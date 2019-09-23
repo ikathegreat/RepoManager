@@ -17,7 +17,7 @@
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\sigmatek.net\Documents\Develop\RepoManager\</PublishUrl>
+    <PublishUrl></PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -28,7 +28,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>Repo Manager</ProductName>
-    <PublisherName>SigmaTEK Systems, LLC</PublisherName>
+    <PublisherName></PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.3.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
