@@ -17,7 +17,7 @@
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>C:\Users\paul.ikeda\source\repos\RepoManager\RepoManager\publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://raw.githubusercontent.com/ikathegreat/RepoManager/master/publish/</InstallUrl>
+    <InstallUrl>https://raw.githubusercontent.com/ikathegreat/RepoManager/RepoManager/master/publish/</InstallUrl>
     <ProductName>Repo Manager</ProductName>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.5.0.0</ApplicationVersion>
