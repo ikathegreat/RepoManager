@@ -1,0 +1,695 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
+using LibGit2Sharp;
+
+namespace RepoManager
+{
+    public static class Utilities
+    {
+        public static async Task GetRepoModelSolutionsList(RepoModel repoModel)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    repoModel.SetSolutionsList(Directory
+                        .EnumerateFiles(repoModel.Path, "*.sln", SearchOption.AllDirectories).ToList());
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"GetRepoModelSolutionsList: {ex.Message}");
+                }
+            });
+        }
+        public static async Task GetRepositoryChanges(RepoModel repoModel)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    //Todo: SX_Core and AutoDEMO_DemoFiles take 20+ seconds
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    using (var repo = new Repository(repoModel.Path))
+                    {
+                        var statusOptions = new StatusOptions
+                        {
+                            IncludeIgnored = false,
+                            IncludeUnaltered = false,
+                            IncludeUntracked = false,
+                            Show = StatusShowOption.WorkDirOnly, //don't check index dir for performance
+                            RecurseIgnoredDirs = false,
+                            RecurseUntrackedDirs = false,
+                            ExcludeSubmodules = true
+                        }; //this is slower?!
+
+                        statusOptions = new StatusOptions();
+                        var repoStatus = repo.RetrieveStatus(statusOptions);
+                        GetFileStatusInfo(repoStatus, out var Changes, out var ChangeString);
+
+                        repoModel.ChangeString = ChangeString;
+                        repoModel.Changes = Changes;
+
+                        stopWatch.Stop();
+                        var ts = stopWatch.Elapsed;
+                        Debug.WriteLine($"GetRepositoryChanges: {repoModel.Name} - {ts.Hours:D2}h:{ts.Minutes:D2}m:{ts.Seconds:D2}s:{ts.Milliseconds:D3}ms");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"GetRepoModelSolutionsList: {ex.Message}");
+                }
+            });
+        }
+        public static async Task GetRepoNumberOfFiles(RepoModel repoModel)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    repoModel.NumberOfFilesString = "0";
+
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+
+                    repoModel.NumberOfFilesString = Directory.GetFiles(repoModel.Path, "*.*",
+                        SearchOption.AllDirectories).ToList().Count.ToString();
+                    stopWatch.Stop();
+                    var ts = stopWatch.Elapsed;
+                    Debug.WriteLine($"GetRepoNumberOfFiles: {repoModel.Name} - {ts.Hours:D2}h:{ts.Minutes:D2}m:{ts.Seconds:D2}s:{ts.Milliseconds:D3}ms");
+
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"GetRepoModelSolutionsList: {ex.Message}");
+                }
+            });
+        }
+        public static async Task GetRepositorySize(RepoModel repoModel)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    repoModel.SizeString = "0 bytes";
+
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+
+                    repoModel.SizeString = BytesToFormattedString(GetDirectorySize(repoModel.Path));
+                    stopWatch.Stop();
+                    var ts = stopWatch.Elapsed;
+                    Debug.WriteLine($"GetRepositorySize: {repoModel.Name} - {ts.Hours:D2}h:{ts.Minutes:D2}m:{ts.Seconds:D2}s:{ts.Milliseconds:D3}ms");
+
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"GetRepoModelSolutionsList: {ex.Message}");
+                }
+            });
+        }
+        private static long GetDirectorySize(string p)
+        {
+            if (!Directory.Exists(p))
+                return 0;
+            var a = Directory.GetFiles(p, "*.*", SearchOption.AllDirectories);
+            return a.Select(name => new FileInfo(name)).Select(info => info.Length).Sum(); //Todo: This throws if you delete directory while running
+        }
+
+        private static string BytesToFormattedString(long value)
+        {
+            string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+
+            if (value < 0) { return "-" + BytesToFormattedString(-value); }
+            if (value == 0) { return "0.0 bytes"; }
+
+            var mag = (int)Math.Log(value, 1024);
+            var adjustedSize = (decimal)value / (1L << (mag * 10));
+
+            return $"{adjustedSize:n1} {SizeSuffixes[mag]}";
+
+        }
+
+        public static async Task GetRepoGitInfoAsync(RepoModel repoModel)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var iniFile = new IniFile(FormMain.OptionsIni);
+                    var azureDevOpsHostUrl = iniFile.ReadString(OptionsForm.AuthenticationSection, "AzureDevOpsHostUrl", "");
+
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    using (var repo = new Repository(repoModel.Path))
+                    {
+                        //Active branch name
+                        var branchNameNoRefHead =
+                            repo.Head.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
+
+                        repoModel.BranchName = branchNameNoRefHead;
+
+                        var remote = repo.Network.Remotes.FirstOrDefault();
+
+                        if (remote != null)
+                        {
+                            repoModel.RemoteURL = remote.Url;
+
+                            if (remote.Url.Contains("github.com"))
+                            {
+                                repoModel.RepoSourceType = RepoSourceTypeEnum.GitHub;
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrEmpty(azureDevOpsHostUrl) && remote.Url.Contains(azureDevOpsHostUrl))
+                                {
+                                    repoModel.RepoSourceType = RepoSourceTypeEnum.AzureDevOps;
+                                }
+                                else
+                                {
+                                    repoModel.RepoSourceType = RepoSourceTypeEnum.Unknown;
+                                }
+                            }
+                        }
+
+                        repoModel.ChangeString = "";
+                        repoModel.Changes = "-";
+
+                        if (repoModel.SkipScan)
+                            return;
+
+                        //Commit ahead/behind
+                        var commitsAhead = repo.Head.TrackingDetails.AheadBy;
+                        var commitsBehind = repo.Head.TrackingDetails.BehindBy;
+
+                        repoModel.CommitsAheadBehind = $"+{commitsAhead}/-{commitsBehind}";
+
+                        var commit = repo.Head.Commits.First();
+                        if (commit != null)
+                        {
+                            repoModel.LastChange = commit.Author.When.ToLocalTime().DateTime;
+                            repoModel.CommitMessage = $"{commit.Author.Name}: {commit.Message}";
+                        }
+
+                        var branchesList = new List<string>();
+
+                        //Get local branches list
+                        // ReSharper disable once LoopCanBeConvertedToQuery
+                        foreach (var b in repo.Branches.Where(b => !b.IsRemote))
+                        {
+                            var tempBranchNameNoRefHead =
+                                b.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
+                            branchesList.Add(tempBranchNameNoRefHead);
+                        }
+
+
+                        repoModel.SetBranchesList(branchesList);
+
+                        stopWatch.Stop();
+                        var ts = stopWatch.Elapsed;
+                        Debug.WriteLine($"GetRepoGitInfoAsync: {repoModel.Name} - {ts.Hours:D2}h:{ts.Minutes:D2}m:{ts.Seconds:D2}s:{ts.Milliseconds:D3}ms");
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"GetRepoActiveBranchNameAsync: {ex.Message}");
+                }
+            });
+        }
+
+        private static void GetFileStatusInfo(RepositoryStatus repoStatus, out string Changes, out string changeString)
+        {
+            var addedCount = 0;
+            var modifiedCount = 0;
+            var deletedCount = 0;
+            var renamedCount = 0;
+            var typeChangeCount = 0;
+            var otherCount = 0;
+
+            foreach (var item in repoStatus)
+            {
+                switch (item.State)
+                {
+                    case FileStatus.NewInWorkdir:
+                        addedCount++;
+                        break;
+                    case FileStatus.ModifiedInWorkdir:
+                        modifiedCount++;
+                        break;
+                    case FileStatus.DeletedFromWorkdir:
+                        deletedCount++;
+                        break;
+                    case FileStatus.RenamedInWorkdir:
+                        renamedCount++;
+                        break;
+                    case FileStatus.TypeChangeInIndex:
+                        typeChangeCount++;
+                        break;
+                    default:
+                        otherCount++;
+                        break;
+                }
+            }
+
+            var sl = new List<string>();
+
+            if (addedCount > 0)
+            {
+                sl.Add($"Added: {addedCount}");
+            }
+
+            if (modifiedCount > 0)
+            {
+                sl.Add($"Modified: {modifiedCount}");
+            }
+
+            if (deletedCount > 0)
+            {
+                sl.Add($"Deleted: {deletedCount}");
+            }
+
+            if (renamedCount > 0)
+            {
+                sl.Add($"Renamed: {renamedCount}");
+            }
+
+            if (typeChangeCount > 0)
+            {
+                sl.Add($"Type changed: {typeChangeCount}");
+            }
+
+            if (otherCount > 0)
+            {
+                sl.Add($"Other: {otherCount}");
+            }
+
+            changeString = sl.Count > 0 ? string.Join(" | ", sl) : "No local changes";
+            Changes = repoStatus.Count().ToString();
+        }
+
+        public static async Task<List<RepoModel>> ScanForRepositoriesAsync(string repoSearchPath)
+        {
+            var repoModelList = new List<RepoModel>();
+            await Task.Run(() =>
+            {
+                var searchRootDirectories =
+                    Directory.EnumerateDirectories(repoSearchPath, "*", SearchOption.TopDirectoryOnly).ToList();
+
+
+                var iniFile = new IniFile(FormMain.OptionsIni);
+                iniFile.ReadSectionValues(SkipRepoBrowseForm.SkipReposSection, out var repoSectionValuesList);
+
+                foreach (var searchRootDirectory in searchRootDirectories)
+                {
+                    var gitFolderList = Directory
+                        .EnumerateDirectories(searchRootDirectory, ".git", SearchOption.TopDirectoryOnly).ToList();
+
+                    foreach (var gitFolder in gitFolderList)
+                    {
+                        var repoPath = Path.GetDirectoryName(gitFolder);
+                        var repoModel = new RepoModel
+                        {
+                            Name = Path.GetFileName(Path.GetDirectoryName(gitFolder)),
+                            Path = repoPath,
+                            SkipScan = repoSectionValuesList.Contains(repoPath)
+                        };
+
+                        repoModelList.Add(repoModel);
+                    }
+                }
+
+
+
+            });
+            return repoModelList;
+        }
+
+        /// <summary>
+        /// https://stackoverflow.com/a/44324346
+        /// </summary>
+        /// <param name="directoryPath"></param>
+        /// <param name="maxRetries"></param>
+        /// <param name="millisecondsDelay"></param>
+        /// <returns></returns>
+        public static bool TryDeleteDirectory(string directoryPath, int maxRetries = 10, int millisecondsDelay = 30)
+        {
+            if (directoryPath == null)
+                throw new ArgumentNullException(directoryPath);
+            if (maxRetries < 1)
+                throw new ArgumentOutOfRangeException(nameof(maxRetries));
+            if (millisecondsDelay < 1)
+                throw new ArgumentOutOfRangeException(nameof(millisecondsDelay));
+
+            for (var i = 0; i < maxRetries; ++i)
+            {
+                try
+                {
+                    if (!Directory.Exists(directoryPath))
+                        return false;
+                    var files = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
+
+                    foreach (var file in files)
+                    {
+                        try
+                        {
+                            File.SetAttributes(file, FileAttributes.Normal);
+                            File.Delete(file);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Failed to delete file in DeleteDirectory: {ex.Message}");
+                        }
+                    }
+
+                    Directory.Delete(directoryPath, true);
+
+                    return true;
+                }
+                catch (IOException)
+                {
+                    //ignored
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    //ignored
+                }
+            }
+
+            return false;
+        }
+
+        public static string GetDescription(Enum en)
+        {
+
+            var type = en.GetType();
+
+            var memInfo = type.GetMember(en.ToString());
+
+            if (memInfo.Length <= 0)
+                return en.ToString();
+            var attrs = memInfo[0].GetCustomAttributes(typeof(Description),
+                false);
+
+            return attrs.Length > 0 ? ((Description)attrs[0]).Text : en.ToString();
+        }
+
+        public static List<string> LoadStringList(string filePath)
+        {
+            var stringList = new List<string>();
+            if (File.Exists(filePath))
+            {
+                TextReader reader = new StreamReader(filePath);
+                try
+                {
+                    var xmlSerializer = new XmlSerializer(typeof(List<string>));
+                    stringList = (List<string>)xmlSerializer.Deserialize(reader);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    reader.Close();
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Can't find this file: " + filePath);
+            }
+
+            return stringList;
+        }
+        public static void SaveStringList(string filePath, List<string> stringList)
+        {
+            var directoryName = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directoryName))
+                if (directoryName != null)
+                    Directory.CreateDirectory(directoryName);
+
+
+            TextWriter writer = new StreamWriter(filePath);
+            var xmlSerializer = new XmlSerializer(typeof(List<string>));
+
+            try
+            {
+                xmlSerializer.Serialize(writer, stringList);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception occurred while writing to XML: {ex.Message}");
+            }
+            finally
+            {
+                writer.Close();
+            }
+
+        }
+
+
+        public static string ConvertHexStringToString(string hex)
+        {
+            var raw = new byte[hex.Length / 2];
+            for (var i = 0; i < raw.Length; i++)
+                raw[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
+            return Encoding.ASCII.GetString(raw);
+        }
+
+        public static string ConvertStringToHexString(string input)
+        {
+            return string.Concat(input.Select(x => ((int)x).ToString("x")));
+        }
+
+        public static async Task CloneGitRepoAsync(string url, string localPath, RepoSourceTypeEnum repoSourceType)
+        {
+            await Task.Run(() =>
+            {
+                if (!IsSiteAccessible(url))
+                    return;
+
+                var hasUserNameOrPassword = GetUserNameAndPassword(out var userName,
+                    out var password, repoSourceType);
+
+                try
+                {
+                    var co = new CloneOptions
+                    {
+                        CredentialsProvider = (_url, _user, _cred) => new UsernamePasswordCredentials
+                        {
+                            Username = userName,
+                            Password = password
+                        }
+                    };
+                    Repository.Clone(url, localPath, co);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"CloneGitRepoAsync: {ex.Message}");
+                    if (!hasUserNameOrPassword)
+                    {
+                        Debug.WriteLine("CloneGitRepoAsync username or password is blank");
+                    }
+                }
+            });
+
+        }
+
+        public static void DoGitReset(RepoModel repoModel, ref SummaryRecord summaryRecord)
+        {
+            if (!IsRemoteServerConnectionOK(repoModel, summaryRecord))
+                return;
+
+            using (var repo = new Repository(repoModel.Path))
+            {
+                Commands.Stage(repo, "*");
+
+                repo.Reset(ResetMode.Hard, repo.Head.Tip);
+            }
+        }
+
+        public static void DoGitPull(RepoModel repoModel, ref SummaryRecord summaryRecord)
+        {
+            if (!IsRemoteServerConnectionOK(repoModel, summaryRecord))
+                return;
+
+            using (var repo = new Repository(repoModel.Path))
+            {
+                var hasUserNameOrPassword = GetUserNameAndPassword(out var userName,
+                    out var password, repoModel.RepoSourceType);
+
+                try
+                {
+                    var options = new PullOptions
+                    {
+                        FetchOptions = new FetchOptions
+                        {
+                            CredentialsProvider = (url, usernameFromUrl, types) =>
+                                new UsernamePasswordCredentials
+                                {
+                                    Username = userName,
+                                    Password = password
+                                }
+                        }
+                    };
+
+                    // User information to create a merge commit
+                    //Todo: Change this to be actual email
+                    var signature = new Signature(
+                        new Identity(userName, $"{userName}@gmail.com"), DateTimeOffset.Now);
+
+                    // Pull
+                    var mergeResult = Commands.Pull(repo, signature, options);
+
+                    switch (mergeResult.Status)
+                    {
+                        case MergeStatus.Conflicts:
+                            summaryRecord.Message = "The merge had conflicts. Resolve them before continuing.";
+                            break;
+                        case MergeStatus.FastForward:
+                            summaryRecord.Message =
+                                $"Fast forward to commit: {mergeResult.Commit.Author} {mergeResult.Commit.Message}";
+                            break;
+                        case MergeStatus.NonFastForward:
+                            summaryRecord.Message =
+                                $"Non-fast forward to commit: {mergeResult.Commit.Author} {mergeResult.Commit.Message}";
+                            break;
+                        case MergeStatus.UpToDate:
+                            summaryRecord.Message = "The branch was already up-to-date.";
+                            break;
+                        default:
+                            Debug.WriteLine($"Unknown mergeResult: {mergeResult.Status}");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (!hasUserNameOrPassword)
+                    {
+                        summaryRecord.Result = "Error";
+                        summaryRecord.Message = "Need to configure repository connection credentials.";
+                    }
+                    else
+                    {
+                        summaryRecord.Result = "Error";
+                        summaryRecord.Message = ex.Message;
+                    }
+                }
+            }
+        }
+        public static void DoGitFetch(RepoModel repoModel, ref SummaryRecord summaryRecord)
+        {
+            if (!IsRemoteServerConnectionOK(repoModel, summaryRecord))
+                return;
+
+            using (var repo = new Repository(repoModel.Path))
+            {
+                var hasUserNameOrPassword = GetUserNameAndPassword(out var userName,
+                    out var password, repoModel.RepoSourceType);
+
+                const string logMessage = "";
+
+                var options = new FetchOptions();
+
+                if (hasUserNameOrPassword)
+                {
+                    options.CredentialsProvider = (url, usernameFromUrl, types) =>
+                        new UsernamePasswordCredentials { Username = userName, Password = password };
+                }
+
+                foreach (var remote in repo.Network.Remotes)
+                {
+                    var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
+                    try
+                    {
+                        Commands.Fetch(repo, remote.Name, refSpecs, options, logMessage);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!hasUserNameOrPassword)
+                        {
+                            summaryRecord.Result = "Error";
+                            summaryRecord.Message = "Need to configure repository connection credentials.";
+                        }
+                        else
+                        {
+                            summaryRecord.Result = "Error";
+                            var message = ex.Message.Replace("too many redirects or authentication replays",
+                                "Incorrect username or password");
+                            summaryRecord.Message = message;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        private static bool IsRemoteServerConnectionOK(RepoModel repoModel, SummaryRecord summaryRecord)
+        {
+            if (IsSiteAccessible(repoModel.RemoteURL))
+                return true;
+
+            summaryRecord.Result = "Error";
+            summaryRecord.Message = $"Could not connect to remote server: {repoModel.RemoteURL}";
+            return false;
+
+        }
+
+        public static bool IsSiteAccessible(string siteUrl)
+        {
+            siteUrl = siteUrl.Replace(".git", "");
+
+            var ping = new Ping();
+            var result = ping.Send(new Uri(siteUrl).Host);
+            var success = false;
+
+            if (result != null)
+                success = result.Status == IPStatus.Success;
+
+            return success;
+        }
+
+        /// <summary>
+        /// Acquires username and password by RepoSourceTypeEnum
+        /// Returns false if both parameters are blank
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="repoSourceTypeEnum"></param>
+        /// <returns></returns>
+        private static bool GetUserNameAndPassword(out string userName, out string password,
+            RepoSourceTypeEnum repoSourceTypeEnum)
+        {
+            var iniFile = new IniFile(FormMain.OptionsIni);
+
+            var repoTypePrefix = repoSourceTypeEnum == RepoSourceTypeEnum.AzureDevOps ? "AzureDevOps" : "GitHub";
+
+            userName = iniFile.ReadString(OptionsForm.AuthenticationSection, $"{repoTypePrefix}UserName", "");
+            password = ConvertHexStringToString(iniFile.ReadString(OptionsForm.AuthenticationSection,
+                $"{repoTypePrefix}Password",
+                ""));
+            var emptyUserName = !string.IsNullOrEmpty(userName);
+            var emptyPassword = !string.IsNullOrEmpty(password);
+            return emptyUserName || emptyPassword;
+        }
+
+        public static bool FilePathHasInvalidChars(string path)
+        {
+            var containsABadCharacter =
+                new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
+            return !containsABadCharacter.IsMatch(path);
+        }
+    }
+
+}
