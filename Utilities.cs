@@ -583,7 +583,9 @@ namespace RepoManager
                     else
                     {
                         summaryRecord.Result = "Error";
-                        summaryRecord.Message = ex.Message;
+                        var message = ex.Message.Replace("too many redirects or authentication replays",
+                            "Incorrect username or password");
+                        summaryRecord.Message = message;
                     }
                 }
             }
