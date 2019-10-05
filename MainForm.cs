@@ -31,7 +31,7 @@ namespace RepoManager
          * Cleanup nuget packages
          * Update nuget packages across repos
          * Change history spark graph
-         * Recently change files list
+         * Recently changed files list
          * Find in files in directories
          *
          */
@@ -198,6 +198,24 @@ namespace RepoManager
 
             if (selectedRepoModelList.Count == 0)
                 return;
+
+            var totalBatchFileCount = 0;
+            if (repoActionEnum == RepoActionEnum.RunBatch)
+            {
+                foreach (var repoModel in selectedRepoModelList)
+                {
+                    totalBatchFileCount += GetBatchFileCount(repoModel);
+                }
+
+                if (totalBatchFileCount == 0)
+                {
+                    XtraMessageBox.Show(
+                        $"No selected batch files found in {selectedRepoModelList.Count} repositories",
+                        "No Batch Files to Run",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
 
             if (repoActionEnum != RepoActionEnum.Open)
             {
@@ -409,6 +427,24 @@ namespace RepoManager
             setUIEnable(true);
             if (refreshAtEnd)
                 SearchRepos(); //Todo: optimize this 
+        }
+
+        private int GetBatchFileCount(RepoModel repoModel)
+        {
+            var batFiles = Directory.EnumerateFiles(repoModel.Path,
+                "*.bat", SearchOption.AllDirectories).ToList();
+
+            var batchToRunCount = 0;
+
+            var iniFile = new IniFile(RunBatchIni);
+            foreach (var batFile in batFiles)
+            {
+                if (iniFile.ReadBool(repoModel.Path, batFile, false))
+                    batchToRunCount++;
+            }
+
+            return batchToRunCount;
+
         }
 
         private void barButtonItemDeleteBinObj_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -864,7 +900,7 @@ namespace RepoManager
 
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
 
-            Process.Start($"{repoModel.RemoteURL.Replace(".git","")}/issues");
+            Process.Start($"{repoModel.RemoteURL.Replace(".git", "")}/issues");
         }
     }
 }
