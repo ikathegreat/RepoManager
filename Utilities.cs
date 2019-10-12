@@ -306,8 +306,7 @@ namespace RepoManager
             {
                 var searchRootDirectories =
                     Directory.EnumerateDirectories(repoSearchPath, "*", SearchOption.TopDirectoryOnly).ToList();
-
-
+                
                 var iniFile = new IniFile(FormMain.OptionsIni);
                 iniFile.ReadSectionValues(SkipRepoBrowseForm.SkipReposSection, out var repoSectionValuesList);
 
@@ -329,9 +328,6 @@ namespace RepoManager
                         repoModelList.Add(repoModel);
                     }
                 }
-
-
-
             });
             return repoModelList;
         }
