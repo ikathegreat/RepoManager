@@ -136,7 +136,6 @@ namespace RepoManager
             stopWatch.Stop();
             var ts = stopWatch.Elapsed;
             Debug.WriteLine($"SearchRepos: {ts.Hours:D2}h:{ts.Minutes:D2}m:{ts.Seconds:D2}s:{ts.Milliseconds:D3}ms");
-
         }
 
         private void LoadPreviouslySelectedRepoSelections()
@@ -207,17 +206,35 @@ namespace RepoManager
                     totalBatchFileCount += GetBatchFileCount(repoModel);
                 }
 
-                if (totalBatchFileCount == 0)
+                var countAndRepoMsg = selectedRepoModelList.Count == 1 ?
+                    $"{selectedRepoModelList.First().Name}" : $"{selectedRepoModelList.Count} repositories";
+
+                switch (totalBatchFileCount)
                 {
-                    XtraMessageBox.Show(
-                        $"No selected batch files found in {selectedRepoModelList.Count} repositories",
-                        "No Batch Files to Run",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    case 0:
+                        XtraMessageBox.Show($"No selected batch files found in {countAndRepoMsg}",
+                            "Run Batch Files",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    case 1:
+                        {
+                            if (XtraMessageBox.Show($"Run {GetFirstSelectedBatchFileName(selectedRepoModelList.First())} in {countAndRepoMsg}?",
+                                    "Run Batch Files",
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                                return;
+                            break;
+                        }
+                    default:
+                        {
+                            if (XtraMessageBox.Show($"Run {totalBatchFileCount} batch files in {countAndRepoMsg}?",
+                                    "Run Batch Files",
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                                return;
+                            break;
+                        }
                 }
             }
-
-            if (repoActionEnum != RepoActionEnum.Open)
+            else if (repoActionEnum != RepoActionEnum.Open)
             {
                 if (selectedRepoModelList.Count == 1)
                 {
@@ -326,8 +343,6 @@ namespace RepoManager
                         var batFiles = Directory.EnumerateFiles(repoModel.Path,
                             "*.bat", SearchOption.AllDirectories).ToList();
 
-                        var successes = 0;
-
                         var listOfBatchFilesToRun = new List<string>();
 
                         var iniFile = new IniFile(RunBatchIni);
@@ -342,22 +357,16 @@ namespace RepoManager
                         else if (listOfBatchFilesToRun.Count == 0)
                             summaryRecord.Message = $"No batch files enabled to run ({batFiles.Count} found)";
 
-
-                        foreach (var batchFile in listOfBatchFilesToRun)
+                        Parallel.ForEach(listOfBatchFilesToRun, batchFile =>
                         {
-                            try
-                            {
-                                var process = Process.Start(batchFile);
-                                process.WaitForExit();
-                                successes++;
-                            }
-                            catch
-                            {
-                                ////ignored
-                            }
+                            var process = Process.Start(batchFile);
+                            if (process == null) return;
+                            process.WaitForExit();
+                            //if (process.ExitCode == 0)
+                            //    successCount++;
+                        });
 
-                            summaryRecord.Message = $"Successfully ran {successes} of {listOfBatchFilesToRun.Count} .bat files";
-                        }
+                        summaryRecord.Message = $"Ran {listOfBatchFilesToRun.Count} .bat files";
                     }
                     catch (Exception ex)
                     {
@@ -444,6 +453,20 @@ namespace RepoManager
             }
 
             return batchToRunCount;
+
+        }
+
+        private string GetFirstSelectedBatchFileName(RepoModel repoModel)
+        {
+            var iniFile = new IniFile(RunBatchIni);
+            foreach (var batFile in Directory.EnumerateFiles(repoModel.Path,
+                "*.bat", SearchOption.AllDirectories).ToList())
+            {
+                if (iniFile.ReadBool(repoModel.Path, batFile, false))
+                    return Path.GetFileName(batFile);
+            }
+
+            return string.Empty;
 
         }
 
