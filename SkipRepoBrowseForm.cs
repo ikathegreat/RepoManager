@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace RepoManager
 {
@@ -23,28 +17,31 @@ namespace RepoManager
 
         private void buttonBrowse_Click(object sender, EventArgs e)
         {
-            var folderPath = "";
-            var fbd = new FolderBrowserDialog
+            var initialDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            var initGitPath = Path.Combine(initialDir, "source", "repos");
+            if (Directory.Exists(initGitPath))
             {
-                ShowNewFolderButton = false,
-                RootFolder = Environment.SpecialFolder.UserProfile
-            };
-
-            var dr = fbd.ShowDialog();
-
-            if (dr != DialogResult.OK)
-                return;
-            folderPath = fbd.SelectedPath;
-            if (folderPath != "")
-            {
-                textBoxPath.Text = folderPath;
+                initialDir = initGitPath;
             }
 
+            if (Directory.Exists(textBoxPath.Text))
+            {
+                initialDir = textBoxPath.Text;
+            }
+
+            var dialog = new CommonOpenFileDialog
+            {
+                InitialDirectory = initialDir, 
+                IsFolderPicker = true
+            };
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                textBoxPath.Text = dialog.FileName;
+            }
         }
 
         private void SkipRepoBrowseForm_Load(object sender, EventArgs e)
         {
-
             var iniFile = new IniFile(FormMain.OptionsIni);
             iniFile.ReadSection(SkipReposSection, out var repoSectionList);
 
@@ -54,6 +51,8 @@ namespace RepoManager
                 if (!string.IsNullOrEmpty(item))
                     listBoxPaths.Items.Add(item);
             }
+
+            buttonAction.Enabled = listBoxPaths.Items.Count != 0;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -78,13 +77,7 @@ namespace RepoManager
         {
             if (listBoxPaths.SelectedIndex != -1)
             {
-                buttonAction.Text = "Remove";
                 textBoxPath.Text = listBoxPaths.SelectedItem.ToString();
-            }
-            else
-            {
-                buttonAction.Text = "Add";
-
             }
         }
 
@@ -96,13 +89,28 @@ namespace RepoManager
             if (buttonAction.Text == "Remove")
             {
                 listBoxPaths.Items.Remove(textBoxPath.Text);
+                textBoxPath.Text = "";
             }
             else
             {
+                var repoGitFolder = Path.Combine(textBoxPath.Text, ".git");
+                if (!Directory.Exists(repoGitFolder))
+                {
+                    if (MessageBox.Show("Selected directory does not have a .git folder. Add anyway?",
+                            "Add Non-Git Folder", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
                 listBoxPaths.Items.Add(textBoxPath.Text);
             }
+            buttonAction.Text = listBoxPaths.Items.Contains(textBoxPath.Text) ? "Remove" : "Add";
+        }
 
-            textBoxPath.Text = "";
+        private void textBoxPath_TextChanged(object sender, EventArgs e)
+        {
+            buttonAction.Enabled = !string.IsNullOrEmpty(textBoxPath.Text);
+            buttonAction.Text = listBoxPaths.Items.Contains(textBoxPath.Text) ? "Remove" : "Add";
         }
     }
 }
