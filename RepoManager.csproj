@@ -155,6 +155,12 @@
     <Compile Include="CloneForm.Designer.cs">
       <DependentUpon>CloneForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="RepoPropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RepoPropertiesForm.Designer.cs">
+      <DependentUpon>RepoPropertiesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="RepoSourceTypeEnum.cs" />
     <Compile Include="RunBatFilesForm.cs">
       <SubType>Form</SubType>
@@ -198,6 +204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CloneForm.resx">
       <DependentUpon>CloneForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RepoPropertiesForm.resx">
+      <DependentUpon>RepoPropertiesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RunBatFilesForm.resx">
       <DependentUpon>RunBatFilesForm.cs</DependentUpon>

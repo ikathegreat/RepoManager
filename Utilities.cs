@@ -688,6 +688,19 @@ namespace RepoManager
                 new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
             return !containsABadCharacter.IsMatch(path);
         }
+
+        public static string GetRepoPreferredSolution(RepoModel repoModel)
+        {
+            var iniFile = new IniFile(FormMain.RepoPropertiesIni);
+            var fileName = iniFile.ReadString(repoModel.Name, "PreferredSolution", "");
+
+            if (!string.IsNullOrEmpty(fileName)) 
+                return !File.Exists(fileName) ? string.Empty : fileName;
+
+            var slnList = repoModel.GetSolutionList();
+            return slnList.Count == 1 ? slnList.First() : string.Empty;
+
+        }
     }
 
 }
