@@ -20,6 +20,7 @@ namespace RepoManager
         public static string SavedRepoSelectionsXml = Path.Combine(RepoManagerAppData, "SelectedRepos.xml");
         public static string OptionsIni = Path.Combine(RepoManagerAppData, "Options.ini");
         public static string RunBatchIni = Path.Combine(RepoManagerAppData, "RunBatch.ini");
+        public static string RepoPropertiesIni = Path.Combine(RepoManagerAppData, "RepoProperties.ini");
         public static string GridLayoutXml = Path.Combine(RepoManagerAppData, "GridLayout.xml");
 
         /*
@@ -732,7 +733,6 @@ namespace RepoManager
                 return;
             barStaticItemFocusedRepo.Caption = $"{repoModel.Name}";
             barStaticItemFocusedRepoStatus.Caption = $"{repoModel.ChangeString}";
-
         }
 
         private void gridView1_DoubleClick(object sender, EventArgs e)
@@ -774,9 +774,56 @@ namespace RepoManager
                 case 7:
                     Process.Start(repoModel.RemoteURL);
                     break;
+                case 8:
+                    OpenPreferredSolutionFile(repoModel);
+                    break;
                 default:
                     Debug.WriteLine($"Unknown action index {actionIndex}");
                     break;
+            }
+        }
+
+        private void OpenPreferredSolutionFile(RepoModel repoModel)
+        {
+            var filePath = Utilities.GetRepoPreferredSolution(repoModel);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                WindowState = FormWindowState.Minimized;
+
+                var iniFile = new IniFile(RepoPropertiesIni);
+                var asAdmin = iniFile.ReadBool(repoModel.Name, "OpenPreferredSolutionAsAdmin", false);
+
+                if (asAdmin)
+                {
+                    //This gives "No Application is associated with specified file for this operation" error
+                    //var info = new ProcessStartInfo(filePath) { UseShellExecute = true, Verb = "", ErrorDialog = true};
+                    //Process.Start(info);
+
+                    var startInfo = new ProcessStartInfo
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        Arguments = $"/C \"{filePath}\"",
+                        Verb = "runas"
+                    };
+                    var process = new Process { StartInfo = startInfo };
+                    process.Start();
+                }
+                else
+                {
+                    Process.Start(filePath);
+                }
+            }
+            else
+            {
+                if (XtraMessageBox.Show(
+                        "Preferred solution not set or file not found. Do you want to configure this now?",
+                        "Cannot Find Preferred Solution",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                {
+                    showRepoProperties();
+                }
             }
         }
 
@@ -924,6 +971,32 @@ namespace RepoManager
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
 
             Process.Start($"{repoModel.RemoteURL.Replace(".git", "")}/issues");
+        }
+
+        private void toolStripMenuItemProperties_Click(object sender, EventArgs e)
+        {
+            showRepoProperties();
+        }
+
+        private void barButtonItemProperties_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            showRepoProperties();
+        }
+
+        private void showRepoProperties()
+        {
+            if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
+                return;
+
+            var propertiesForm = new RepoPropertiesForm(repoModel);
+            propertiesForm.ShowDialog();
+        }
+
+        private void barButtonItemOpenPreferredSln_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
+                return;
+            OpenPreferredSolutionFile(repoModel);
         }
     }
 }

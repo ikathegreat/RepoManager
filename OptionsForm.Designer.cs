@@ -35,26 +35,26 @@
             this.groupBoxAuthentication = new System.Windows.Forms.GroupBox();
             this.xtraTabControl = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPageAzureDevOps = new DevExpress.XtraTab.XtraTabPage();
-            this.textBoxHostUrl = new System.Windows.Forms.TextBox();
             this.labelHostUrl = new System.Windows.Forms.Label();
-            this.textBoxAzureDevOpsPassword = new System.Windows.Forms.TextBox();
+            this.textBoxHostUrl = new System.Windows.Forms.TextBox();
+            this.labelAzureDevOpsUsername = new System.Windows.Forms.Label();
             this.textBoxAzureDevOpsUserName = new System.Windows.Forms.TextBox();
             this.labelAzureDevOpsPassword = new System.Windows.Forms.Label();
-            this.labelAzureDevOpsUsername = new System.Windows.Forms.Label();
+            this.textBoxAzureDevOpsPassword = new System.Windows.Forms.TextBox();
             this.xtraTabPageGitHub = new DevExpress.XtraTab.XtraTabPage();
-            this.textBoxGitHubPassword = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.textBoxGitHubUsername = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.textBoxGitHubPassword = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.buttonRepoSearchPathBrowse = new System.Windows.Forms.Button();
-            this.textBoxRepoSearchPath = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.buttonRepoSkipBrowse = new System.Windows.Forms.Button();
-            this.labelRepoSkipCount = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBoxRepoSearchPath = new System.Windows.Forms.TextBox();
+            this.buttonRepoSearchPathBrowse = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.labelRepoSkipCount = new System.Windows.Forms.Label();
+            this.buttonRepoSkipBrowse = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBoxAuthentication.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl)).BeginInit();
@@ -69,7 +69,7 @@
             this.panel1.Controls.Add(this.buttonOK);
             this.panel1.Controls.Add(this.buttonCancel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 417);
+            this.panel1.Location = new System.Drawing.Point(0, 405);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(5);
             this.panel1.Size = new System.Drawing.Size(564, 35);
@@ -104,8 +104,10 @@
             // 
             // groupBoxAuthentication
             // 
+            this.groupBoxAuthentication.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxAuthentication.Controls.Add(this.xtraTabControl);
-            this.groupBoxAuthentication.Location = new System.Drawing.Point(12, 191);
+            this.groupBoxAuthentication.Location = new System.Drawing.Point(12, 180);
             this.groupBoxAuthentication.Name = "groupBoxAuthentication";
             this.groupBoxAuthentication.Size = new System.Drawing.Size(540, 220);
             this.groupBoxAuthentication.TabIndex = 4;
@@ -135,13 +137,6 @@
             this.xtraTabPageAzureDevOps.Size = new System.Drawing.Size(526, 159);
             this.xtraTabPageAzureDevOps.Text = "Azure DevOps";
             // 
-            // textBoxHostUrl
-            // 
-            this.textBoxHostUrl.Location = new System.Drawing.Point(118, 17);
-            this.textBoxHostUrl.Name = "textBoxHostUrl";
-            this.textBoxHostUrl.Size = new System.Drawing.Size(188, 23);
-            this.textBoxHostUrl.TabIndex = 5;
-            // 
             // labelHostUrl
             // 
             this.labelHostUrl.AutoSize = true;
@@ -151,13 +146,21 @@
             this.labelHostUrl.TabIndex = 4;
             this.labelHostUrl.Text = "Host URL";
             // 
-            // textBoxAzureDevOpsPassword
+            // textBoxHostUrl
             // 
-            this.textBoxAzureDevOpsPassword.Location = new System.Drawing.Point(118, 101);
-            this.textBoxAzureDevOpsPassword.Name = "textBoxAzureDevOpsPassword";
-            this.textBoxAzureDevOpsPassword.PasswordChar = '*';
-            this.textBoxAzureDevOpsPassword.Size = new System.Drawing.Size(188, 23);
-            this.textBoxAzureDevOpsPassword.TabIndex = 7;
+            this.textBoxHostUrl.Location = new System.Drawing.Point(118, 17);
+            this.textBoxHostUrl.Name = "textBoxHostUrl";
+            this.textBoxHostUrl.Size = new System.Drawing.Size(188, 23);
+            this.textBoxHostUrl.TabIndex = 5;
+            // 
+            // labelAzureDevOpsUsername
+            // 
+            this.labelAzureDevOpsUsername.AutoSize = true;
+            this.labelAzureDevOpsUsername.Location = new System.Drawing.Point(37, 69);
+            this.labelAzureDevOpsUsername.Name = "labelAzureDevOpsUsername";
+            this.labelAzureDevOpsUsername.Size = new System.Drawing.Size(60, 15);
+            this.labelAzureDevOpsUsername.TabIndex = 0;
+            this.labelAzureDevOpsUsername.Text = "Username";
             // 
             // textBoxAzureDevOpsUserName
             // 
@@ -175,14 +178,13 @@
             this.labelAzureDevOpsPassword.TabIndex = 1;
             this.labelAzureDevOpsPassword.Text = "Password";
             // 
-            // labelAzureDevOpsUsername
+            // textBoxAzureDevOpsPassword
             // 
-            this.labelAzureDevOpsUsername.AutoSize = true;
-            this.labelAzureDevOpsUsername.Location = new System.Drawing.Point(37, 69);
-            this.labelAzureDevOpsUsername.Name = "labelAzureDevOpsUsername";
-            this.labelAzureDevOpsUsername.Size = new System.Drawing.Size(60, 15);
-            this.labelAzureDevOpsUsername.TabIndex = 0;
-            this.labelAzureDevOpsUsername.Text = "Username";
+            this.textBoxAzureDevOpsPassword.Location = new System.Drawing.Point(118, 101);
+            this.textBoxAzureDevOpsPassword.Name = "textBoxAzureDevOpsPassword";
+            this.textBoxAzureDevOpsPassword.PasswordChar = '*';
+            this.textBoxAzureDevOpsPassword.Size = new System.Drawing.Size(188, 23);
+            this.textBoxAzureDevOpsPassword.TabIndex = 7;
             // 
             // xtraTabPageGitHub
             // 
@@ -194,13 +196,14 @@
             this.xtraTabPageGitHub.Size = new System.Drawing.Size(526, 159);
             this.xtraTabPageGitHub.Text = "GitHub";
             // 
-            // textBoxGitHubPassword
+            // label4
             // 
-            this.textBoxGitHubPassword.Location = new System.Drawing.Point(118, 53);
-            this.textBoxGitHubPassword.Name = "textBoxGitHubPassword";
-            this.textBoxGitHubPassword.PasswordChar = '*';
-            this.textBoxGitHubPassword.Size = new System.Drawing.Size(188, 23);
-            this.textBoxGitHubPassword.TabIndex = 9;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(37, 21);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(60, 15);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "Username";
             // 
             // textBoxGitHubUsername
             // 
@@ -218,17 +221,19 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "Password";
             // 
-            // label4
+            // textBoxGitHubPassword
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(37, 21);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(60, 15);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "Username";
+            this.textBoxGitHubPassword.Location = new System.Drawing.Point(118, 53);
+            this.textBoxGitHubPassword.Name = "textBoxGitHubPassword";
+            this.textBoxGitHubPassword.PasswordChar = '*';
+            this.textBoxGitHubPassword.Size = new System.Drawing.Size(188, 23);
+            this.textBoxGitHubPassword.TabIndex = 9;
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.textBoxRepoSearchPath);
             this.groupBox1.Controls.Add(this.buttonRepoSearchPathBrowse);
@@ -239,10 +244,26 @@
             this.groupBox1.Controls.Add(this.buttonRepoSkipBrowse);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(540, 173);
+            this.groupBox1.Size = new System.Drawing.Size(540, 162);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Preferences";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(44, 30);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(128, 15);
+            this.label7.TabIndex = 7;
+            this.label7.Text = "Repository Search Path";
+            // 
+            // textBoxRepoSearchPath
+            // 
+            this.textBoxRepoSearchPath.Location = new System.Drawing.Point(192, 27);
+            this.textBoxRepoSearchPath.Name = "textBoxRepoSearchPath";
+            this.textBoxRepoSearchPath.Size = new System.Drawing.Size(302, 23);
+            this.textBoxRepoSearchPath.TabIndex = 0;
             // 
             // buttonRepoSearchPathBrowse
             // 
@@ -254,49 +275,14 @@
             this.buttonRepoSearchPathBrowse.UseVisualStyleBackColor = true;
             this.buttonRepoSearchPathBrowse.Click += new System.EventHandler(this.ButtonRepoSearchPathBrowse_Click);
             // 
-            // textBoxRepoSearchPath
+            // label5
             // 
-            this.textBoxRepoSearchPath.Location = new System.Drawing.Point(192, 27);
-            this.textBoxRepoSearchPath.Name = "textBoxRepoSearchPath";
-            this.textBoxRepoSearchPath.Size = new System.Drawing.Size(302, 23);
-            this.textBoxRepoSearchPath.TabIndex = 0;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(44, 30);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(128, 15);
-            this.label7.TabIndex = 7;
-            this.label7.Text = "Repository Search Path";
-            // 
-            // buttonRepoSkipBrowse
-            // 
-            this.buttonRepoSkipBrowse.Location = new System.Drawing.Point(256, 114);
-            this.buttonRepoSkipBrowse.Name = "buttonRepoSkipBrowse";
-            this.buttonRepoSkipBrowse.Size = new System.Drawing.Size(34, 23);
-            this.buttonRepoSkipBrowse.TabIndex = 3;
-            this.buttonRepoSkipBrowse.Text = "...";
-            this.buttonRepoSkipBrowse.UseVisualStyleBackColor = true;
-            this.buttonRepoSkipBrowse.Click += new System.EventHandler(this.buttonRepoSkipBrowse_Click);
-            // 
-            // labelRepoSkipCount
-            // 
-            this.labelRepoSkipCount.AutoSize = true;
-            this.labelRepoSkipCount.Location = new System.Drawing.Point(189, 118);
-            this.labelRepoSkipCount.Name = "labelRepoSkipCount";
-            this.labelRepoSkipCount.Size = new System.Drawing.Size(45, 15);
-            this.labelRepoSkipCount.TabIndex = 5;
-            this.labelRepoSkipCount.Text = "0 repos";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(44, 118);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(90, 15);
-            this.label6.TabIndex = 4;
-            this.label6.Text = "Repos to Ignore";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(44, 75);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(142, 15);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "Repo Double Click Action";
             // 
             // comboBox1
             // 
@@ -310,20 +296,40 @@
             "Delete bin/obj",
             "Delete .vs",
             "Open Local Folder",
-            "Open Remote URL"});
+            "Open Remote URL",
+            "Open Preferred Solution"});
             this.comboBox1.Location = new System.Drawing.Point(192, 72);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(162, 23);
             this.comboBox1.TabIndex = 2;
             // 
-            // label5
+            // label6
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(44, 75);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(142, 15);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "Repo Double Click Action";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(44, 118);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(90, 15);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "Repos to Ignore";
+            // 
+            // labelRepoSkipCount
+            // 
+            this.labelRepoSkipCount.AutoSize = true;
+            this.labelRepoSkipCount.Location = new System.Drawing.Point(189, 118);
+            this.labelRepoSkipCount.Name = "labelRepoSkipCount";
+            this.labelRepoSkipCount.Size = new System.Drawing.Size(45, 15);
+            this.labelRepoSkipCount.TabIndex = 5;
+            this.labelRepoSkipCount.Text = "0 repos";
+            // 
+            // buttonRepoSkipBrowse
+            // 
+            this.buttonRepoSkipBrowse.Location = new System.Drawing.Point(256, 114);
+            this.buttonRepoSkipBrowse.Name = "buttonRepoSkipBrowse";
+            this.buttonRepoSkipBrowse.Size = new System.Drawing.Size(34, 23);
+            this.buttonRepoSkipBrowse.TabIndex = 3;
+            this.buttonRepoSkipBrowse.Text = "...";
+            this.buttonRepoSkipBrowse.UseVisualStyleBackColor = true;
+            this.buttonRepoSkipBrowse.Click += new System.EventHandler(this.buttonRepoSkipBrowse_Click);
             // 
             // OptionsForm
             // 
@@ -331,7 +337,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(564, 452);
+            this.ClientSize = new System.Drawing.Size(564, 440);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxAuthentication);
             this.Controls.Add(this.panel1);
