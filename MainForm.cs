@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
@@ -37,6 +38,9 @@ namespace RepoManager
          *
          */
 
+
+        private CancellationTokenSource cts;
+
         public FormMain()
         {
             InitializeComponent();
@@ -67,7 +71,6 @@ namespace RepoManager
 
         private async void SearchRepos()
         {
-
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             if (gridView1.RowCount > 0)
@@ -106,23 +109,31 @@ namespace RepoManager
             var listOfTasks = new List<Task>();
             barSelectionStatus.Caption = "Getting repository information...";
 
+            //Debug.Write();
+
+            cts?.Cancel();
+
+            cts = new CancellationTokenSource();
+            var ct = cts.Token;
             progressBarControl1.EditValue = 0;
             foreach (var repoModel in reposList)
             {
-                listOfTasks.Add(Utilities.GetRepoGitInfoAsync(repoModel));
-                listOfTasks.Add(Utilities.GetRepoModelSolutionsList(repoModel));
+                listOfTasks.Add(Utilities.GetRepoGitInfoAsync(repoModel, ct));
+                listOfTasks.Add(Utilities.GetRepoModelSolutionsList(repoModel, ct));
                 if (repoModel.SkipScan)
                     continue;
-                listOfTasks.Add(Utilities.GetRepositorySize(repoModel));
-                listOfTasks.Add(Utilities.GetRepoNumberOfFiles(repoModel));
-                listOfTasks.Add(Utilities.GetRepositoryChanges(repoModel));
+                listOfTasks.Add(Utilities.GetRepositorySize(repoModel, ct));
+                listOfTasks.Add(Utilities.GetRepoNumberOfFiles(repoModel, ct));
+                listOfTasks.Add(Utilities.GetRepositoryChanges(repoModel, ct));
 
             }
             progressBarControl1.Properties.Maximum = listOfTasks.Count;
 
             var entireTask1 = Task.WhenAll(listOfTasks);
-            while (await Task.WhenAny(entireTask1, Task.Delay(100)) != entireTask1)
+            while (await Task.WhenAny(entireTask1, Task.Delay(100, ct)) != entireTask1)
             {
+                if (ct.IsCancellationRequested)
+                    break;
                 var completeCount = listOfTasks.Count(x => x.Status == TaskStatus.RanToCompletion);
                 progressBarControl1.EditValue = completeCount;
 

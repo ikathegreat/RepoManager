@@ -28,13 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SummaryForm));
             this.panel1 = new System.Windows.Forms.Panel();
             this.labelStatus = new System.Windows.Forms.Label();
             this.buttonOK = new System.Windows.Forms.Button();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
-            this.summaryRecordBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.summaryRecordBindingSource = new System.Windows.Forms.BindingSource();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colRepositoryName = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colRepoActionEnum = new DevExpress.XtraGrid.Columns.GridColumn();

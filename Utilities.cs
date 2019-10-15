@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using DevExpress.Utils.Extensions;
 using LibGit2Sharp;
+using LibGit2Sharp.Handlers;
+using RepoManager.Models;
 
 namespace RepoManager
 {
     public static class Utilities
     {
-        public static async Task GetRepoModelSolutionsList(RepoModel repoModel)
+        private const string RFC2822Format = "ddd dd MMM HH:mm:ss yyyy K";
+        public static async Task GetRepoModelSolutionsList(RepoModel repoModel, CancellationToken ct)
         {
             await Task.Run(() =>
             {
@@ -27,9 +33,9 @@ namespace RepoManager
                 {
                     Debug.WriteLine($"GetRepoModelSolutionsList: {ex.Message}");
                 }
-            });
+            }, ct);
         }
-        public static async Task GetRepositoryChanges(RepoModel repoModel)
+        public static async Task GetRepositoryChanges(RepoModel repoModel, CancellationToken ct)
         {
             await Task.Run(() =>
             {
@@ -67,9 +73,9 @@ namespace RepoManager
                 {
                     Debug.WriteLine($"GetRepoModelSolutionsList: {ex.Message}");
                 }
-            });
+            }, ct);
         }
-        public static async Task GetRepoNumberOfFiles(RepoModel repoModel)
+        public static async Task GetRepoNumberOfFiles(RepoModel repoModel, CancellationToken ct)
         {
             await Task.Run(() =>
             {
@@ -92,9 +98,9 @@ namespace RepoManager
                 {
                     Debug.WriteLine($"GetRepoModelSolutionsList: {ex.Message}");
                 }
-            });
+            }, ct);
         }
-        public static async Task GetRepositorySize(RepoModel repoModel)
+        public static async Task GetRepositorySize(RepoModel repoModel, CancellationToken ct)
         {
             await Task.Run(() =>
             {
@@ -116,7 +122,7 @@ namespace RepoManager
                 {
                     Debug.WriteLine($"GetRepoModelSolutionsList: {ex.Message}");
                 }
-            });
+            }, ct);
         }
         private static long GetDirectorySize(string p)
         {
@@ -140,7 +146,7 @@ namespace RepoManager
 
         }
 
-        public static async Task GetRepoGitInfoAsync(RepoModel repoModel)
+        public static async Task GetRepoGitInfoAsync(RepoModel repoModel, CancellationToken ct)
         {
             await Task.Run(() =>
             {
@@ -226,7 +232,7 @@ namespace RepoManager
                 {
                     Debug.WriteLine($"GetRepoActiveBranchNameAsync: {ex.Message}");
                 }
-            });
+            }, ct);
         }
 
         private static void GetFileStatusInfo(RepositoryStatus repoStatus, out string Changes, out string changeString)
@@ -480,6 +486,7 @@ namespace RepoManager
 
                 try
                 {
+
                     var co = new CloneOptions
                     {
                         CredentialsProvider = (_url, _user, _cred) => new UsernamePasswordCredentials
@@ -604,6 +611,8 @@ namespace RepoManager
                 {
                     options.CredentialsProvider = (url, usernameFromUrl, types) =>
                         new UsernamePasswordCredentials { Username = userName, Password = password };
+
+
                 }
 
                 foreach (var remote in repo.Network.Remotes)
@@ -631,6 +640,70 @@ namespace RepoManager
                     }
                 }
             }
+        }
+
+        public static List<SimpleCommit> DoGitCommitHistoryRetrieve(RepoModel repoModel, int numberOfCommits = 15)
+        {
+            var result = new List<SimpleCommit>();
+
+            using (var repo = new Repository(repoModel.Path))
+            {
+                foreach (var c in repo.Commits.Take(numberOfCommits))
+                {
+                    var mergeString = c.Parents.Count() > 1
+                        ? string.Join(" ", c.Parents.Select(p => p.Id.Sha.Substring(0, 7)).ToArray())
+                        : "";
+
+                    var changeCount = 0;
+                        c.Parents.ForEach(x => changeCount +=
+                            repo.Diff.Compare<TreeChanges>(x.Tree,
+                                c.Tree).Count);
+                    result.Add(new SimpleCommit
+                    {
+                        Id = c.Id.ToString(),
+                        Merges = mergeString,
+                        Author = $"{c.Author.Name} <{c.Author.Email}>",
+                        Date = c.Author.When.LocalDateTime,
+                        Message = c.Message,
+                        ChangeCount = changeCount
+                    });
+                }
+            }
+            return result;
+        }
+
+        public static List<SimpleFileChange> DoGitChangedFilesRetrieve(RepoModel repoModel, int numberOfCommits = 15)
+        {
+            var result = new List<SimpleFileChange>();
+
+            var iniFile = new IniFile(FormMain.OptionsIni);
+            var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
+            var slnSearchPath = iniFile.ReadString(OptionsForm.PreferencesSection, "RepoPath", defaultPath);
+            
+            using (var repo = new Repository(repoModel.Path))
+            {
+                foreach (var commit in repo.Commits.Take(numberOfCommits))
+                {
+                    foreach (var parent in commit.Parents)
+                    {
+                        foreach (var change in repo.Diff.Compare<TreeChanges>(parent.Tree,
+                            commit.Tree))
+                        {
+                            result.Add(new SimpleFileChange
+                            {
+                                FileChangeKind = change.Status.ToString(),
+                                Path =  Path.Combine(slnSearchPath, repoModel.Name, change.Path.Replace('/','\\')),
+                                ChangeAuthor = commit.Author.Name,
+                                DateChanged = commit.Author.When.LocalDateTime,
+                                Message = commit.MessageShort,
+                                Sha = commit.Sha
+                            });
+
+                        }
+                    }
+                }
+            }
+            return result;
         }
 
         private static bool IsRemoteServerConnectionOK(RepoModel repoModel, SummaryRecord summaryRecord)
@@ -677,9 +750,25 @@ namespace RepoManager
             password = ConvertHexStringToString(iniFile.ReadString(OptionsForm.AuthenticationSection,
                 $"{repoTypePrefix}Password",
                 ""));
-            var emptyUserName = !string.IsNullOrEmpty(userName);
-            var emptyPassword = !string.IsNullOrEmpty(password);
-            return emptyUserName || emptyPassword;
+
+            var useUserNamePassword =
+                iniFile.ReadBool(OptionsForm.AuthenticationSection, "UseUsernameAndPassword", true);
+
+            if (repoSourceTypeEnum == RepoSourceTypeEnum.AzureDevOps && !useUserNamePassword)
+            {
+                var adoHexPat = iniFile.ReadString(OptionsForm.AuthenticationSection, "AzureDevOpsPAT", "");
+                userName = ConvertHexStringToString(adoHexPat);
+                password = ConvertHexStringToString(adoHexPat);
+                var emptyPassword = !string.IsNullOrEmpty(password);
+                return emptyPassword;
+            }
+            else
+            {
+
+                var emptyUserName = !string.IsNullOrEmpty(userName);
+                var emptyPassword = !string.IsNullOrEmpty(password);
+                return emptyUserName || emptyPassword;
+            }
         }
 
         public static bool FilePathHasInvalidChars(string path)
@@ -694,7 +783,7 @@ namespace RepoManager
             var iniFile = new IniFile(FormMain.RepoPropertiesIni);
             var fileName = iniFile.ReadString(repoModel.Name, "PreferredSolution", "");
 
-            if (!string.IsNullOrEmpty(fileName)) 
+            if (!string.IsNullOrEmpty(fileName))
                 return !File.Exists(fileName) ? string.Empty : fileName;
 
             var slnList = repoModel.GetSolutionList();

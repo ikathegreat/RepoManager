@@ -55,6 +55,11 @@
             this.label6 = new System.Windows.Forms.Label();
             this.labelRepoSkipCount = new System.Windows.Forms.Label();
             this.buttonRepoSkipBrowse = new System.Windows.Forms.Button();
+            this.groupBoxAdoMethod = new System.Windows.Forms.GroupBox();
+            this.radioButtonUserNamePassword = new System.Windows.Forms.RadioButton();
+            this.radioButtonPAT = new System.Windows.Forms.RadioButton();
+            this.textBoxPATValue = new System.Windows.Forms.TextBox();
+            this.labelPATToken = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.groupBoxAuthentication.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl)).BeginInit();
@@ -62,6 +67,7 @@
             this.xtraTabPageAzureDevOps.SuspendLayout();
             this.xtraTabPageGitHub.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBoxAdoMethod.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -69,7 +75,7 @@
             this.panel1.Controls.Add(this.buttonOK);
             this.panel1.Controls.Add(this.buttonCancel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 405);
+            this.panel1.Location = new System.Drawing.Point(0, 500);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(5);
             this.panel1.Size = new System.Drawing.Size(564, 35);
@@ -107,9 +113,9 @@
             this.groupBoxAuthentication.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxAuthentication.Controls.Add(this.xtraTabControl);
-            this.groupBoxAuthentication.Location = new System.Drawing.Point(12, 180);
+            this.groupBoxAuthentication.Location = new System.Drawing.Point(12, 179);
             this.groupBoxAuthentication.Name = "groupBoxAuthentication";
-            this.groupBoxAuthentication.Size = new System.Drawing.Size(540, 220);
+            this.groupBoxAuthentication.Size = new System.Drawing.Size(540, 316);
             this.groupBoxAuthentication.TabIndex = 4;
             this.groupBoxAuthentication.TabStop = false;
             this.groupBoxAuthentication.Text = "Authentication";
@@ -119,7 +125,7 @@
             this.xtraTabControl.Location = new System.Drawing.Point(6, 22);
             this.xtraTabControl.Name = "xtraTabControl";
             this.xtraTabControl.SelectedTabPage = this.xtraTabPageAzureDevOps;
-            this.xtraTabControl.Size = new System.Drawing.Size(528, 186);
+            this.xtraTabControl.Size = new System.Drawing.Size(528, 288);
             this.xtraTabControl.TabIndex = 0;
             this.xtraTabControl.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPageAzureDevOps,
@@ -127,14 +133,11 @@
             // 
             // xtraTabPageAzureDevOps
             // 
+            this.xtraTabPageAzureDevOps.Controls.Add(this.groupBoxAdoMethod);
             this.xtraTabPageAzureDevOps.Controls.Add(this.labelHostUrl);
             this.xtraTabPageAzureDevOps.Controls.Add(this.textBoxHostUrl);
-            this.xtraTabPageAzureDevOps.Controls.Add(this.labelAzureDevOpsUsername);
-            this.xtraTabPageAzureDevOps.Controls.Add(this.textBoxAzureDevOpsUserName);
-            this.xtraTabPageAzureDevOps.Controls.Add(this.labelAzureDevOpsPassword);
-            this.xtraTabPageAzureDevOps.Controls.Add(this.textBoxAzureDevOpsPassword);
             this.xtraTabPageAzureDevOps.Name = "xtraTabPageAzureDevOps";
-            this.xtraTabPageAzureDevOps.Size = new System.Drawing.Size(526, 159);
+            this.xtraTabPageAzureDevOps.Size = new System.Drawing.Size(526, 261);
             this.xtraTabPageAzureDevOps.Text = "Azure DevOps";
             // 
             // labelHostUrl
@@ -156,7 +159,7 @@
             // labelAzureDevOpsUsername
             // 
             this.labelAzureDevOpsUsername.AutoSize = true;
-            this.labelAzureDevOpsUsername.Location = new System.Drawing.Point(37, 69);
+            this.labelAzureDevOpsUsername.Location = new System.Drawing.Point(48, 60);
             this.labelAzureDevOpsUsername.Name = "labelAzureDevOpsUsername";
             this.labelAzureDevOpsUsername.Size = new System.Drawing.Size(60, 15);
             this.labelAzureDevOpsUsername.TabIndex = 0;
@@ -164,7 +167,7 @@
             // 
             // textBoxAzureDevOpsUserName
             // 
-            this.textBoxAzureDevOpsUserName.Location = new System.Drawing.Point(118, 66);
+            this.textBoxAzureDevOpsUserName.Location = new System.Drawing.Point(129, 57);
             this.textBoxAzureDevOpsUserName.Name = "textBoxAzureDevOpsUserName";
             this.textBoxAzureDevOpsUserName.Size = new System.Drawing.Size(188, 23);
             this.textBoxAzureDevOpsUserName.TabIndex = 6;
@@ -172,7 +175,7 @@
             // labelAzureDevOpsPassword
             // 
             this.labelAzureDevOpsPassword.AutoSize = true;
-            this.labelAzureDevOpsPassword.Location = new System.Drawing.Point(37, 104);
+            this.labelAzureDevOpsPassword.Location = new System.Drawing.Point(48, 95);
             this.labelAzureDevOpsPassword.Name = "labelAzureDevOpsPassword";
             this.labelAzureDevOpsPassword.Size = new System.Drawing.Size(57, 15);
             this.labelAzureDevOpsPassword.TabIndex = 1;
@@ -180,7 +183,7 @@
             // 
             // textBoxAzureDevOpsPassword
             // 
-            this.textBoxAzureDevOpsPassword.Location = new System.Drawing.Point(118, 101);
+            this.textBoxAzureDevOpsPassword.Location = new System.Drawing.Point(129, 92);
             this.textBoxAzureDevOpsPassword.Name = "textBoxAzureDevOpsPassword";
             this.textBoxAzureDevOpsPassword.PasswordChar = '*';
             this.textBoxAzureDevOpsPassword.Size = new System.Drawing.Size(188, 23);
@@ -193,7 +196,7 @@
             this.xtraTabPageGitHub.Controls.Add(this.label3);
             this.xtraTabPageGitHub.Controls.Add(this.textBoxGitHubPassword);
             this.xtraTabPageGitHub.Name = "xtraTabPageGitHub";
-            this.xtraTabPageGitHub.Size = new System.Drawing.Size(526, 159);
+            this.xtraTabPageGitHub.Size = new System.Drawing.Size(526, 213);
             this.xtraTabPageGitHub.Text = "GitHub";
             // 
             // label4
@@ -244,7 +247,7 @@
             this.groupBox1.Controls.Add(this.buttonRepoSkipBrowse);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(540, 162);
+            this.groupBox1.Size = new System.Drawing.Size(540, 161);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Preferences";
@@ -331,13 +334,71 @@
             this.buttonRepoSkipBrowse.UseVisualStyleBackColor = true;
             this.buttonRepoSkipBrowse.Click += new System.EventHandler(this.buttonRepoSkipBrowse_Click);
             // 
+            // groupBoxAdoMethod
+            // 
+            this.groupBoxAdoMethod.Controls.Add(this.textBoxPATValue);
+            this.groupBoxAdoMethod.Controls.Add(this.labelPATToken);
+            this.groupBoxAdoMethod.Controls.Add(this.radioButtonPAT);
+            this.groupBoxAdoMethod.Controls.Add(this.radioButtonUserNamePassword);
+            this.groupBoxAdoMethod.Controls.Add(this.labelAzureDevOpsUsername);
+            this.groupBoxAdoMethod.Controls.Add(this.textBoxAzureDevOpsPassword);
+            this.groupBoxAdoMethod.Controls.Add(this.textBoxAzureDevOpsUserName);
+            this.groupBoxAdoMethod.Controls.Add(this.labelAzureDevOpsPassword);
+            this.groupBoxAdoMethod.Location = new System.Drawing.Point(40, 46);
+            this.groupBoxAdoMethod.Name = "groupBoxAdoMethod";
+            this.groupBoxAdoMethod.Size = new System.Drawing.Size(468, 195);
+            this.groupBoxAdoMethod.TabIndex = 8;
+            this.groupBoxAdoMethod.TabStop = false;
+            this.groupBoxAdoMethod.Text = "Method";
+            // 
+            // radioButtonUserNamePassword
+            // 
+            this.radioButtonUserNamePassword.AutoSize = true;
+            this.radioButtonUserNamePassword.Checked = true;
+            this.radioButtonUserNamePassword.Location = new System.Drawing.Point(24, 31);
+            this.radioButtonUserNamePassword.Name = "radioButtonUserNamePassword";
+            this.radioButtonUserNamePassword.Size = new System.Drawing.Size(154, 19);
+            this.radioButtonUserNamePassword.TabIndex = 0;
+            this.radioButtonUserNamePassword.TabStop = true;
+            this.radioButtonUserNamePassword.Text = "Username and Password";
+            this.radioButtonUserNamePassword.UseVisualStyleBackColor = true;
+            this.radioButtonUserNamePassword.CheckedChanged += new System.EventHandler(this.radioCheckChanged);
+            // 
+            // radioButtonPAT
+            // 
+            this.radioButtonPAT.AutoSize = true;
+            this.radioButtonPAT.Location = new System.Drawing.Point(24, 126);
+            this.radioButtonPAT.Name = "radioButtonPAT";
+            this.radioButtonPAT.Size = new System.Drawing.Size(143, 19);
+            this.radioButtonPAT.TabIndex = 1;
+            this.radioButtonPAT.Text = "Personal Access Token";
+            this.radioButtonPAT.UseVisualStyleBackColor = true;
+            this.radioButtonPAT.CheckedChanged += new System.EventHandler(this.radioCheckChanged);
+            // 
+            // textBoxPATValue
+            // 
+            this.textBoxPATValue.Location = new System.Drawing.Point(129, 163);
+            this.textBoxPATValue.Name = "textBoxPATValue";
+            this.textBoxPATValue.PasswordChar = '*';
+            this.textBoxPATValue.Size = new System.Drawing.Size(188, 23);
+            this.textBoxPATValue.TabIndex = 9;
+            // 
+            // labelPATToken
+            // 
+            this.labelPATToken.AutoSize = true;
+            this.labelPATToken.Location = new System.Drawing.Point(48, 166);
+            this.labelPATToken.Name = "labelPATToken";
+            this.labelPATToken.Size = new System.Drawing.Size(38, 15);
+            this.labelPATToken.TabIndex = 8;
+            this.labelPATToken.Text = "Token";
+            // 
             // OptionsForm
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(564, 440);
+            this.ClientSize = new System.Drawing.Size(564, 535);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxAuthentication);
             this.Controls.Add(this.panel1);
@@ -359,6 +420,8 @@
             this.xtraTabPageGitHub.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBoxAdoMethod.ResumeLayout(false);
+            this.groupBoxAdoMethod.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -391,5 +454,10 @@
         private System.Windows.Forms.TextBox textBoxHostUrl;
         private System.Windows.Forms.Label labelHostUrl;
         private System.Windows.Forms.Button buttonRepoSearchPathBrowse;
+        private System.Windows.Forms.GroupBox groupBoxAdoMethod;
+        private System.Windows.Forms.TextBox textBoxPATValue;
+        private System.Windows.Forms.Label labelPATToken;
+        private System.Windows.Forms.RadioButton radioButtonPAT;
+        private System.Windows.Forms.RadioButton radioButtonUserNamePassword;
     }
 }
