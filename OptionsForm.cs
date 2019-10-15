@@ -32,6 +32,9 @@ namespace RepoManager
 
             iniFile.WriteString(AuthenticationSection, "AzureDevOpsHostUrl", textBoxHostUrl.Text);
 
+            iniFile.WriteBool(AuthenticationSection, "UseUsernameAndPassword", radioButtonUserNamePassword.Checked);
+            var adoPatValue = Utilities.ConvertStringToHexString(textBoxPATValue.Text);
+            iniFile.WriteString(AuthenticationSection, "AzureDevOpsPAT", adoPatValue);
 
             Close();
         }
@@ -49,6 +52,16 @@ namespace RepoManager
             var gitHubHexPassword = iniFile.ReadString(AuthenticationSection, "GitHubPassword", "");
             textBoxGitHubPassword.Text = Utilities.ConvertHexStringToString(gitHubHexPassword);
 
+            textBoxHostUrl.Text = iniFile.ReadString(AuthenticationSection, "AzureDevOpsHostUrl", "");
+
+            radioButtonUserNamePassword.Checked =
+                iniFile.ReadBool(AuthenticationSection, "UseUsernameAndPassword", true);
+            radioButtonPAT.Checked = !radioButtonUserNamePassword.Checked;
+            radioCheckChanged(null, null);
+
+            var adoHexPat = iniFile.ReadString(AuthenticationSection, "AzureDevOpsPAT", "");
+            textBoxPATValue.Text = Utilities.ConvertHexStringToString(adoHexPat);
+
             comboBox1.SelectedIndex = iniFile.ReadInteger(PreferencesSection, "DoubleClickAction", 6);
 
             iniFile.ReadSection(SkipRepoBrowseForm.SkipReposSection, out var repoSectionList);
@@ -57,7 +70,12 @@ namespace RepoManager
             var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
             textBoxRepoSearchPath.Text = iniFile.ReadString(PreferencesSection, "RepoPath", defaultPath);
 
-            textBoxHostUrl.Text = iniFile.ReadString(AuthenticationSection, "AzureDevOpsHostUrl", "");
+            //Todo: Finish this. Currently facing too many redirects error. Might be version of lib2gitsharp version.
+            radioButtonPAT.Visible = false;
+            labelPATToken.Visible = false;
+            textBoxPATValue.Visible = false;
+
+
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -87,6 +105,17 @@ namespace RepoManager
             {
                 textBoxRepoSearchPath.Text = dialog.FileName;
             }
+        }
+
+        private void radioCheckChanged(object sender, EventArgs e)
+        {
+            labelAzureDevOpsUsername.Enabled = radioButtonUserNamePassword.Checked;
+            textBoxAzureDevOpsUserName.Enabled = radioButtonUserNamePassword.Checked;
+            labelAzureDevOpsPassword.Enabled = radioButtonUserNamePassword.Checked;
+            textBoxAzureDevOpsPassword.Enabled = radioButtonUserNamePassword.Checked;
+
+            labelPATToken.Enabled = radioButtonPAT.Checked;
+            textBoxPATValue.Enabled = radioButtonPAT.Checked;
         }
     }
 }
