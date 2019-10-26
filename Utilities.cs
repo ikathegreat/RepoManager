@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -12,7 +11,6 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using DevExpress.Utils.Extensions;
 using LibGit2Sharp;
-using LibGit2Sharp.Handlers;
 using RepoManager.Models;
 
 namespace RepoManager

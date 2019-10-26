@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
+using RepoManager.Models;
 
 namespace RepoManager
 {
@@ -23,6 +24,12 @@ namespace RepoManager
         public static string RunBatchIni = Path.Combine(RepoManagerAppData, "RunBatch.ini");
         public static string RepoPropertiesIni = Path.Combine(RepoManagerAppData, "RepoProperties.ini");
         public static string GridLayoutXml = Path.Combine(RepoManagerAppData, "GridLayout.xml");
+        public static string GridRecentFilesXml = Path.Combine(RepoManagerAppData, "GridRecentFiles.xml");
+        public static string GridCommitHistoryXml = Path.Combine(RepoManagerAppData, "GridCommitHistory.xml");
+        public static string GridRunBatchFilesXml = Path.Combine(RepoManagerAppData, "GridRunBatchFiles.xml");
+        public static string GridSummaryXml = Path.Combine(RepoManagerAppData, "GridSummary.xml");
+        public static string GridNugetPackagesXml = Path.Combine(RepoManagerAppData, "GridNugetPackages.xml");
+        public static string GridNugetToUpgradeXml = Path.Combine(RepoManagerAppData, "GridNugetToUpgrade.xml");
 
         /*
          * This project heavily relies on libgit2sharp
@@ -50,11 +57,14 @@ namespace RepoManager
 
             var iniFile = new IniFile(OptionsIni);
 
-            Width = iniFile.ReadInteger("Window", "Width", 1200);
-            Height = iniFile.ReadInteger("Window", "Height", 600);
-
             var isMaximized = iniFile.ReadBool("Window", "IsMaximized", false);
             WindowState = isMaximized ? FormWindowState.Maximized : FormWindowState.Normal;
+
+            if (WindowState == FormWindowState.Normal)
+            {
+                Width = iniFile.ReadInteger("Window", "Width", 1200);
+                Height = iniFile.ReadInteger("Window", "Height", 600);
+            }
         }
 
         private void buttonSearchRepos_Click(object sender, EventArgs e)
@@ -209,6 +219,14 @@ namespace RepoManager
 
             if (selectedRepoModelList.Count == 0)
                 return;
+
+            if (repoActionEnum == RepoActionEnum.ManageNuget)
+            {
+                var manageNugetForm = new ManageNugetForm { ReposList = selectedRepoModelList };
+
+                manageNugetForm.ShowDialog();
+                return;
+            }
 
             var totalBatchFileCount = 0;
             if (repoActionEnum == RepoActionEnum.RunBatch)
@@ -504,6 +522,8 @@ namespace RepoManager
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            cts?.Cancel();
+
             var directory = Path.GetDirectoryName(OptionsIni);
             if (!Directory.Exists(directory))
                 if (directory != null)
@@ -511,8 +531,13 @@ namespace RepoManager
 
             var iniFile = new IniFile(OptionsIni);
             iniFile.WriteBool("Window", "IsMaximized", WindowState == FormWindowState.Maximized);
-            iniFile.WriteInteger("Window", "Width", Width);
-            iniFile.WriteInteger("Window", "Height", Height);
+
+
+            if (WindowState != FormWindowState.Normal)
+            {
+                iniFile.WriteInteger("Window", "Width", Width);
+                iniFile.WriteInteger("Window", "Height", Height);
+            }
 
             gridView1.SaveLayoutToXml(GridLayoutXml);
 
@@ -589,16 +614,20 @@ namespace RepoManager
                 var branchCount = branchesList.Count == 0 ? "None" : branchesList.Count.ToString();
                 branchesToolStripMenuItem.Text = $"Branches ({branchCount})";
 
-                toolStripMenuItemAzureDevOps.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps;
-                remoteURLToolStripMenuItem.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps;
-                toolStripMenuItemAdoCommits.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps;
-                toolStripMenuItemAdoPushes.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps;
-                toolStripMenuItemAdoBranches.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps;
-                toolStripMenuItemAdoPulLRequests.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps;
+                var iniFile = new IniFile(OptionsIni);
+                var showWebShortcuts = iniFile.ReadBool(OptionsForm.PreferencesSection, "ShowWebShortcuts", true);
 
-                gitHubToolStripMenuItem.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.GitHub;
-                gitHubCodeToolStripMenuItem.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.GitHub;
-                gitHubIssuesToolStripMenuItem.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.GitHub;
+                toolStripSeparator5.Visible = showWebShortcuts;
+                toolStripMenuItemAzureDevOps.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps && showWebShortcuts;
+                remoteURLToolStripMenuItem.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps && showWebShortcuts;
+                toolStripMenuItemAdoCommits.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps && showWebShortcuts;
+                toolStripMenuItemAdoPushes.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps && showWebShortcuts;
+                toolStripMenuItemAdoBranches.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps && showWebShortcuts;
+                toolStripMenuItemAdoPulLRequests.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps && showWebShortcuts;
+
+                gitHubToolStripMenuItem.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.GitHub && showWebShortcuts;
+                gitHubCodeToolStripMenuItem.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.GitHub && showWebShortcuts;
+                gitHubIssuesToolStripMenuItem.Visible = repoModel.RepoSourceType == RepoSourceTypeEnum.GitHub && showWebShortcuts;
 
             }
             finally
@@ -1008,6 +1037,16 @@ namespace RepoManager
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
                 return;
             OpenPreferredSolutionFile(repoModel);
+        }
+
+        private void barButtonItemManageNuget_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.ManageNuget);
+        }
+
+        private void nugetPackagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.ManageNuget, true);
         }
     }
 }

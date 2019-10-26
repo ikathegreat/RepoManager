@@ -61,6 +61,9 @@
             this.barStaticItemVersion = new DevExpress.XtraBars.BarStaticItem();
             this.barButtonItemRefresh = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemRunBatch = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemProperties = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemOpenPreferredSln = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemManageNuget = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroupGit = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroupRepoUtilities = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -101,8 +104,7 @@
             this.branchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemProperties = new System.Windows.Forms.ToolStripMenuItem();
-            this.barButtonItemProperties = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItemOpenPreferredSln = new DevExpress.XtraBars.BarButtonItem();
+            this.nugetPackagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repoModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
@@ -119,7 +121,7 @@
             this.gridControl1.Location = new System.Drawing.Point(0, 62);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(1101, 389);
+            this.gridControl1.Size = new System.Drawing.Size(1306, 389);
             this.gridControl1.TabIndex = 4;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -262,9 +264,10 @@
             this.barButtonItemRefresh,
             this.barButtonItemRunBatch,
             this.barButtonItemProperties,
-            this.barButtonItemOpenPreferredSln});
+            this.barButtonItemOpenPreferredSln,
+            this.barButtonItemManageNuget});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl1.MaxItemId = 22;
+            this.ribbonControl1.MaxItemId = 24;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1});
@@ -277,7 +280,7 @@
             this.ribbonControl1.ShowPageHeadersMode = DevExpress.XtraBars.Ribbon.ShowPageHeadersMode.Hide;
             this.ribbonControl1.ShowQatLocationSelector = false;
             this.ribbonControl1.ShowToolbarCustomizeItem = false;
-            this.ribbonControl1.Size = new System.Drawing.Size(1101, 62);
+            this.ribbonControl1.Size = new System.Drawing.Size(1306, 62);
             this.ribbonControl1.StatusBar = this.ribbonStatusBar1;
             this.ribbonControl1.Toolbar.ShowCustomizeItem = false;
             // 
@@ -285,6 +288,7 @@
             // 
             this.barButtonItemGitGetLatest.Caption = "Pull";
             this.barButtonItemGitGetLatest.Id = 1;
+            this.barButtonItemGitGetLatest.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemGitGetLatest.ImageOptions.Image")));
             this.barButtonItemGitGetLatest.Name = "barButtonItemGitGetLatest";
             this.barButtonItemGitGetLatest.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemGitGetLatest_ItemClick);
             // 
@@ -292,6 +296,7 @@
             // 
             this.barButtonItemReset.Caption = "Reset";
             this.barButtonItemReset.Id = 1;
+            this.barButtonItemReset.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemReset.ImageOptions.Image")));
             this.barButtonItemReset.Name = "barButtonItemReset";
             this.barButtonItemReset.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemReset_ItemClick);
             // 
@@ -299,6 +304,7 @@
             // 
             this.barButtonItemDeleteBinObj.Caption = "Delete bin/obj";
             this.barButtonItemDeleteBinObj.Id = 3;
+            this.barButtonItemDeleteBinObj.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemDeleteBinObj.ImageOptions.Image")));
             this.barButtonItemDeleteBinObj.Name = "barButtonItemDeleteBinObj";
             this.barButtonItemDeleteBinObj.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemDeleteBinObj_ItemClick);
             // 
@@ -322,6 +328,7 @@
             // 
             this.barButtonItemDeleteVs.Caption = "Delete .vs";
             this.barButtonItemDeleteVs.Id = 6;
+            this.barButtonItemDeleteVs.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemDeleteVs.ImageOptions.Image")));
             this.barButtonItemDeleteVs.Name = "barButtonItemDeleteVs";
             this.barButtonItemDeleteVs.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemDeleteVs_ItemClick);
             // 
@@ -343,6 +350,7 @@
             // 
             this.barButtonItemFetch.Caption = "Fetch";
             this.barButtonItemFetch.Id = 10;
+            this.barButtonItemFetch.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemFetch.ImageOptions.Image")));
             this.barButtonItemFetch.Name = "barButtonItemFetch";
             this.barButtonItemFetch.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemFetch_ItemClick);
             // 
@@ -358,6 +366,7 @@
             // 
             this.barButtonItemClone.Caption = "Clone";
             this.barButtonItemClone.Id = 12;
+            this.barButtonItemClone.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemClone.ImageOptions.Image")));
             this.barButtonItemClone.Name = "barButtonItemClone";
             this.barButtonItemClone.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemClone_ItemClick);
             // 
@@ -400,8 +409,33 @@
             // 
             this.barButtonItemRunBatch.Caption = "Run Batch";
             this.barButtonItemRunBatch.Id = 19;
+            this.barButtonItemRunBatch.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemRunBatch.ImageOptions.Image")));
             this.barButtonItemRunBatch.Name = "barButtonItemRunBatch";
             this.barButtonItemRunBatch.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.BarButtonItemRunBatch_ItemClick);
+            // 
+            // barButtonItemProperties
+            // 
+            this.barButtonItemProperties.Caption = "Properties";
+            this.barButtonItemProperties.Id = 20;
+            this.barButtonItemProperties.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemProperties.ImageOptions.Image")));
+            this.barButtonItemProperties.Name = "barButtonItemProperties";
+            this.barButtonItemProperties.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemProperties_ItemClick);
+            // 
+            // barButtonItemOpenPreferredSln
+            // 
+            this.barButtonItemOpenPreferredSln.Caption = "Open .sln";
+            this.barButtonItemOpenPreferredSln.Id = 21;
+            this.barButtonItemOpenPreferredSln.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemOpenPreferredSln.ImageOptions.Image")));
+            this.barButtonItemOpenPreferredSln.Name = "barButtonItemOpenPreferredSln";
+            this.barButtonItemOpenPreferredSln.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemOpenPreferredSln_ItemClick);
+            // 
+            // barButtonItemManageNuget
+            // 
+            this.barButtonItemManageNuget.Caption = "Nuget Packages...";
+            this.barButtonItemManageNuget.Id = 23;
+            this.barButtonItemManageNuget.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemManageNuget.ImageOptions.Image")));
+            this.barButtonItemManageNuget.Name = "barButtonItemManageNuget";
+            this.barButtonItemManageNuget.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemManageNuget_ItemClick);
             // 
             // ribbonPage1
             // 
@@ -428,6 +462,7 @@
             this.ribbonPageGroupRepoUtilities.ItemLinks.Add(this.barButtonItemRunBatch);
             this.ribbonPageGroupRepoUtilities.ItemLinks.Add(this.barButtonItemDeleteBinObj);
             this.ribbonPageGroupRepoUtilities.ItemLinks.Add(this.barButtonItemDeleteVs);
+            this.ribbonPageGroupRepoUtilities.ItemLinks.Add(this.barButtonItemManageNuget);
             this.ribbonPageGroupRepoUtilities.Name = "ribbonPageGroupRepoUtilities";
             this.ribbonPageGroupRepoUtilities.Text = "Repo Utilities";
             // 
@@ -463,7 +498,7 @@
             this.ribbonStatusBar1.Location = new System.Drawing.Point(0, 498);
             this.ribbonStatusBar1.Name = "ribbonStatusBar1";
             this.ribbonStatusBar1.Ribbon = this.ribbonControl1;
-            this.ribbonStatusBar1.Size = new System.Drawing.Size(1101, 21);
+            this.ribbonStatusBar1.Size = new System.Drawing.Size(1306, 21);
             // 
             // panelProgressBar
             // 
@@ -471,7 +506,7 @@
             this.panelProgressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelProgressBar.Location = new System.Drawing.Point(0, 451);
             this.panelProgressBar.Name = "panelProgressBar";
-            this.panelProgressBar.Size = new System.Drawing.Size(1101, 47);
+            this.panelProgressBar.Size = new System.Drawing.Size(1306, 47);
             this.panelProgressBar.TabIndex = 7;
             // 
             // progressBarControl1
@@ -483,7 +518,7 @@
             this.progressBarControl1.Name = "progressBarControl1";
             this.progressBarControl1.Properties.ShowTitle = true;
             this.progressBarControl1.ShowProgressInTaskBar = true;
-            this.progressBarControl1.Size = new System.Drawing.Size(1077, 18);
+            this.progressBarControl1.Size = new System.Drawing.Size(1282, 18);
             this.progressBarControl1.TabIndex = 0;
             // 
             // contextMenuStrip
@@ -510,6 +545,7 @@
             this.deletevsToolStripMenuItem,
             this.runBatchFilesToolStripMenuItem,
             this.editRunBatchFilesToolStripMenuItem,
+            this.nugetPackagesToolStripMenuItem,
             this.toolStripSeparator4,
             this.openToolStripMenuItem,
             this.deleteToolStripMenuItem,
@@ -521,7 +557,7 @@
             this.toolStripSeparator7,
             this.toolStripMenuItemProperties});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(178, 552);
+            this.contextMenuStrip.Size = new System.Drawing.Size(178, 574);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // focusedRepoNameToolStripMenuItem
@@ -529,27 +565,27 @@
             this.focusedRepoNameToolStripMenuItem.Enabled = false;
             this.focusedRepoNameToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("focusedRepoNameToolStripMenuItem.Image")));
             this.focusedRepoNameToolStripMenuItem.Name = "focusedRepoNameToolStripMenuItem";
-            this.focusedRepoNameToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.focusedRepoNameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.focusedRepoNameToolStripMenuItem.Text = "FocusedRepoName";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // toolStripMenuItemAzureDevOps
             // 
             this.toolStripMenuItemAzureDevOps.Enabled = false;
             this.toolStripMenuItemAzureDevOps.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAzureDevOps.Image")));
             this.toolStripMenuItemAzureDevOps.Name = "toolStripMenuItemAzureDevOps";
-            this.toolStripMenuItemAzureDevOps.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAzureDevOps.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAzureDevOps.Text = "Azure DevOps";
             // 
             // remoteURLToolStripMenuItem
             // 
             this.remoteURLToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("remoteURLToolStripMenuItem.Image")));
             this.remoteURLToolStripMenuItem.Name = "remoteURLToolStripMenuItem";
-            this.remoteURLToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.remoteURLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.remoteURLToolStripMenuItem.Text = "Code";
             this.remoteURLToolStripMenuItem.Click += new System.EventHandler(this.remoteURLToolStripMenuItem_Click);
             // 
@@ -557,7 +593,7 @@
             // 
             this.toolStripMenuItemAdoCommits.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAdoCommits.Image")));
             this.toolStripMenuItemAdoCommits.Name = "toolStripMenuItemAdoCommits";
-            this.toolStripMenuItemAdoCommits.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAdoCommits.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAdoCommits.Text = "Commits";
             this.toolStripMenuItemAdoCommits.Click += new System.EventHandler(this.toolStripMenuItemAdoCommits_Click);
             // 
@@ -565,7 +601,7 @@
             // 
             this.toolStripMenuItemAdoPushes.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAdoPushes.Image")));
             this.toolStripMenuItemAdoPushes.Name = "toolStripMenuItemAdoPushes";
-            this.toolStripMenuItemAdoPushes.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAdoPushes.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAdoPushes.Text = "Pushes";
             this.toolStripMenuItemAdoPushes.Click += new System.EventHandler(this.toolStripMenuItemAdoPushes_Click);
             // 
@@ -573,7 +609,7 @@
             // 
             this.toolStripMenuItemAdoBranches.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAdoBranches.Image")));
             this.toolStripMenuItemAdoBranches.Name = "toolStripMenuItemAdoBranches";
-            this.toolStripMenuItemAdoBranches.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAdoBranches.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAdoBranches.Text = "Branches";
             this.toolStripMenuItemAdoBranches.Click += new System.EventHandler(this.toolStripMenuItemAdoBranches_Click);
             // 
@@ -581,7 +617,7 @@
             // 
             this.toolStripMenuItemAdoPulLRequests.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAdoPulLRequests.Image")));
             this.toolStripMenuItemAdoPulLRequests.Name = "toolStripMenuItemAdoPulLRequests";
-            this.toolStripMenuItemAdoPulLRequests.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAdoPulLRequests.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAdoPulLRequests.Text = "Pull Requests";
             this.toolStripMenuItemAdoPulLRequests.Click += new System.EventHandler(this.toolStripMenuItemAdoPulLRequests_Click);
             // 
@@ -590,14 +626,14 @@
             this.gitHubToolStripMenuItem.Enabled = false;
             this.gitHubToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("gitHubToolStripMenuItem.Image")));
             this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
-            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gitHubToolStripMenuItem.Text = "GitHub";
             // 
             // gitHubCodeToolStripMenuItem
             // 
             this.gitHubCodeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("gitHubCodeToolStripMenuItem.Image")));
             this.gitHubCodeToolStripMenuItem.Name = "gitHubCodeToolStripMenuItem";
-            this.gitHubCodeToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.gitHubCodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gitHubCodeToolStripMenuItem.Text = "Code";
             this.gitHubCodeToolStripMenuItem.Click += new System.EventHandler(this.CodeToolStripMenuItem_Click);
             // 
@@ -605,20 +641,20 @@
             // 
             this.gitHubIssuesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("gitHubIssuesToolStripMenuItem.Image")));
             this.gitHubIssuesToolStripMenuItem.Name = "gitHubIssuesToolStripMenuItem";
-            this.gitHubIssuesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.gitHubIssuesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gitHubIssuesToolStripMenuItem.Text = "Issues";
             this.gitHubIssuesToolStripMenuItem.Click += new System.EventHandler(this.GitHubIssuesToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
             // 
             // fetchToolStripMenuItem
             // 
             this.fetchToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fetchToolStripMenuItem.Image")));
             this.fetchToolStripMenuItem.Name = "fetchToolStripMenuItem";
-            this.fetchToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.fetchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.fetchToolStripMenuItem.Text = "Fetch";
             this.fetchToolStripMenuItem.Click += new System.EventHandler(this.fetchToolStripMenuItem_Click);
             // 
@@ -626,7 +662,7 @@
             // 
             this.pullToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pullToolStripMenuItem.Image")));
             this.pullToolStripMenuItem.Name = "pullToolStripMenuItem";
-            this.pullToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.pullToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pullToolStripMenuItem.Text = "Pull";
             this.pullToolStripMenuItem.Click += new System.EventHandler(this.pullToolStripMenuItem_Click);
             // 
@@ -634,26 +670,28 @@
             // 
             this.resetToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("resetToolStripMenuItem.Image")));
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // deleteBinobjToolStripMenuItem
             // 
+            this.deleteBinobjToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteBinobjToolStripMenuItem.Image")));
             this.deleteBinobjToolStripMenuItem.Name = "deleteBinobjToolStripMenuItem";
-            this.deleteBinobjToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.deleteBinobjToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deleteBinobjToolStripMenuItem.Text = "Delete bin/obj";
             this.deleteBinobjToolStripMenuItem.Click += new System.EventHandler(this.deleteBinobjToolStripMenuItem_Click);
             // 
             // deletevsToolStripMenuItem
             // 
+            this.deletevsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deletevsToolStripMenuItem.Image")));
             this.deletevsToolStripMenuItem.Name = "deletevsToolStripMenuItem";
-            this.deletevsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.deletevsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deletevsToolStripMenuItem.Text = "Delete .vs";
             this.deletevsToolStripMenuItem.Click += new System.EventHandler(this.deletevsToolStripMenuItem_Click);
             // 
@@ -661,7 +699,7 @@
             // 
             this.runBatchFilesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runBatchFilesToolStripMenuItem.Image")));
             this.runBatchFilesToolStripMenuItem.Name = "runBatchFilesToolStripMenuItem";
-            this.runBatchFilesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.runBatchFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.runBatchFilesToolStripMenuItem.Text = "Run Batch Files";
             this.runBatchFilesToolStripMenuItem.Click += new System.EventHandler(this.RunBatchFilesToolStripMenuItem_Click);
             // 
@@ -669,20 +707,20 @@
             // 
             this.editRunBatchFilesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("editRunBatchFilesToolStripMenuItem.Image")));
             this.editRunBatchFilesToolStripMenuItem.Name = "editRunBatchFilesToolStripMenuItem";
-            this.editRunBatchFilesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.editRunBatchFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.editRunBatchFilesToolStripMenuItem.Text = "Batch Files...";
             this.editRunBatchFilesToolStripMenuItem.Click += new System.EventHandler(this.EditRunBatchFilesToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -690,77 +728,69 @@
             // 
             this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // ignoreRepoToolStripMenuItem
             // 
             this.ignoreRepoToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("ignoreRepoToolStripMenuItem.Image")));
             this.ignoreRepoToolStripMenuItem.Name = "ignoreRepoToolStripMenuItem";
-            this.ignoreRepoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.ignoreRepoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ignoreRepoToolStripMenuItem.Text = "Ignore Repo";
             this.ignoreRepoToolStripMenuItem.Click += new System.EventHandler(this.ignoreRepoToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
             // 
             // solutionsToolStripMenuItem
             // 
             this.solutionsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("solutionsToolStripMenuItem.Image")));
             this.solutionsToolStripMenuItem.Name = "solutionsToolStripMenuItem";
-            this.solutionsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.solutionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.solutionsToolStripMenuItem.Text = "Solutions";
             // 
             // branchesToolStripMenuItem
             // 
             this.branchesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("branchesToolStripMenuItem.Image")));
             this.branchesToolStripMenuItem.Name = "branchesToolStripMenuItem";
-            this.branchesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.branchesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.branchesToolStripMenuItem.Text = "Branches";
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(177, 6);
             // 
             // toolStripMenuItemProperties
             // 
             this.toolStripMenuItemProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemProperties.Image")));
             this.toolStripMenuItemProperties.Name = "toolStripMenuItemProperties";
-            this.toolStripMenuItemProperties.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemProperties.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemProperties.Text = "Properties";
             this.toolStripMenuItemProperties.Click += new System.EventHandler(this.toolStripMenuItemProperties_Click);
             // 
-            // barButtonItemProperties
+            // nugetPackagesToolStripMenuItem
             // 
-            this.barButtonItemProperties.Caption = "Properties";
-            this.barButtonItemProperties.Id = 20;
-            this.barButtonItemProperties.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemProperties.ImageOptions.Image")));
-            this.barButtonItemProperties.Name = "barButtonItemProperties";
-            this.barButtonItemProperties.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemProperties_ItemClick);
-            // 
-            // barButtonItemOpenPreferredSln
-            // 
-            this.barButtonItemOpenPreferredSln.Caption = "Open .sln";
-            this.barButtonItemOpenPreferredSln.Id = 21;
-            this.barButtonItemOpenPreferredSln.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemOpenPreferredSln.ImageOptions.Image")));
-            this.barButtonItemOpenPreferredSln.Name = "barButtonItemOpenPreferredSln";
-            this.barButtonItemOpenPreferredSln.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemOpenPreferredSln_ItemClick);
+            this.nugetPackagesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("nugetPackagesToolStripMenuItem.Image")));
+            this.nugetPackagesToolStripMenuItem.Name = "nugetPackagesToolStripMenuItem";
+            this.nugetPackagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nugetPackagesToolStripMenuItem.Text = "Nuget Packages...";
+            this.nugetPackagesToolStripMenuItem.Click += new System.EventHandler(this.nugetPackagesToolStripMenuItem_Click);
             // 
             // FormMain
             // 
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1101, 519);
+            this.ClientSize = new System.Drawing.Size(1306, 519);
             this.Controls.Add(this.gridControl1);
             this.Controls.Add(this.panelProgressBar);
             this.Controls.Add(this.ribbonStatusBar1);
@@ -860,6 +890,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemProperties;
         private DevExpress.XtraBars.BarButtonItem barButtonItemProperties;
         private DevExpress.XtraBars.BarButtonItem barButtonItemOpenPreferredSln;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemManageNuget;
+        private System.Windows.Forms.ToolStripMenuItem nugetPackagesToolStripMenuItem;
     }
 }
 

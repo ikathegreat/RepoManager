@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using CommandLineParser.Arguments;
 using CommandLineParser.Exceptions;
 
 namespace RepoManager
