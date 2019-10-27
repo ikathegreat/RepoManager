@@ -1,13 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using MaterialSkin;
+using MaterialSkin.Controls;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using RepoManager.Analytics;
 using RepoManager.Models;
 
 namespace RepoManager
 {
-    public partial class OptionsForm : DevExpress.XtraEditors.XtraForm
+    public partial class OptionsForm : MaterialForm
     {
         public const string AuthenticationSection = "Authentication";
         public const string PreferencesSection = "Preferences";
@@ -17,6 +19,12 @@ namespace RepoManager
         public OptionsForm()
         {
             InitializeComponent();
+
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -31,10 +39,22 @@ namespace RepoManager
             var gitHubHexPassword = Utilities.ConvertStringToHexString(textBoxGitHubPassword.Text);
             iniFile.WriteString(AuthenticationSection, "GitHubPassword", gitHubHexPassword);
 
-            if (comboBox1.SelectedIndex != DefaultDoubleClickIndex)
-                Track.DoTrackEvent(TrackCategories.Option, "changeRepoDoubleClickOption", comboBox1.SelectedIndex.ToString());
+            var selectedIndex = 0;
+            foreach (ToolStripItem toolStripItem in materialContextMenuStrip1.Items)
+            {
 
-            iniFile.WriteInteger(PreferencesSection, "DoubleClickAction", comboBox1.SelectedIndex);
+                if (!(toolStripItem is ToolStripMenuItem toolStripMenuItem))
+                    continue;
+                if (!toolStripMenuItem.Checked)
+                    continue;
+                selectedIndex = Convert.ToInt32(toolStripMenuItem.Tag);
+            }
+
+            if (selectedIndex != DefaultDoubleClickIndex)
+                Track.DoTrackEvent(TrackCategories.Option, "changeRepoDoubleClickOption",
+                    selectedIndex.ToString());
+
+            iniFile.WriteInteger(PreferencesSection, "DoubleClickAction", selectedIndex);
 
             iniFile.WriteString(PreferencesSection, "RepoPath", textBoxRepoSearchPath.Text);
 
@@ -48,7 +68,7 @@ namespace RepoManager
                 Track.DoTrackEvent(TrackCategories.Option, "hideWebShortcuts");
             iniFile.WriteBool(PreferencesSection, "ShowWebShortcuts", checkBoxShowWebShortcuts.Checked);
 
-            if(!checkBoxAnalytics.Checked)
+            if (!checkBoxAnalytics.Checked)
                 Track.DoTrackEvent(TrackCategories.Option, "optOutAnalytics");
 
             iniFile.WriteBool(PreferencesSection, "DoAnalytics", checkBoxAnalytics.Checked);
@@ -79,16 +99,27 @@ namespace RepoManager
             var adoHexPat = iniFile.ReadString(AuthenticationSection, "AzureDevOpsPAT", "");
             textBoxPATValue.Text = Utilities.ConvertHexStringToString(adoHexPat);
 
-            comboBox1.SelectedIndex = iniFile.ReadInteger(PreferencesSection, "DoubleClickAction", DefaultDoubleClickIndex);
+            var selectedIndex = iniFile.ReadInteger(PreferencesSection, "DoubleClickAction", DefaultDoubleClickIndex);
+
+            foreach (ToolStripItem toolStripItem in materialContextMenuStrip1.Items)
+            {
+                if (Convert.ToInt32(toolStripItem.Tag) != selectedIndex)
+                    continue;
+
+                if (!(toolStripItem is ToolStripMenuItem toolStripMenuItem))
+                    continue;
+                toolStripMenuItem.Checked = true;
+                materialFlatButtonDoubleClick.Text = toolStripMenuItem.Text;
+            }
 
             iniFile.ReadSection(SkipRepoBrowseForm.SkipReposSection, out var repoSectionList);
             labelRepoSkipCount.Text = $"{repoSectionList.Count} repos";
 
             var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
             textBoxRepoSearchPath.Text = iniFile.ReadString(PreferencesSection, "RepoPath", defaultPath);
-            
-            checkBoxShowWebShortcuts.Checked =  iniFile.ReadBool(PreferencesSection, "ShowWebShortcuts", true);
-            checkBoxAnalytics.Checked =  iniFile.ReadBool(PreferencesSection, "DoAnalytics", true);
+
+            checkBoxShowWebShortcuts.Checked = iniFile.ReadBool(PreferencesSection, "ShowWebShortcuts", true);
+            checkBoxAnalytics.Checked = iniFile.ReadBool(PreferencesSection, "DoAnalytics", true);
 
 
             //Todo: Finish this. Currently facing too many redirects error. Might be version of lib2gitsharp version.
@@ -106,6 +137,25 @@ namespace RepoManager
 
         private void buttonRepoSkipBrowse_Click(object sender, EventArgs e)
         {
+        }
+
+        private void ButtonRepoSearchPathBrowse_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void radioCheckChanged(object sender, EventArgs e)
+        {
+            labelAzureDevOpsUsername.Enabled = radioButtonUserNamePassword.Checked;
+            textBoxAzureDevOpsUserName.Enabled = radioButtonUserNamePassword.Checked;
+            labelAzureDevOpsPassword.Enabled = radioButtonUserNamePassword.Checked;
+            textBoxAzureDevOpsPassword.Enabled = radioButtonUserNamePassword.Checked;
+
+            labelPATToken.Enabled = radioButtonPAT.Checked;
+            textBoxPATValue.Enabled = radioButtonPAT.Checked;
+        }
+
+        private void buttonRepoSkipBrowse_Click_1(object sender, EventArgs e)
+        {
             Track.DoTrackEvent(TrackCategories.Application, "skipRepoBrowseForm.ShowDialog");
 
             var skipRepoBrowseForm = new SkipRepoBrowseForm();
@@ -116,7 +166,45 @@ namespace RepoManager
 
         }
 
-        private void ButtonRepoSearchPathBrowse_Click(object sender, EventArgs e)
+        private void materialFlatButton1_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void materialFlatButton1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                materialContextMenuStrip1.Show(PointToScreen(e.Location));
+
+        }
+
+        private void materialContextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
+        private void gitFetchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!(sender is ToolStripMenuItem senderToolStripMenuItem))
+                return;
+
+            //Can't uncheck
+            if (senderToolStripMenuItem.Checked)
+                return;
+
+            senderToolStripMenuItem.Checked = true;
+
+            materialFlatButtonDoubleClick.Text = senderToolStripMenuItem.Text;
+
+            foreach (ToolStripItem toolStripItem in materialContextMenuStrip1.Items)
+            {
+                if (!(toolStripItem is ToolStripMenuItem toolStripMenuItem)
+                    || toolStripMenuItem == senderToolStripMenuItem)
+                    continue;
+                toolStripMenuItem.Checked = false;
+            }
+        }
+
+        private void materialFlatButtonRepoBrowse_Click(object sender, EventArgs e)
         {
             var dialog = new CommonOpenFileDialog
             {
@@ -130,15 +218,9 @@ namespace RepoManager
             }
         }
 
-        private void radioCheckChanged(object sender, EventArgs e)
+        private void textBoxAzureDevOpsUserName_Click(object sender, EventArgs e)
         {
-            labelAzureDevOpsUsername.Enabled = radioButtonUserNamePassword.Checked;
-            textBoxAzureDevOpsUserName.Enabled = radioButtonUserNamePassword.Checked;
-            labelAzureDevOpsPassword.Enabled = radioButtonUserNamePassword.Checked;
-            textBoxAzureDevOpsPassword.Enabled = radioButtonUserNamePassword.Checked;
 
-            labelPATToken.Enabled = radioButtonPAT.Checked;
-            textBoxPATValue.Enabled = radioButtonPAT.Checked;
         }
     }
 }

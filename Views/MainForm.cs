@@ -592,7 +592,7 @@ namespace RepoManager
             var iniFile = new IniFile(OptionsIni);
             iniFile.WriteBool("Window", "IsMaximized", WindowState == FormWindowState.Maximized);
 
-            if (WindowState != FormWindowState.Normal)
+            if (WindowState == FormWindowState.Normal)
             {
                 iniFile.WriteInteger("Window", "Width", Width);
                 iniFile.WriteInteger("Window", "Height", Height);

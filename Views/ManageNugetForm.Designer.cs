@@ -31,21 +31,17 @@
             this.components = new System.ComponentModel.Container();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageNugetForm));
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.splitter1 = new System.Windows.Forms.Splitter();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.splitter2 = new System.Windows.Forms.Splitter();
-            this.groupBox2Upgrade = new System.Windows.Forms.GroupBox();
-            this.gridControl2 = new DevExpress.XtraGrid.GridControl();
-            this.gridViewPackagesToUpgrade = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.colUpgrade = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colPackageName = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colVersion = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colOutOfDatePackages = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.groupBoxPackagesList = new System.Windows.Forms.GroupBox();
-            this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridControl1 = new DevExpress.XtraGrid.GridControl();
+            this.contextMenuStripPackagesList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openSolutionFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openProjectFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.openNugetSourceFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.openSolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openPackagesConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gridViewPackagesList = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colSolutionName = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colProjectName = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -55,173 +51,51 @@
             this.colTargetFramework = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnSolutionFullPath = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnProjectFullPath = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.listBoxRepos = new System.Windows.Forms.ListBox();
             this.groupBoxUpgradeMethod = new System.Windows.Forms.GroupBox();
             this.hyperlinkLabelControlManualHelp = new DevExpress.XtraEditors.HyperlinkLabelControl();
             this.hyperlinkLabelControlLastUsedHelp = new DevExpress.XtraEditors.HyperlinkLabelControl();
-            this.radioButtonManual = new System.Windows.Forms.RadioButton();
             this.radioButtonLatestUsed = new System.Windows.Forms.RadioButton();
+            this.radioButtonManual = new System.Windows.Forms.RadioButton();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.groupBox2Upgrade = new System.Windows.Forms.GroupBox();
+            this.gridControl2 = new DevExpress.XtraGrid.GridControl();
+            this.gridViewPackagesToUpgrade = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colUpgrade = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPackageName = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colVersion = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colOutOfDatePackages = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.splitter2 = new System.Windows.Forms.Splitter();
+            this.groupBoxPackagesList = new System.Windows.Forms.GroupBox();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.progressBarControl1 = new DevExpress.XtraEditors.ProgressBarControl();
             this.panel5 = new System.Windows.Forms.Panel();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.contextMenuStripPackagesList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.openSolutionFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openProjectFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.openSolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openPackagesConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.listBoxRepos = new System.Windows.Forms.ListBox();
-            this.openNugetSourceFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
+            this.contextMenuStripPackagesList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewPackagesList)).BeginInit();
             this.panel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBoxUpgradeMethod.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.groupBox2Upgrade.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewPackagesToUpgrade)).BeginInit();
             this.groupBoxPackagesList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridViewPackagesList)).BeginInit();
-            this.groupBoxUpgradeMethod.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).BeginInit();
             this.panel5.SuspendLayout();
-            this.contextMenuStripPackagesList.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // gridView1
             // 
-            this.panel1.Controls.Add(this.groupBox1);
-            this.panel1.Controls.Add(this.groupBoxUpgradeMethod);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(5);
-            this.panel1.Size = new System.Drawing.Size(174, 626);
-            this.panel1.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.panel4);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(174, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1110, 626);
-            this.panel2.TabIndex = 1;
-            // 
-            // splitter1
-            // 
-            this.splitter1.Location = new System.Drawing.Point(174, 0);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 626);
-            this.splitter1.TabIndex = 2;
-            this.splitter1.TabStop = false;
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.groupBox2Upgrade);
-            this.panel4.Controls.Add(this.splitter2);
-            this.panel4.Controls.Add(this.groupBoxPackagesList);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(0, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Padding = new System.Windows.Forms.Padding(10);
-            this.panel4.Size = new System.Drawing.Size(1110, 626);
-            this.panel4.TabIndex = 10;
-            // 
-            // splitter2
-            // 
-            this.splitter2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter2.Location = new System.Drawing.Point(10, 360);
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Padding = new System.Windows.Forms.Padding(5);
-            this.splitter2.Size = new System.Drawing.Size(1090, 3);
-            this.splitter2.TabIndex = 2;
-            this.splitter2.TabStop = false;
-            // 
-            // groupBox2Upgrade
-            // 
-            this.groupBox2Upgrade.Controls.Add(this.gridControl2);
-            this.groupBox2Upgrade.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2Upgrade.Location = new System.Drawing.Point(10, 363);
-            this.groupBox2Upgrade.Name = "groupBox2Upgrade";
-            this.groupBox2Upgrade.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox2Upgrade.Size = new System.Drawing.Size(1090, 253);
-            this.groupBox2Upgrade.TabIndex = 1;
-            this.groupBox2Upgrade.TabStop = false;
-            this.groupBox2Upgrade.Text = "Nuget Packages to Upgrade";
-            // 
-            // gridControl2
-            // 
-            this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridControl2.Location = new System.Drawing.Point(10, 26);
-            this.gridControl2.LookAndFeel.SkinName = "Office 2016 Colorful";
-            this.gridControl2.LookAndFeel.UseDefaultLookAndFeel = false;
-            this.gridControl2.MainView = this.gridViewPackagesToUpgrade;
-            this.gridControl2.Name = "gridControl2";
-            this.gridControl2.Size = new System.Drawing.Size(1070, 217);
-            this.gridControl2.TabIndex = 4;
-            this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridViewPackagesToUpgrade});
-            // 
-            // gridViewPackagesToUpgrade
-            // 
-            this.gridViewPackagesToUpgrade.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-            this.colUpgrade,
-            this.colPackageName,
-            this.colVersion,
-            this.colOutOfDatePackages});
-            this.gridViewPackagesToUpgrade.GridControl = this.gridControl2;
-            this.gridViewPackagesToUpgrade.Name = "gridViewPackagesToUpgrade";
-            this.gridViewPackagesToUpgrade.OptionsFind.AlwaysVisible = true;
-            this.gridViewPackagesToUpgrade.OptionsSelection.MultiSelect = true;
-            // 
-            // colUpgrade
-            // 
-            this.colUpgrade.FieldName = "Upgrade";
-            this.colUpgrade.Name = "colUpgrade";
-            this.colUpgrade.Visible = true;
-            this.colUpgrade.VisibleIndex = 0;
-            // 
-            // colPackageName
-            // 
-            this.colPackageName.FieldName = "PackageName";
-            this.colPackageName.Name = "colPackageName";
-            this.colPackageName.OptionsColumn.AllowEdit = false;
-            this.colPackageName.OptionsColumn.ReadOnly = true;
-            this.colPackageName.Visible = true;
-            this.colPackageName.VisibleIndex = 1;
-            // 
-            // colVersion
-            // 
-            this.colVersion.FieldName = "Version";
-            this.colVersion.Name = "colVersion";
-            this.colVersion.Visible = true;
-            this.colVersion.VisibleIndex = 2;
-            // 
-            // colOutOfDatePackages
-            // 
-            this.colOutOfDatePackages.FieldName = "OutOfDatePackages";
-            this.colOutOfDatePackages.Name = "colOutOfDatePackages";
-            this.colOutOfDatePackages.OptionsColumn.AllowEdit = false;
-            this.colOutOfDatePackages.OptionsColumn.ReadOnly = true;
-            this.colOutOfDatePackages.Visible = true;
-            this.colOutOfDatePackages.VisibleIndex = 3;
-            // 
-            // groupBoxPackagesList
-            // 
-            this.groupBoxPackagesList.Controls.Add(this.gridControl1);
-            this.groupBoxPackagesList.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxPackagesList.Location = new System.Drawing.Point(10, 10);
-            this.groupBoxPackagesList.Name = "groupBoxPackagesList";
-            this.groupBoxPackagesList.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBoxPackagesList.Size = new System.Drawing.Size(1090, 350);
-            this.groupBoxPackagesList.TabIndex = 0;
-            this.groupBoxPackagesList.TabStop = false;
-            this.groupBoxPackagesList.Text = "Packages List";
+            this.gridView1.GridControl = this.gridControl1;
+            this.gridView1.Name = "gridView1";
             // 
             // gridControl1
             // 
@@ -239,13 +113,74 @@
             this.gridControl1.Size = new System.Drawing.Size(1070, 314);
             this.gridControl1.TabIndex = 2;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridView1,
-            this.gridViewPackagesList});
+            this.gridViewPackagesList,
+            this.gridView1});
             // 
-            // gridView1
+            // contextMenuStripPackagesList
             // 
-            this.gridView1.GridControl = this.gridControl1;
-            this.gridView1.Name = "gridView1";
+            this.contextMenuStripPackagesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openSolutionFolderToolStripMenuItem,
+            this.openProjectFolderToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.openNugetSourceFolderToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.openSolutionToolStripMenuItem,
+            this.openProjectToolStripMenuItem,
+            this.openPackagesConfigToolStripMenuItem});
+            this.contextMenuStripPackagesList.Name = "contextMenuStripPackagesList";
+            this.contextMenuStripPackagesList.Size = new System.Drawing.Size(215, 148);
+            // 
+            // openSolutionFolderToolStripMenuItem
+            // 
+            this.openSolutionFolderToolStripMenuItem.Name = "openSolutionFolderToolStripMenuItem";
+            this.openSolutionFolderToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.openSolutionFolderToolStripMenuItem.Text = "Open Solution Folder";
+            this.openSolutionFolderToolStripMenuItem.Click += new System.EventHandler(this.openSolutionFolderToolStripMenuItem_Click);
+            // 
+            // openProjectFolderToolStripMenuItem
+            // 
+            this.openProjectFolderToolStripMenuItem.Name = "openProjectFolderToolStripMenuItem";
+            this.openProjectFolderToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.openProjectFolderToolStripMenuItem.Text = "Open Project Folder";
+            this.openProjectFolderToolStripMenuItem.Click += new System.EventHandler(this.openProjectFolderToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(211, 6);
+            // 
+            // openNugetSourceFolderToolStripMenuItem
+            // 
+            this.openNugetSourceFolderToolStripMenuItem.Name = "openNugetSourceFolderToolStripMenuItem";
+            this.openNugetSourceFolderToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.openNugetSourceFolderToolStripMenuItem.Text = "Open Nuget Source Folder";
+            this.openNugetSourceFolderToolStripMenuItem.Click += new System.EventHandler(this.openNugetSourceFolderToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(211, 6);
+            // 
+            // openSolutionToolStripMenuItem
+            // 
+            this.openSolutionToolStripMenuItem.Name = "openSolutionToolStripMenuItem";
+            this.openSolutionToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.openSolutionToolStripMenuItem.Text = "Open Solution";
+            this.openSolutionToolStripMenuItem.Click += new System.EventHandler(this.openSolutionToolStripMenuItem_Click);
+            // 
+            // openProjectToolStripMenuItem
+            // 
+            this.openProjectToolStripMenuItem.Name = "openProjectToolStripMenuItem";
+            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.openProjectToolStripMenuItem.Text = "Open Project";
+            this.openProjectToolStripMenuItem.Click += new System.EventHandler(this.openProjectToolStripMenuItem_Click);
+            // 
+            // openPackagesConfigToolStripMenuItem
+            // 
+            this.openPackagesConfigToolStripMenuItem.Name = "openPackagesConfigToolStripMenuItem";
+            this.openPackagesConfigToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.openPackagesConfigToolStripMenuItem.Text = "Open packages.config";
+            this.openPackagesConfigToolStripMenuItem.Click += new System.EventHandler(this.openPackagesConfigToolStripMenuItem_Click);
             // 
             // gridViewPackagesList
             // 
@@ -337,6 +272,39 @@
             this.gridColumnProjectFullPath.Visible = true;
             this.gridColumnProjectFullPath.VisibleIndex = 7;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.groupBox1);
+            this.panel1.Controls.Add(this.groupBoxUpgradeMethod);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Padding = new System.Windows.Forms.Padding(5);
+            this.panel1.Size = new System.Drawing.Size(174, 626);
+            this.panel1.TabIndex = 0;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.listBoxRepos);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox1.Location = new System.Drawing.Point(5, 94);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
+            this.groupBox1.Size = new System.Drawing.Size(164, 527);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Repos";
+            // 
+            // listBoxRepos
+            // 
+            this.listBoxRepos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxRepos.FormattingEnabled = true;
+            this.listBoxRepos.ItemHeight = 15;
+            this.listBoxRepos.Location = new System.Drawing.Point(10, 26);
+            this.listBoxRepos.Name = "listBoxRepos";
+            this.listBoxRepos.Size = new System.Drawing.Size(144, 491);
+            this.listBoxRepos.TabIndex = 0;
+            // 
             // groupBoxUpgradeMethod
             // 
             this.groupBoxUpgradeMethod.Controls.Add(this.hyperlinkLabelControlManualHelp);
@@ -369,16 +337,6 @@
             this.hyperlinkLabelControlLastUsedHelp.Text = " ? ";
             this.hyperlinkLabelControlLastUsedHelp.Click += new System.EventHandler(this.hyperlinkLabelControlLastUsedHelp_Click);
             // 
-            // radioButtonManual
-            // 
-            this.radioButtonManual.AutoSize = true;
-            this.radioButtonManual.Location = new System.Drawing.Point(17, 51);
-            this.radioButtonManual.Name = "radioButtonManual";
-            this.radioButtonManual.Size = new System.Drawing.Size(65, 19);
-            this.radioButtonManual.TabIndex = 1;
-            this.radioButtonManual.Text = "Manual";
-            this.radioButtonManual.UseVisualStyleBackColor = true;
-            // 
             // radioButtonLatestUsed
             // 
             this.radioButtonLatestUsed.AutoSize = true;
@@ -391,6 +349,136 @@
             this.radioButtonLatestUsed.Text = "Latest Used";
             this.radioButtonLatestUsed.UseVisualStyleBackColor = true;
             this.radioButtonLatestUsed.CheckedChanged += new System.EventHandler(this.upgradeMethodRadioChanged);
+            // 
+            // radioButtonManual
+            // 
+            this.radioButtonManual.AutoSize = true;
+            this.radioButtonManual.Location = new System.Drawing.Point(17, 51);
+            this.radioButtonManual.Name = "radioButtonManual";
+            this.radioButtonManual.Size = new System.Drawing.Size(65, 19);
+            this.radioButtonManual.TabIndex = 1;
+            this.radioButtonManual.Text = "Manual";
+            this.radioButtonManual.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.panel4);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(174, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1110, 626);
+            this.panel2.TabIndex = 1;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.groupBox2Upgrade);
+            this.panel4.Controls.Add(this.splitter2);
+            this.panel4.Controls.Add(this.groupBoxPackagesList);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Padding = new System.Windows.Forms.Padding(10);
+            this.panel4.Size = new System.Drawing.Size(1110, 626);
+            this.panel4.TabIndex = 10;
+            // 
+            // groupBox2Upgrade
+            // 
+            this.groupBox2Upgrade.Controls.Add(this.gridControl2);
+            this.groupBox2Upgrade.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2Upgrade.Location = new System.Drawing.Point(10, 363);
+            this.groupBox2Upgrade.Name = "groupBox2Upgrade";
+            this.groupBox2Upgrade.Padding = new System.Windows.Forms.Padding(10);
+            this.groupBox2Upgrade.Size = new System.Drawing.Size(1090, 253);
+            this.groupBox2Upgrade.TabIndex = 1;
+            this.groupBox2Upgrade.TabStop = false;
+            this.groupBox2Upgrade.Text = "Nuget Packages to Upgrade";
+            // 
+            // gridControl2
+            // 
+            this.gridControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridControl2.Location = new System.Drawing.Point(10, 26);
+            this.gridControl2.LookAndFeel.SkinName = "Office 2016 Colorful";
+            this.gridControl2.LookAndFeel.UseDefaultLookAndFeel = false;
+            this.gridControl2.MainView = this.gridViewPackagesToUpgrade;
+            this.gridControl2.Name = "gridControl2";
+            this.gridControl2.Size = new System.Drawing.Size(1070, 217);
+            this.gridControl2.TabIndex = 4;
+            this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridViewPackagesToUpgrade});
+            // 
+            // gridViewPackagesToUpgrade
+            // 
+            this.gridViewPackagesToUpgrade.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colUpgrade,
+            this.colPackageName,
+            this.colVersion,
+            this.colOutOfDatePackages});
+            this.gridViewPackagesToUpgrade.GridControl = this.gridControl2;
+            this.gridViewPackagesToUpgrade.Name = "gridViewPackagesToUpgrade";
+            this.gridViewPackagesToUpgrade.OptionsFind.AlwaysVisible = true;
+            this.gridViewPackagesToUpgrade.OptionsSelection.MultiSelect = true;
+            // 
+            // colUpgrade
+            // 
+            this.colUpgrade.FieldName = "Upgrade";
+            this.colUpgrade.Name = "colUpgrade";
+            this.colUpgrade.Visible = true;
+            this.colUpgrade.VisibleIndex = 0;
+            // 
+            // colPackageName
+            // 
+            this.colPackageName.FieldName = "PackageName";
+            this.colPackageName.Name = "colPackageName";
+            this.colPackageName.OptionsColumn.AllowEdit = false;
+            this.colPackageName.OptionsColumn.ReadOnly = true;
+            this.colPackageName.Visible = true;
+            this.colPackageName.VisibleIndex = 1;
+            // 
+            // colVersion
+            // 
+            this.colVersion.FieldName = "Version";
+            this.colVersion.Name = "colVersion";
+            this.colVersion.Visible = true;
+            this.colVersion.VisibleIndex = 2;
+            // 
+            // colOutOfDatePackages
+            // 
+            this.colOutOfDatePackages.FieldName = "OutOfDatePackages";
+            this.colOutOfDatePackages.Name = "colOutOfDatePackages";
+            this.colOutOfDatePackages.OptionsColumn.AllowEdit = false;
+            this.colOutOfDatePackages.OptionsColumn.ReadOnly = true;
+            this.colOutOfDatePackages.Visible = true;
+            this.colOutOfDatePackages.VisibleIndex = 3;
+            // 
+            // splitter2
+            // 
+            this.splitter2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.splitter2.Location = new System.Drawing.Point(10, 360);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Padding = new System.Windows.Forms.Padding(5);
+            this.splitter2.Size = new System.Drawing.Size(1090, 3);
+            this.splitter2.TabIndex = 2;
+            this.splitter2.TabStop = false;
+            // 
+            // groupBoxPackagesList
+            // 
+            this.groupBoxPackagesList.Controls.Add(this.gridControl1);
+            this.groupBoxPackagesList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxPackagesList.Location = new System.Drawing.Point(10, 10);
+            this.groupBoxPackagesList.Name = "groupBoxPackagesList";
+            this.groupBoxPackagesList.Padding = new System.Windows.Forms.Padding(10);
+            this.groupBoxPackagesList.Size = new System.Drawing.Size(1090, 350);
+            this.groupBoxPackagesList.TabIndex = 0;
+            this.groupBoxPackagesList.TabStop = false;
+            this.groupBoxPackagesList.Text = "Packages List";
+            // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(174, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 626);
+            this.splitter1.TabIndex = 2;
+            this.splitter1.TabStop = false;
             // 
             // progressBarControl1
             // 
@@ -444,98 +532,11 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
-            // contextMenuStripPackagesList
-            // 
-            this.contextMenuStripPackagesList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openSolutionFolderToolStripMenuItem,
-            this.openProjectFolderToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.openNugetSourceFolderToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.openSolutionToolStripMenuItem,
-            this.openProjectToolStripMenuItem,
-            this.openPackagesConfigToolStripMenuItem});
-            this.contextMenuStripPackagesList.Name = "contextMenuStripPackagesList";
-            this.contextMenuStripPackagesList.Size = new System.Drawing.Size(215, 148);
-            // 
-            // openSolutionFolderToolStripMenuItem
-            // 
-            this.openSolutionFolderToolStripMenuItem.Name = "openSolutionFolderToolStripMenuItem";
-            this.openSolutionFolderToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.openSolutionFolderToolStripMenuItem.Text = "Open Solution Folder";
-            this.openSolutionFolderToolStripMenuItem.Click += new System.EventHandler(this.openSolutionFolderToolStripMenuItem_Click);
-            // 
-            // openProjectFolderToolStripMenuItem
-            // 
-            this.openProjectFolderToolStripMenuItem.Name = "openProjectFolderToolStripMenuItem";
-            this.openProjectFolderToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.openProjectFolderToolStripMenuItem.Text = "Open Project Folder";
-            this.openProjectFolderToolStripMenuItem.Click += new System.EventHandler(this.openProjectFolderToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(211, 6);
-            // 
-            // openSolutionToolStripMenuItem
-            // 
-            this.openSolutionToolStripMenuItem.Name = "openSolutionToolStripMenuItem";
-            this.openSolutionToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.openSolutionToolStripMenuItem.Text = "Open Solution";
-            this.openSolutionToolStripMenuItem.Click += new System.EventHandler(this.openSolutionToolStripMenuItem_Click);
-            // 
-            // openProjectToolStripMenuItem
-            // 
-            this.openProjectToolStripMenuItem.Name = "openProjectToolStripMenuItem";
-            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.openProjectToolStripMenuItem.Text = "Open Project";
-            this.openProjectToolStripMenuItem.Click += new System.EventHandler(this.openProjectToolStripMenuItem_Click);
-            // 
-            // openPackagesConfigToolStripMenuItem
-            // 
-            this.openPackagesConfigToolStripMenuItem.Name = "openPackagesConfigToolStripMenuItem";
-            this.openPackagesConfigToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.openPackagesConfigToolStripMenuItem.Text = "Open packages.config";
-            this.openPackagesConfigToolStripMenuItem.Click += new System.EventHandler(this.openPackagesConfigToolStripMenuItem_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.listBoxRepos);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(5, 94);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox1.Size = new System.Drawing.Size(164, 527);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Repos";
-            // 
-            // listBoxRepos
-            // 
-            this.listBoxRepos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxRepos.FormattingEnabled = true;
-            this.listBoxRepos.ItemHeight = 15;
-            this.listBoxRepos.Location = new System.Drawing.Point(10, 26);
-            this.listBoxRepos.Name = "listBoxRepos";
-            this.listBoxRepos.Size = new System.Drawing.Size(144, 491);
-            this.listBoxRepos.TabIndex = 0;
-            // 
-            // openNugetSourceFolderToolStripMenuItem
-            // 
-            this.openNugetSourceFolderToolStripMenuItem.Name = "openNugetSourceFolderToolStripMenuItem";
-            this.openNugetSourceFolderToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.openNugetSourceFolderToolStripMenuItem.Text = "Open Nuget Source Folder";
-            this.openNugetSourceFolderToolStripMenuItem.Click += new System.EventHandler(this.openNugetSourceFolderToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(211, 6);
-            // 
             // ManageNugetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1284, 661);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.panel2);
@@ -550,22 +551,22 @@
             this.Text = "Manage Nuget Packages";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ManageNugetForm_FormClosing);
             this.Load += new System.EventHandler(this.ManageNugetForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
+            this.contextMenuStripPackagesList.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewPackagesList)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBoxUpgradeMethod.ResumeLayout(false);
+            this.groupBoxUpgradeMethod.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.groupBox2Upgrade.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewPackagesToUpgrade)).EndInit();
             this.groupBoxPackagesList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridViewPackagesList)).EndInit();
-            this.groupBoxUpgradeMethod.ResumeLayout(false);
-            this.groupBoxUpgradeMethod.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).EndInit();
             this.panel5.ResumeLayout(false);
-            this.contextMenuStripPackagesList.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

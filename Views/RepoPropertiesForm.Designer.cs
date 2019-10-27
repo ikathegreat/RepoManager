@@ -139,7 +139,7 @@
             this.gridControl1.Location = new System.Drawing.Point(3, 3);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(955, 382);
+            this.gridControl1.Size = new System.Drawing.Size(943, 382);
             this.gridControl1.TabIndex = 7;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -315,7 +315,7 @@
             this.tabPageCommitHistory.Location = new System.Drawing.Point(4, 24);
             this.tabPageCommitHistory.Name = "tabPageCommitHistory";
             this.tabPageCommitHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCommitHistory.Size = new System.Drawing.Size(961, 388);
+            this.tabPageCommitHistory.Size = new System.Drawing.Size(949, 388);
             this.tabPageCommitHistory.TabIndex = 1;
             this.tabPageCommitHistory.Text = "Commit History";
             this.tabPageCommitHistory.UseVisualStyleBackColor = true;
@@ -325,7 +325,7 @@
             this.tabPageChangeTrends.Location = new System.Drawing.Point(4, 24);
             this.tabPageChangeTrends.Name = "tabPageChangeTrends";
             this.tabPageChangeTrends.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageChangeTrends.Size = new System.Drawing.Size(961, 388);
+            this.tabPageChangeTrends.Size = new System.Drawing.Size(949, 388);
             this.tabPageChangeTrends.TabIndex = 2;
             this.tabPageChangeTrends.Text = "Change Trend";
             this.tabPageChangeTrends.UseVisualStyleBackColor = true;
@@ -334,6 +334,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(984, 561);
             this.Controls.Add(this.tabControl1);
