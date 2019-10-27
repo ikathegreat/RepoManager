@@ -7,7 +7,7 @@ using System.Text;
 
 // ReSharper disable UnusedMember.Global
 
-namespace RepoManager
+namespace RepoManager.Models
 {
     /// <summary>
     /// The boolean type to be written to an ini file.

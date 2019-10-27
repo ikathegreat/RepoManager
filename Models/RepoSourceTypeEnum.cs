@@ -1,4 +1,4 @@
-﻿namespace RepoManager
+﻿namespace RepoManager.Models
 {
 
     public enum RepoSourceTypeEnum

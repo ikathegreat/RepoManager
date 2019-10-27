@@ -2,6 +2,8 @@
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using RepoManager.Analytics;
+using RepoManager.Models;
 
 namespace RepoManager
 {
@@ -9,6 +11,9 @@ namespace RepoManager
     {
         public const string AuthenticationSection = "Authentication";
         public const string PreferencesSection = "Preferences";
+
+        private const int DefaultDoubleClickIndex = 6;
+
         public OptionsForm()
         {
             InitializeComponent();
@@ -26,6 +31,9 @@ namespace RepoManager
             var gitHubHexPassword = Utilities.ConvertStringToHexString(textBoxGitHubPassword.Text);
             iniFile.WriteString(AuthenticationSection, "GitHubPassword", gitHubHexPassword);
 
+            if (comboBox1.SelectedIndex != DefaultDoubleClickIndex)
+                Track.DoTrackEvent(TrackCategories.Option, "changeRepoDoubleClickOption", comboBox1.SelectedIndex.ToString());
+
             iniFile.WriteInteger(PreferencesSection, "DoubleClickAction", comboBox1.SelectedIndex);
 
             iniFile.WriteString(PreferencesSection, "RepoPath", textBoxRepoSearchPath.Text);
@@ -36,7 +44,15 @@ namespace RepoManager
             var adoPatValue = Utilities.ConvertStringToHexString(textBoxPATValue.Text);
             iniFile.WriteString(AuthenticationSection, "AzureDevOpsPAT", adoPatValue);
 
+            if (!checkBoxShowWebShortcuts.Checked)
+                Track.DoTrackEvent(TrackCategories.Option, "hideWebShortcuts");
             iniFile.WriteBool(PreferencesSection, "ShowWebShortcuts", checkBoxShowWebShortcuts.Checked);
+
+            if(!checkBoxAnalytics.Checked)
+                Track.DoTrackEvent(TrackCategories.Option, "optOutAnalytics");
+
+            iniFile.WriteBool(PreferencesSection, "DoAnalytics", checkBoxAnalytics.Checked);
+
             Close();
         }
 
@@ -63,7 +79,7 @@ namespace RepoManager
             var adoHexPat = iniFile.ReadString(AuthenticationSection, "AzureDevOpsPAT", "");
             textBoxPATValue.Text = Utilities.ConvertHexStringToString(adoHexPat);
 
-            comboBox1.SelectedIndex = iniFile.ReadInteger(PreferencesSection, "DoubleClickAction", 6);
+            comboBox1.SelectedIndex = iniFile.ReadInteger(PreferencesSection, "DoubleClickAction", DefaultDoubleClickIndex);
 
             iniFile.ReadSection(SkipRepoBrowseForm.SkipReposSection, out var repoSectionList);
             labelRepoSkipCount.Text = $"{repoSectionList.Count} repos";
@@ -72,6 +88,8 @@ namespace RepoManager
             textBoxRepoSearchPath.Text = iniFile.ReadString(PreferencesSection, "RepoPath", defaultPath);
             
             checkBoxShowWebShortcuts.Checked =  iniFile.ReadBool(PreferencesSection, "ShowWebShortcuts", true);
+            checkBoxAnalytics.Checked =  iniFile.ReadBool(PreferencesSection, "DoAnalytics", true);
+
 
             //Todo: Finish this. Currently facing too many redirects error. Might be version of lib2gitsharp version.
             radioButtonPAT.Visible = false;
@@ -88,6 +106,8 @@ namespace RepoManager
 
         private void buttonRepoSkipBrowse_Click(object sender, EventArgs e)
         {
+            Track.DoTrackEvent(TrackCategories.Application, "skipRepoBrowseForm.ShowDialog");
+
             var skipRepoBrowseForm = new SkipRepoBrowseForm();
             if (skipRepoBrowseForm.ShowDialog() != DialogResult.OK) return;
             var iniFile = new IniFile(FormMain.OptionsIni);

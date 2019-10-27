@@ -52,6 +52,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxGitHubPassword = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBoxShowWebShortcuts = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxRepoSearchPath = new System.Windows.Forms.TextBox();
             this.buttonRepoSearchPathBrowse = new System.Windows.Forms.Button();
@@ -60,7 +61,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.labelRepoSkipCount = new System.Windows.Forms.Label();
             this.buttonRepoSkipBrowse = new System.Windows.Forms.Button();
-            this.checkBoxShowWebShortcuts = new System.Windows.Forms.CheckBox();
+            this.checkBoxAnalytics = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.groupBoxAuthentication.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl)).BeginInit();
@@ -76,7 +77,7 @@
             this.panel1.Controls.Add(this.buttonOK);
             this.panel1.Controls.Add(this.buttonCancel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 548);
+            this.panel1.Location = new System.Drawing.Point(0, 579);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(5);
             this.panel1.Size = new System.Drawing.Size(564, 35);
@@ -114,7 +115,7 @@
             this.groupBoxAuthentication.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxAuthentication.Controls.Add(this.xtraTabControl);
-            this.groupBoxAuthentication.Location = new System.Drawing.Point(12, 227);
+            this.groupBoxAuthentication.Location = new System.Drawing.Point(12, 258);
             this.groupBoxAuthentication.Name = "groupBoxAuthentication";
             this.groupBoxAuthentication.Size = new System.Drawing.Size(540, 316);
             this.groupBoxAuthentication.TabIndex = 4;
@@ -296,6 +297,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.checkBoxAnalytics);
             this.groupBox1.Controls.Add(this.checkBoxShowWebShortcuts);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.textBoxRepoSearchPath);
@@ -307,10 +309,22 @@
             this.groupBox1.Controls.Add(this.buttonRepoSkipBrowse);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(540, 209);
+            this.groupBox1.Size = new System.Drawing.Size(540, 240);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Preferences";
+            // 
+            // checkBoxShowWebShortcuts
+            // 
+            this.checkBoxShowWebShortcuts.AutoSize = true;
+            this.checkBoxShowWebShortcuts.Checked = true;
+            this.checkBoxShowWebShortcuts.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxShowWebShortcuts.Location = new System.Drawing.Point(47, 163);
+            this.checkBoxShowWebShortcuts.Name = "checkBoxShowWebShortcuts";
+            this.checkBoxShowWebShortcuts.Size = new System.Drawing.Size(222, 19);
+            this.checkBoxShowWebShortcuts.TabIndex = 8;
+            this.checkBoxShowWebShortcuts.Text = "Show web shortcuts in context menu";
+            this.checkBoxShowWebShortcuts.UseVisualStyleBackColor = true;
             // 
             // label7
             // 
@@ -363,7 +377,7 @@
             "Open Preferred Solution"});
             this.comboBox1.Location = new System.Drawing.Point(192, 72);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(162, 23);
+            this.comboBox1.Size = new System.Drawing.Size(205, 23);
             this.comboBox1.TabIndex = 2;
             // 
             // label6
@@ -394,17 +408,17 @@
             this.buttonRepoSkipBrowse.UseVisualStyleBackColor = true;
             this.buttonRepoSkipBrowse.Click += new System.EventHandler(this.buttonRepoSkipBrowse_Click);
             // 
-            // checkBoxShowWebShortcuts
+            // checkBoxAnalytics
             // 
-            this.checkBoxShowWebShortcuts.AutoSize = true;
-            this.checkBoxShowWebShortcuts.Checked = true;
-            this.checkBoxShowWebShortcuts.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxShowWebShortcuts.Location = new System.Drawing.Point(47, 163);
-            this.checkBoxShowWebShortcuts.Name = "checkBoxShowWebShortcuts";
-            this.checkBoxShowWebShortcuts.Size = new System.Drawing.Size(222, 19);
-            this.checkBoxShowWebShortcuts.TabIndex = 8;
-            this.checkBoxShowWebShortcuts.Text = "Show web shortcuts in context menu";
-            this.checkBoxShowWebShortcuts.UseVisualStyleBackColor = true;
+            this.checkBoxAnalytics.AutoSize = true;
+            this.checkBoxAnalytics.Checked = true;
+            this.checkBoxAnalytics.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAnalytics.Location = new System.Drawing.Point(47, 188);
+            this.checkBoxAnalytics.Name = "checkBoxAnalytics";
+            this.checkBoxAnalytics.Size = new System.Drawing.Size(178, 19);
+            this.checkBoxAnalytics.TabIndex = 9;
+            this.checkBoxAnalytics.Text = "Send anonymous usage data";
+            this.checkBoxAnalytics.UseVisualStyleBackColor = true;
             // 
             // OptionsForm
             // 
@@ -412,7 +426,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(564, 583);
+            this.ClientSize = new System.Drawing.Size(564, 614);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxAuthentication);
             this.Controls.Add(this.panel1);
@@ -474,5 +488,6 @@
         private System.Windows.Forms.RadioButton radioButtonPAT;
         private System.Windows.Forms.RadioButton radioButtonUserNamePassword;
         private System.Windows.Forms.CheckBox checkBoxShowWebShortcuts;
+        private System.Windows.Forms.CheckBox checkBoxAnalytics;
     }
 }

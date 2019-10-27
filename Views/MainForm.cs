@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
+using RepoManager.Analytics;
 using RepoManager.Models;
 
 namespace RepoManager
@@ -38,10 +40,19 @@ namespace RepoManager
          * Bump the project version if you make changes.
          *
          * Cleanup nuget packages
-         * Update nuget packages across repos
          * Change history spark graph
-         * Recently changed files list
+         * SmartScreen/signing issue
+         * Move files paths to separate class
+         * Ribbon tooltips with keyboard shortcuts
+         * Individual repo refresh, auto refresh on directory change
          * Find in files in directories
+         * Whats new
+         * Size column sort is alphabetical instead of lexicographical
+         * Ability to have repo-specific credentials
+         * Dark mode
+         * Skip repo subscans if grid column is hidden
+         * Ability to list and checkout remote branches
+         * Last fetch time
          *
          */
 
@@ -67,15 +78,9 @@ namespace RepoManager
             }
         }
 
-        private void buttonSearchRepos_Click(object sender, EventArgs e)
-        {
-            SearchRepos();
-        }
-
         private void setUIEnable(bool enable)
         {
             ribbonControl1.Enabled = gridControl1.Enabled = enable;
-
             Cursor = enable ? Cursors.Default : Cursors.WaitCursor;
         }
 
@@ -150,13 +155,28 @@ namespace RepoManager
                 barSelectionStatus.Caption = $"Getting repository information ({completeCount}/{listOfTasks.Count})...";
                 gridControl1.RefreshDataSource();
             }
-            gridView1.BestFitColumns();
+
+            var doDummyData = false;
+
+            if (doDummyData)
+            {
+                var index = 0;
+                foreach (var repoModel in reposList)
+                {
+                    repoModel.Name = DummyRepoData.RepoNames[index];
+                    repoModel.CommitMessage = $"{DummyRepoData.DevNames[index]}: {DummyRepoData.CommitMessages[index]}";
+                    index++;
+                }
+            }
+
+            //gridView1.BestFitColumns();
             progressBarControl1.EditValue = 0;
             panelProgressBar.Visible = false;
 
             barSelectionStatus.Caption = "";
             stopWatch.Stop();
             var ts = stopWatch.Elapsed;
+            Track.DoTrackEvent(TrackCategories.Application, "searchRepos", reposList.Count.ToString());
             Debug.WriteLine($"SearchRepos: {ts.Hours:D2}h:{ts.Minutes:D2}m:{ts.Seconds:D2}s:{ts.Milliseconds:D3}ms");
         }
 
@@ -180,12 +200,40 @@ namespace RepoManager
             if (File.Exists(GridLayoutXml))
                 gridView1.RestoreLayoutFromXml(GridLayoutXml);
 
+            InitializeAnalytics();
+
+            Track.DoTrackEvent(TrackCategories.Application, "version",
+                FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion);
+
+
             panelProgressBar.Visible = false;
             SearchRepos();
 
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
 
             barStaticItemVersion.Caption = $"{fileVersionInfo.FileMajorPart}.{fileVersionInfo.FileMinorPart}";
+        }
+
+        private static void InitializeAnalytics()
+        {
+            var iniFile = new IniFile(OptionsIni);
+
+            var doTracking = iniFile.ReadBool(OptionsForm.PreferencesSection, "DoAnalytics", true);
+
+            Track.DoTracking = doTracking;
+
+            if (!Track.DoTracking)
+                return;
+
+            var originalFID = iniFile.ReadString(OptionsForm.PreferencesSection, "ClientID", "");
+
+            Track.Register(originalFID);
+            Track.TrackingID = "UA-150937562-1";
+            Track.ApplicationName = "Repo Manager";
+
+            if (!string.IsNullOrEmpty(Track.ClientID))
+                iniFile.WriteString(OptionsForm.PreferencesSection, "ClientID", Track.ClientID);
+
         }
 
         private void barButtonItemOpenRepo_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -222,6 +270,7 @@ namespace RepoManager
 
             if (repoActionEnum == RepoActionEnum.ManageNuget)
             {
+                Track.DoTrackEvent(TrackCategories.Application, "manageNugetForm.ShowDialog");
                 var manageNugetForm = new ManageNugetForm { ReposList = selectedRepoModelList };
 
                 manageNugetForm.ShowDialog();
@@ -263,6 +312,7 @@ namespace RepoManager
                             break;
                         }
                 }
+
             }
             else if (repoActionEnum != RepoActionEnum.Open)
             {
@@ -283,6 +333,7 @@ namespace RepoManager
                             MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                         return;
                 }
+
             }
 
             ProcessRepositories(repoActionEnum, selectedRepoModelList);
@@ -356,6 +407,12 @@ namespace RepoManager
                             break;
                     }
 
+                    var actionName = repoActionEnum.ToString();
+                    if (actionName != string.Empty && char.IsUpper(actionName[0]))
+                        actionName = char.ToLower(actionName[0]) + actionName.Substring(1);
+
+                    Track.DoTrackEvent(TrackCategories.LocalAction, actionName, directoriesToDelete.Count.ToString());
+
                     foreach (var directory in directoriesToDelete)
                     {
                         if (Utilities.TryDeleteDirectory(directory))
@@ -395,7 +452,7 @@ namespace RepoManager
                             //if (process.ExitCode == 0)
                             //    successCount++;
                         });
-
+                        Track.DoTrackEvent(TrackCategories.LocalAction, "runBatchFiles", listOfBatchFilesToRun.ToString());
                         summaryRecord.Message = $"Ran {listOfBatchFilesToRun.Count} .bat files";
                     }
                     catch (Exception ex)
@@ -409,6 +466,7 @@ namespace RepoManager
                 {
                     try
                     {
+                        Track.DoTrackEvent(TrackCategories.GitAction, "gitReset");
                         Utilities.DoGitReset(repoModel, ref summaryRecord);
                     }
                     catch (Exception ex)
@@ -422,6 +480,7 @@ namespace RepoManager
                 {
                     try
                     {
+                        Track.DoTrackEvent(TrackCategories.GitAction, "gitPull");
                         Utilities.DoGitPull(repoModel, ref summaryRecord);
                     }
                     catch (Exception ex)
@@ -436,6 +495,7 @@ namespace RepoManager
                 {
                     try
                     {
+                        Track.DoTrackEvent(TrackCategories.GitAction, "gitFetch");
                         Utilities.DoGitFetch(repoModel, ref summaryRecord);
                     }
                     catch (Exception ex)
@@ -532,7 +592,6 @@ namespace RepoManager
             var iniFile = new IniFile(OptionsIni);
             iniFile.WriteBool("Window", "IsMaximized", WindowState == FormWindowState.Maximized);
 
-
             if (WindowState != FormWindowState.Normal)
             {
                 iniFile.WriteInteger("Window", "Width", Width);
@@ -541,6 +600,7 @@ namespace RepoManager
 
             gridView1.SaveLayoutToXml(GridLayoutXml);
 
+            Track.DoTrackEvent(TrackCategories.Application, "shutdown");
             SaveSelectedRepos();
         }
 
@@ -698,6 +758,7 @@ namespace RepoManager
 
         private void barButtonItemOptions_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            Track.DoTrackEvent(TrackCategories.Application, "optionsForm.ShowDialog");
             var optionsForm = new OptionsForm();
             optionsForm.ShowDialog();
         }
@@ -736,11 +797,13 @@ namespace RepoManager
         {
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
 
+            Track.DoTrackEvent(TrackCategories.Web, "azureDevOpsCode");
             Process.Start(repoModel.RemoteURL);
         }
 
         private void barButtonItemAbout_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            Track.DoTrackEvent(TrackCategories.Application, "aboutForm.ShowDialog");
             var aboutForm = new AboutForm();
             aboutForm.ShowDialog();
 
@@ -748,6 +811,7 @@ namespace RepoManager
 
         private void barButtonItemClone_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            Track.DoTrackEvent(TrackCategories.Application, "cloneForm.ShowDialog");
             var iniFile = new IniFile(OptionsIni);
             var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
             var repoPath = iniFile.ReadString(OptionsForm.PreferencesSection, "RepoPath", defaultPath);
@@ -777,6 +841,11 @@ namespace RepoManager
 
         private void gridView1_DoubleClick(object sender, EventArgs e)
         {
+            GridRowDoubleClick();
+        }
+
+        private void GridRowDoubleClick()
+        {
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
                 return;
 
@@ -788,6 +857,7 @@ namespace RepoManager
 
             var iniFile = new IniFile(OptionsIni);
             var actionIndex = iniFile.ReadInteger(OptionsForm.PreferencesSection, "DoubleClickAction", 6);
+            Track.DoTrackEvent(TrackCategories.Application, "gridRowDoubleClick", actionIndex.ToString());
             switch (actionIndex)
             {
                 case 0:
@@ -834,6 +904,7 @@ namespace RepoManager
                 var iniFile = new IniFile(RepoPropertiesIni);
                 var asAdmin = iniFile.ReadBool(repoModel.Name, "OpenPreferredSolutionAsAdmin", false);
 
+                Track.DoTrackEvent(TrackCategories.LocalAction, "openPreferredSolutionFile");
                 if (asAdmin)
                 {
                     //This gives "No Application is associated with specified file for this operation" error
@@ -877,6 +948,7 @@ namespace RepoManager
 
         private void barButtonItemFeedback_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            Track.DoTrackEvent(TrackCategories.Application, "feedback");
             Process.Start("https://github.com/ikathegreat/RepoManager/issues");
         }
 
@@ -934,6 +1006,8 @@ namespace RepoManager
                 }
 
             }
+            Track.DoTrackEvent(TrackCategories.Application, "toggleIgnoreRepo",
+                repoModel.SkipScan ? "include" : "ignore");
 
             repoModel.SkipScan = !repoModel.SkipScan;
             gridView1.RefreshRow(gridView1.FocusedRowHandle);
@@ -953,24 +1027,28 @@ namespace RepoManager
         private void toolStripMenuItemAdoPulLRequests_Click(object sender, EventArgs e)
         {
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
+            Track.DoTrackEvent(TrackCategories.Web, "azureDevOpsPullRequests");
             Process.Start($"{repoModel.RemoteURL}/pullrequests?_a=active");
         }
 
         private void toolStripMenuItemAdoBranches_Click(object sender, EventArgs e)
         {
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
+            Track.DoTrackEvent(TrackCategories.Web, "azureDevOpsBranches");
             Process.Start($"{repoModel.RemoteURL}/branches?_a=all");
         }
 
         private void toolStripMenuItemAdoPushes_Click(object sender, EventArgs e)
         {
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
+            Track.DoTrackEvent(TrackCategories.Web, "azureDevOpsPushes");
             Process.Start($"{repoModel.RemoteURL}/pushes?itemVersion=GBmaster");
         }
 
         private void toolStripMenuItemAdoCommits_Click(object sender, EventArgs e)
         {
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
+            Track.DoTrackEvent(TrackCategories.Web, "azureDevOpsCommits");
             Process.Start($"{repoModel.RemoteURL}/commits?itemPath=%2F&itemVersion=GBmaster");
         }
 
@@ -984,6 +1062,7 @@ namespace RepoManager
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
                 return;
 
+            Track.DoTrackEvent(TrackCategories.Application, "runBatFilesForm.ShowDialog");
             var runBatFilesForm = new RunBatFilesForm { RepoPath = repoModel.Path };
             runBatFilesForm.ShowDialog();
         }
@@ -1001,6 +1080,7 @@ namespace RepoManager
         private void CodeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
+            Track.DoTrackEvent(TrackCategories.Web, "gitHubCode");
 
             Process.Start(repoModel.RemoteURL);
         }
@@ -1009,7 +1089,7 @@ namespace RepoManager
         {
 
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
-
+            Track.DoTrackEvent(TrackCategories.Web, "gitHubIssues");
             Process.Start($"{repoModel.RemoteURL.Replace(".git", "")}/issues");
         }
 
@@ -1028,6 +1108,7 @@ namespace RepoManager
             if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
                 return;
 
+            Track.DoTrackEvent(TrackCategories.Application, "propertiesForm.ShowDialog");
             var propertiesForm = new RepoPropertiesForm(repoModel);
             propertiesForm.ShowDialog();
         }
@@ -1047,6 +1128,35 @@ namespace RepoManager
         private void nugetPackagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DoRepoAction(RepoActionEnum.ManageNuget, true);
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Space:
+                    Track.DoTrackEvent(TrackCategories.Application, "keyboardShortcut", "Space");
+                    GridRowDoubleClick();
+                    return true;
+                case Keys.F5:
+                    Track.DoTrackEvent(TrackCategories.Application, "keyboardShortcut", "F5");
+                    SearchRepos();
+                    return true;
+                case Keys.Control | Keys.F:
+                    Track.DoTrackEvent(TrackCategories.Application, "keyboardShortcut", "Ctrl+F");
+                    DoRepoAction(RepoActionEnum.GitFetch);
+                    return true;
+                case Keys.Control | Keys.P:
+                    Track.DoTrackEvent(TrackCategories.Application, "keyboardShortcut", "Ctrl+P");
+                    DoRepoAction(RepoActionEnum.GitPull);
+                    return true;
+                case Keys.Control | Keys.R:
+                    Track.DoTrackEvent(TrackCategories.Application, "keyboardShortcut", "Ctrl+R");
+                    DoRepoAction(RepoActionEnum.GitReset);
+                    return true;
+                default:
+                    return base.ProcessCmdKey(ref msg, keyData);
+            }
         }
     }
 }

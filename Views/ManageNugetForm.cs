@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using NugetManagement;
+using RepoManager.Analytics;
 using RepoManager.Models;
 
 namespace RepoManager
@@ -147,6 +148,8 @@ namespace RepoManager
             //Validate again search path
             if (!processor.IsValidSearchPath())
                 return;
+
+            Track.DoTrackEvent(TrackCategories.LocalAction, "upgradeNugetPackages", upgradeCount.ToString());
 
             //Start processing
             progressBarControl1.Visible = true;

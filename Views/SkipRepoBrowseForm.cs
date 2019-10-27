@@ -2,6 +2,8 @@
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using RepoManager.Analytics;
+using RepoManager.Models;
 
 namespace RepoManager
 {
@@ -104,6 +106,8 @@ namespace RepoManager
                 }
                 listBoxPaths.Items.Add(textBoxPath.Text);
             }
+
+            Track.DoTrackEvent(TrackCategories.Option, "addRepoToIgnore");
             buttonAction.Text = listBoxPaths.Items.Contains(textBoxPath.Text) ? "Remove" : "Add";
         }
 
