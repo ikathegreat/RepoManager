@@ -54,6 +54,16 @@
             this.colChangeMessage = new DevExpress.XtraGrid.Columns.GridColumn();
             this.tabPageCommitHistory = new System.Windows.Forms.TabPage();
             this.tabPageChangeTrends = new System.Windows.Forms.TabPage();
+            this.tabPageSmartGit = new System.Windows.Forms.TabPage();
+            this.checkBoxEnableSmartGit = new System.Windows.Forms.CheckBox();
+            this.listBoxSmartGitLinkedRepos = new System.Windows.Forms.ListBox();
+            this.panelSmartGitRepo = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.buttonAddSingleRepo = new System.Windows.Forms.Button();
+            this.buttonAutoDetect = new System.Windows.Forms.Button();
+            this.buttonRemove = new System.Windows.Forms.Button();
+            this.buttonCheckAutoDetect = new System.Windows.Forms.Button();
+            this.labelLinkedReposCount = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
@@ -62,6 +72,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
             this.tabPageCommitHistory.SuspendLayout();
+            this.tabPageSmartGit.SuspendLayout();
+            this.panelSmartGitRepo.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -139,7 +152,7 @@
             this.gridControl1.Location = new System.Drawing.Point(3, 3);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(943, 382);
+            this.gridControl1.Size = new System.Drawing.Size(943, 394);
             this.gridControl1.TabIndex = 7;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -210,11 +223,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageRecentFiles);
             this.tabControl1.Controls.Add(this.tabPageCommitHistory);
+            this.tabControl1.Controls.Add(this.tabPageSmartGit);
             this.tabControl1.Controls.Add(this.tabPageChangeTrends);
-            this.tabControl1.Location = new System.Drawing.Point(15, 104);
+            this.tabControl1.Location = new System.Drawing.Point(15, 92);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(957, 416);
+            this.tabControl1.Size = new System.Drawing.Size(957, 428);
             this.tabControl1.TabIndex = 8;
             // 
             // tabPageRecentFiles
@@ -223,7 +237,7 @@
             this.tabPageRecentFiles.Location = new System.Drawing.Point(4, 24);
             this.tabPageRecentFiles.Name = "tabPageRecentFiles";
             this.tabPageRecentFiles.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRecentFiles.Size = new System.Drawing.Size(949, 388);
+            this.tabPageRecentFiles.Size = new System.Drawing.Size(949, 400);
             this.tabPageRecentFiles.TabIndex = 0;
             this.tabPageRecentFiles.Text = "Recent Files";
             this.tabPageRecentFiles.UseVisualStyleBackColor = true;
@@ -234,7 +248,7 @@
             this.gridControl2.Location = new System.Drawing.Point(3, 3);
             this.gridControl2.MainView = this.gridView2;
             this.gridControl2.Name = "gridControl2";
-            this.gridControl2.Size = new System.Drawing.Size(943, 382);
+            this.gridControl2.Size = new System.Drawing.Size(943, 394);
             this.gridControl2.TabIndex = 8;
             this.gridControl2.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView2});
@@ -315,7 +329,7 @@
             this.tabPageCommitHistory.Location = new System.Drawing.Point(4, 24);
             this.tabPageCommitHistory.Name = "tabPageCommitHistory";
             this.tabPageCommitHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCommitHistory.Size = new System.Drawing.Size(949, 388);
+            this.tabPageCommitHistory.Size = new System.Drawing.Size(949, 400);
             this.tabPageCommitHistory.TabIndex = 1;
             this.tabPageCommitHistory.Text = "Commit History";
             this.tabPageCommitHistory.UseVisualStyleBackColor = true;
@@ -325,10 +339,118 @@
             this.tabPageChangeTrends.Location = new System.Drawing.Point(4, 24);
             this.tabPageChangeTrends.Name = "tabPageChangeTrends";
             this.tabPageChangeTrends.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageChangeTrends.Size = new System.Drawing.Size(949, 388);
+            this.tabPageChangeTrends.Size = new System.Drawing.Size(949, 400);
             this.tabPageChangeTrends.TabIndex = 2;
             this.tabPageChangeTrends.Text = "Change Trend";
             this.tabPageChangeTrends.UseVisualStyleBackColor = true;
+            // 
+            // tabPageSmartGit
+            // 
+            this.tabPageSmartGit.Controls.Add(this.labelLinkedReposCount);
+            this.tabPageSmartGit.Controls.Add(this.buttonCheckAutoDetect);
+            this.tabPageSmartGit.Controls.Add(this.panelSmartGitRepo);
+            this.tabPageSmartGit.Controls.Add(this.checkBoxEnableSmartGit);
+            this.tabPageSmartGit.Location = new System.Drawing.Point(4, 24);
+            this.tabPageSmartGit.Name = "tabPageSmartGit";
+            this.tabPageSmartGit.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSmartGit.Size = new System.Drawing.Size(949, 400);
+            this.tabPageSmartGit.TabIndex = 3;
+            this.tabPageSmartGit.Text = "SmartGit™";
+            this.tabPageSmartGit.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnableSmartGit
+            // 
+            this.checkBoxEnableSmartGit.AutoSize = true;
+            this.checkBoxEnableSmartGit.Location = new System.Drawing.Point(21, 26);
+            this.checkBoxEnableSmartGit.Name = "checkBoxEnableSmartGit";
+            this.checkBoxEnableSmartGit.Size = new System.Drawing.Size(186, 19);
+            this.checkBoxEnableSmartGit.TabIndex = 0;
+            this.checkBoxEnableSmartGit.Text = "Enable SmartGit™ for this repo";
+            this.checkBoxEnableSmartGit.UseVisualStyleBackColor = true;
+            this.checkBoxEnableSmartGit.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // listBoxSmartGitLinkedRepos
+            // 
+            this.listBoxSmartGitLinkedRepos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxSmartGitLinkedRepos.FormattingEnabled = true;
+            this.listBoxSmartGitLinkedRepos.ItemHeight = 15;
+            this.listBoxSmartGitLinkedRepos.Location = new System.Drawing.Point(0, 30);
+            this.listBoxSmartGitLinkedRepos.Name = "listBoxSmartGitLinkedRepos";
+            this.listBoxSmartGitLinkedRepos.Size = new System.Drawing.Size(423, 162);
+            this.listBoxSmartGitLinkedRepos.TabIndex = 1;
+            // 
+            // panelSmartGitRepo
+            // 
+            this.panelSmartGitRepo.Controls.Add(this.listBoxSmartGitLinkedRepos);
+            this.panelSmartGitRepo.Controls.Add(this.panel3);
+            this.panelSmartGitRepo.Location = new System.Drawing.Point(21, 81);
+            this.panelSmartGitRepo.Name = "panelSmartGitRepo";
+            this.panelSmartGitRepo.Size = new System.Drawing.Size(423, 192);
+            this.panelSmartGitRepo.TabIndex = 2;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.buttonRemove);
+            this.panel3.Controls.Add(this.buttonAutoDetect);
+            this.panel3.Controls.Add(this.buttonAddSingleRepo);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Padding = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.panel3.Size = new System.Drawing.Size(423, 30);
+            this.panel3.TabIndex = 0;
+            // 
+            // buttonAddSingleRepo
+            // 
+            this.buttonAddSingleRepo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonAddSingleRepo.Location = new System.Drawing.Point(0, 3);
+            this.buttonAddSingleRepo.Name = "buttonAddSingleRepo";
+            this.buttonAddSingleRepo.Size = new System.Drawing.Size(75, 24);
+            this.buttonAddSingleRepo.TabIndex = 0;
+            this.buttonAddSingleRepo.Text = "Add";
+            this.buttonAddSingleRepo.UseVisualStyleBackColor = true;
+            this.buttonAddSingleRepo.Click += new System.EventHandler(this.buttonAddSingleRepo_Click);
+            // 
+            // buttonAutoDetect
+            // 
+            this.buttonAutoDetect.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonAutoDetect.Location = new System.Drawing.Point(75, 3);
+            this.buttonAutoDetect.Name = "buttonAutoDetect";
+            this.buttonAutoDetect.Size = new System.Drawing.Size(85, 24);
+            this.buttonAutoDetect.TabIndex = 1;
+            this.buttonAutoDetect.Text = "Auto Detect";
+            this.buttonAutoDetect.UseVisualStyleBackColor = true;
+            this.buttonAutoDetect.Click += new System.EventHandler(this.buttonAutoDetect_Click);
+            // 
+            // buttonRemove
+            // 
+            this.buttonRemove.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonRemove.Location = new System.Drawing.Point(160, 3);
+            this.buttonRemove.Name = "buttonRemove";
+            this.buttonRemove.Size = new System.Drawing.Size(75, 24);
+            this.buttonRemove.TabIndex = 2;
+            this.buttonRemove.Text = "Remove";
+            this.buttonRemove.UseVisualStyleBackColor = true;
+            this.buttonRemove.Click += new System.EventHandler(this.buttonRemove_Click);
+            // 
+            // buttonCheckAutoDetect
+            // 
+            this.buttonCheckAutoDetect.Location = new System.Drawing.Point(115, 51);
+            this.buttonCheckAutoDetect.Name = "buttonCheckAutoDetect";
+            this.buttonCheckAutoDetect.Size = new System.Drawing.Size(130, 24);
+            this.buttonCheckAutoDetect.TabIndex = 3;
+            this.buttonCheckAutoDetect.Text = "View Linked Repos";
+            this.buttonCheckAutoDetect.UseVisualStyleBackColor = true;
+            this.buttonCheckAutoDetect.Click += new System.EventHandler(this.buttonCheckAutoDetect_Click);
+            // 
+            // labelLinkedReposCount
+            // 
+            this.labelLinkedReposCount.AutoSize = true;
+            this.labelLinkedReposCount.Location = new System.Drawing.Point(18, 56);
+            this.labelLinkedReposCount.Name = "labelLinkedReposCount";
+            this.labelLinkedReposCount.Size = new System.Drawing.Size(38, 15);
+            this.labelLinkedReposCount.TabIndex = 4;
+            this.labelLinkedReposCount.Text = "label1";
             // 
             // RepoPropertiesForm
             // 
@@ -345,6 +467,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(600, 450);
             this.Name = "RepoPropertiesForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Repo Properties";
@@ -358,6 +481,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).EndInit();
             this.tabPageCommitHistory.ResumeLayout(false);
+            this.tabPageSmartGit.ResumeLayout(false);
+            this.tabPageSmartGit.PerformLayout();
+            this.panelSmartGitRepo.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -390,5 +517,15 @@
         private DevExpress.XtraGrid.Columns.GridColumn colDaysAge;
         private System.Windows.Forms.TabPage tabPageChangeTrends;
         private DevExpress.XtraGrid.Columns.GridColumn colChangeCount;
+        private System.Windows.Forms.TabPage tabPageSmartGit;
+        private System.Windows.Forms.Panel panelSmartGitRepo;
+        private System.Windows.Forms.ListBox listBoxSmartGitLinkedRepos;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button buttonRemove;
+        private System.Windows.Forms.Button buttonAutoDetect;
+        private System.Windows.Forms.Button buttonAddSingleRepo;
+        private System.Windows.Forms.CheckBox checkBoxEnableSmartGit;
+        private System.Windows.Forms.Button buttonCheckAutoDetect;
+        private System.Windows.Forms.Label labelLinkedReposCount;
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using DevExpress.XtraCharts;
 using RepoManager.Models;
+using RepoManager.Views;
 
 namespace RepoManager
 {
@@ -63,6 +64,19 @@ namespace RepoManager
             if (File.Exists(FormMain.GridCommitHistoryXml))
                 gridView1.RestoreLayoutFromXml(FormMain.GridCommitHistoryXml);
 
+            checkBoxEnableSmartGit.Checked = iniFile.ReadBool(repoModel.Name, "EnableSmartGit", false);
+            panelSmartGitRepo.Enabled = checkBoxEnableSmartGit.Checked;
+
+            var linkedReposString = iniFile.ReadString(repoModel.Name, "SmartGitLinkedRepos", "");
+
+            if (string.IsNullOrEmpty(linkedReposString))
+                listBoxSmartGitLinkedRepos.Items.Add("(Auto Detect)");
+            else
+                linkedReposString.Split('|').ToList().ForEach(x => listBoxSmartGitLinkedRepos.Items.Add(x));
+
+            tabControl1.SelectedIndex = iniFile.ReadInteger(repoModel.Name, "LastTabIndex", 0);
+
+            labelLinkedReposCount.Text = $"{repoModel.GetDependentRepoNamesList().Count} linked repo(s)";
         }
 
         private void LoadChart(IReadOnlyCollection<SimpleCommit> commitHistory)
@@ -116,6 +130,21 @@ namespace RepoManager
         {
             iniFile.WriteString(repoModel.Name, "PreferredSolution", comboBoxPreferredSolution.Text);
             iniFile.WriteBool(repoModel.Name, "OpenPreferredSolutionAsAdmin", checkBoxOpenAsAdmin.Checked);
+
+            iniFile.WriteBool(repoModel.Name, "EnableSmartGit", checkBoxEnableSmartGit.Checked);
+            iniFile.WriteString(repoModel.Name, "SmartGitLinkedRepos", 
+                string.Join("|", listBoxSmartGitLinkedRepos.Items.OfType<string>().ToArray()));
+
+            var linkedReposString = iniFile.ReadString(repoModel.Name, "SmartGitLinkedRepos", "");
+
+            if (string.IsNullOrEmpty(linkedReposString))
+                listBoxSmartGitLinkedRepos.Items.Add("(Auto Detect)");
+            else
+                linkedReposString.Split('|').ToList().ForEach(x => listBoxSmartGitLinkedRepos.Items.Add(x));
+            
+            iniFile.WriteInteger(repoModel.Name, "LastTabIndex", tabControl1.SelectedIndex);
+
+
             Close();
         }
 
@@ -142,6 +171,60 @@ namespace RepoManager
 
             if (File.Exists(simpleFileChange.Path))
                 Process.Start(simpleFileChange.Path);
+        }
+
+        private void buttonAutoDetect_Click(object sender, EventArgs e)
+        {
+            if (!listBoxSmartGitLinkedRepos.Items.Contains("(Auto Detect)"))
+                listBoxSmartGitLinkedRepos.Items.Add("(Auto Detect)");
+        }
+
+        private void buttonRemove_Click(object sender, EventArgs e)
+        {
+            var selectedItem = listBoxSmartGitLinkedRepos.SelectedItem;
+            if (selectedItem != null)
+                listBoxSmartGitLinkedRepos.Items.Remove(selectedItem);
+        }
+
+        private void buttonAddSingleRepo_Click(object sender, EventArgs e)
+        {
+            var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
+            var reposPath = iniFile.ReadString(OptionsForm.PreferencesSection, "RepoPath", defaultPath);
+
+            var reposList = new List<string>();
+            Directory.EnumerateDirectories(reposPath).ToList().ForEach(x => reposList.Add(Path.GetFileName(x)));
+
+            var addLinkedRepoForm = new AddLinkedRepoForm
+            {
+                ReposList = reposList
+            };
+
+            if (addLinkedRepoForm.ShowDialog() != DialogResult.OK)
+                return;
+
+            if (!listBoxSmartGitLinkedRepos.Items.Contains(addLinkedRepoForm.SelectedRepo))
+                listBoxSmartGitLinkedRepos.Items.Add(addLinkedRepoForm.SelectedRepo);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            panelSmartGitRepo.Enabled = checkBoxEnableSmartGit.Checked;
+        }
+
+        private void buttonCheckAutoDetect_Click(object sender, EventArgs e)
+        {
+            var dependentRepoNamesList = repoModel.GetDependentRepoNamesList();
+
+            if (dependentRepoNamesList.Count == 0)
+            {
+                MessageBox.Show($"{repoModel.Name} has no linked repos");
+                return;
+            }
+
+            var reposString = string.Join(Environment.NewLine, dependentRepoNamesList);
+
+            MessageBox.Show($"{repoModel.Name} has {dependentRepoNamesList.Count} linked repo(s):"
+                            + Environment.NewLine + Environment.NewLine + reposString);
         }
     }
 }

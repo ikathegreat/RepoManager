@@ -93,14 +93,14 @@ namespace RepoManager
 
             List<RepoModel> reposList;
             setUIEnable(false);
+            var iniFile = new IniFile(OptionsIni);
+            var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
+            var reposPath = iniFile.ReadString(OptionsForm.PreferencesSection, "RepoPath", defaultPath);
+
             try
             {
-                var iniFile = new IniFile(OptionsIni);
-                var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
-                var slnSearchPath = iniFile.ReadString(OptionsForm.PreferencesSection, "RepoPath", defaultPath);
 
-
-                if (!Directory.Exists(slnSearchPath))
+                if (!Directory.Exists(reposPath))
                 {
                     barStaticItemFocusedRepo.Caption = "";
                     barStaticItemFocusedRepoStatus.Caption = "";
@@ -108,7 +108,7 @@ namespace RepoManager
                 }
 
                 barSelectionStatus.Caption = "Refreshing repository lists...";
-                reposList = await Utilities.ScanForRepositoriesAsync(slnSearchPath);
+                reposList = await Utilities.ScanForRepositoriesAsync(reposPath);
                 gridControl1.DataSource = reposList;
 
 
@@ -134,7 +134,7 @@ namespace RepoManager
             foreach (var repoModel in reposList)
             {
                 listOfTasks.Add(Utilities.GetRepoGitInfoAsync(repoModel, ct));
-                listOfTasks.Add(Utilities.GetRepoModelSolutionsList(repoModel, ct));
+                listOfTasks.Add(Utilities.GetRepoModelSolutionsList(repoModel, reposPath, ct));
                 if (repoModel.SkipScan)
                     continue;
                 listOfTasks.Add(Utilities.GetRepositorySize(repoModel, ct));
@@ -647,7 +647,9 @@ namespace RepoManager
 
                 foreach (var solutionPath in solutionsList)
                 {
-                    var toolStripItem = new ToolStripMenuItem("", null, SolutionItemClick) { Text = solutionPath };
+                    var toolStripItem = new ToolStripMenuItem("", null,
+                        SolutionItemClick)
+                    { Text = solutionPath };
 
                     //var item = solutionsToolStripMenuItem.DropDownItems.Add(solutionPath);
                     //item.Click += SolutionItemClick; //libgit2sharp doesn't support switching local branches yet
@@ -661,6 +663,13 @@ namespace RepoManager
                 var solCount = solutionsList.Count == 0 ? "None" : solutionsList.Count.ToString();
                 solutionsToolStripMenuItem.Text = $"Solutions ({solCount})";
 
+
+                //Todo: Move to fetch
+                //var dependentRepoNamesList = repoModel.GetDependentRepoNamesList();
+                //foreach (var branch in dependentRepoNamesList)
+                //{
+                //    var item = dependentReposToolStripMenuItem.DropDownItems.Add(branch);
+                //}
 
                 branchesToolStripMenuItem.DropDownItems.Clear();
                 var branchesList = repoModel.GetBranchesList();

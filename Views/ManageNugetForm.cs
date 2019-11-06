@@ -72,7 +72,7 @@ namespace RepoManager
             gridControl2.DataSource = null;
             processor.SolutionSearchPath = searchPath;
 
-            if (!processor.IsValidSearchPath())
+            if (!Processor.IsValidSearchPath(processor.SolutionSearchPath))
             {
                 return;
             }
@@ -146,7 +146,7 @@ namespace RepoManager
                 return;
 
             //Validate again search path
-            if (!processor.IsValidSearchPath())
+            if (!Processor.IsValidSearchPath(processor.SolutionSearchPath))
                 return;
 
             Track.DoTrackEvent(TrackCategories.LocalAction, "upgradeNugetPackages", upgradeCount.ToString());

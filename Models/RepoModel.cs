@@ -7,6 +7,7 @@ namespace RepoManager.Models
     {
         private List<string> solutionList = new List<string>();
         private List<string> branchesList = new List<string>();
+        private List<string> dependentRepoNamesList = new List<string>();
 
         public string Name { get; set; }
         public string Path { get; set; }
@@ -39,6 +40,16 @@ namespace RepoManager.Models
         public List<string> GetBranchesList()
         {
             return branchesList;
+        }
+
+        public void SetDependentRepoNamesList(List<string> aDependentRepoNamesList)
+        {
+            dependentRepoNamesList = aDependentRepoNamesList;
+        }
+
+        public List<string> GetDependentRepoNamesList()
+        {
+            return dependentRepoNamesList;
         }
 
     }
