@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using NugetManagement;
+using RepoManager.Analytics;
 using RepoManager.Models;
 
 namespace RepoManager
@@ -71,7 +72,7 @@ namespace RepoManager
             gridControl2.DataSource = null;
             processor.SolutionSearchPath = searchPath;
 
-            if (!processor.IsValidSearchPath())
+            if (!Processor.IsValidSearchPath(processor.SolutionSearchPath))
             {
                 return;
             }
@@ -145,8 +146,10 @@ namespace RepoManager
                 return;
 
             //Validate again search path
-            if (!processor.IsValidSearchPath())
+            if (!Processor.IsValidSearchPath(processor.SolutionSearchPath))
                 return;
+
+            Track.DoTrackEvent(TrackCategories.LocalAction, "upgradeNugetPackages", upgradeCount.ToString());
 
             //Start processing
             progressBarControl1.Visible = true;

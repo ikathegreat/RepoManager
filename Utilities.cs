@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using DevExpress.Utils.Extensions;
 using LibGit2Sharp;
+using NugetManagement;
 using RepoManager.Models;
 
 namespace RepoManager
@@ -18,14 +19,47 @@ namespace RepoManager
     public static class Utilities
     {
         private const string RFC2822Format = "ddd dd MMM HH:mm:ss yyyy K";
-        public static async Task GetRepoModelSolutionsList(RepoModel repoModel, CancellationToken ct)
+        public static async Task GetRepoModelSolutionsList(RepoModel repoModel, string reposPath, CancellationToken ct)
         {
             await Task.Run(() =>
             {
                 try
                 {
-                    repoModel.SetSolutionsList(Directory
-                        .EnumerateFiles(repoModel.Path, "*.sln", SearchOption.AllDirectories).ToList());
+                    var solutionsList = Directory
+                        .EnumerateFiles(repoModel.Path, "*.sln", SearchOption.AllDirectories).ToList();
+                    repoModel.SetSolutionsList(solutionsList);
+
+                    if (!Processor.IsValidSearchPath(repoModel.Path))
+                        return;
+
+                    var modelSolutionList = (from solutionPath in solutionsList
+                                             let solutionDirectory = Path.GetDirectoryName(solutionPath)
+                                             where solutionDirectory != null
+                                             select new ModelSolution(solutionPath)).ToList();
+
+                    var dependentRepoNamesList = new List<string>();
+
+                    foreach (var modelSolution in modelSolutionList)
+                    {
+                        foreach (var modelProject in modelSolution.ProjectList)
+                        {
+                            var truncatedPath = Path.GetFullPath(modelProject.FullPath)
+                                .Replace(reposPath, "").TrimStart('\\').Split('\\')[0];
+                            if (Path.GetFileName(repoModel.Path) != truncatedPath)
+                                dependentRepoNamesList.Add(truncatedPath);
+                        }
+                    }
+
+                    //Do this weird thing for distinct items for mixed cases
+                    var tempDependentRepoNamesList = new List<string>();
+                    foreach (var repoName in dependentRepoNamesList)
+                    {
+                        if (tempDependentRepoNamesList.Any(x =>
+                             string.Equals(x, repoName, StringComparison.CurrentCultureIgnoreCase)))
+                            continue;
+                        tempDependentRepoNamesList.Add(repoName);
+                    }
+                    repoModel.SetDependentRepoNamesList(tempDependentRepoNamesList);
                 }
                 catch (Exception ex)
                 {
@@ -229,6 +263,30 @@ namespace RepoManager
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"GetRepoActiveBranchNameAsync: {ex.Message}");
+                }
+            }, ct);
+        }
+        public static async Task GetInterRepoReferences(RepoModel repoModel, CancellationToken ct)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    repoModel.NumberOfFilesString = "0";
+
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+
+
+
+                    var ts = stopWatch.Elapsed;
+                    Debug.WriteLine($"GetRepoNumberOfFiles: {repoModel.Name} - {ts.Hours:D2}h:{ts.Minutes:D2}m:{ts.Seconds:D2}s:{ts.Milliseconds:D3}ms");
+
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"GetRepoModelSolutionsList: {ex.Message}");
                 }
             }, ct);
         }
@@ -653,9 +711,9 @@ namespace RepoManager
                         : "";
 
                     var changeCount = 0;
-                        c.Parents.ForEach(x => changeCount +=
-                            repo.Diff.Compare<TreeChanges>(x.Tree,
-                                c.Tree).Count);
+                    c.Parents.ForEach(x => changeCount +=
+                        repo.Diff.Compare<TreeChanges>(x.Tree,
+                            c.Tree).Count);
                     result.Add(new SimpleCommit
                     {
                         Id = c.Id.ToString(),
@@ -677,7 +735,7 @@ namespace RepoManager
             var iniFile = new IniFile(FormMain.OptionsIni);
             var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
             var slnSearchPath = iniFile.ReadString(OptionsForm.PreferencesSection, "RepoPath", defaultPath);
-            
+
             using (var repo = new Repository(repoModel.Path))
             {
                 foreach (var commit in repo.Commits.Take(numberOfCommits))
@@ -690,7 +748,7 @@ namespace RepoManager
                             result.Add(new SimpleFileChange
                             {
                                 FileChangeKind = change.Status.ToString(),
-                                Path =  Path.Combine(slnSearchPath, repoModel.Name, change.Path.Replace('/','\\')),
+                                Path = Path.Combine(slnSearchPath, repoModel.Name, change.Path.Replace('/', '\\')),
                                 ChangeAuthor = commit.Author.Name,
                                 DateChanged = commit.Author.When.LocalDateTime,
                                 Message = commit.MessageShort,

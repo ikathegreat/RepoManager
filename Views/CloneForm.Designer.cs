@@ -33,14 +33,14 @@
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxRemoteUrl = new System.Windows.Forms.TextBox();
+            this.labelRepoType = new System.Windows.Forms.Label();
+            this.labelStatus = new System.Windows.Forms.Label();
+            this.labelLocalPath = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.textBoxLocalFolderName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.labelLocalPath = new System.Windows.Forms.Label();
-            this.labelStatus = new System.Windows.Forms.Label();
-            this.labelRepoType = new System.Windows.Forms.Label();
+            this.textBoxRemoteUrl = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -101,22 +101,41 @@
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             // 
-            // label1
+            // labelRepoType
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(28, 34);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(72, 15);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Remote URL";
+            this.labelRepoType.AutoSize = true;
+            this.labelRepoType.Location = new System.Drawing.Point(518, 34);
+            this.labelRepoType.Name = "labelRepoType";
+            this.labelRepoType.Size = new System.Drawing.Size(31, 15);
+            this.labelRepoType.TabIndex = 7;
+            this.labelRepoType.Text = "Type";
             // 
-            // textBoxRemoteUrl
+            // labelStatus
             // 
-            this.textBoxRemoteUrl.Location = new System.Drawing.Point(140, 31);
-            this.textBoxRemoteUrl.Name = "textBoxRemoteUrl";
-            this.textBoxRemoteUrl.Size = new System.Drawing.Size(372, 23);
-            this.textBoxRemoteUrl.TabIndex = 1;
-            this.textBoxRemoteUrl.TextChanged += new System.EventHandler(this.textBoxRemoteUrl_TextChanged);
+            this.labelStatus.AutoSize = true;
+            this.labelStatus.Location = new System.Drawing.Point(140, 128);
+            this.labelStatus.Name = "labelStatus";
+            this.labelStatus.Size = new System.Drawing.Size(39, 15);
+            this.labelStatus.TabIndex = 6;
+            this.labelStatus.Text = "Status";
+            // 
+            // labelLocalPath
+            // 
+            this.labelLocalPath.AutoSize = true;
+            this.labelLocalPath.Location = new System.Drawing.Point(140, 100);
+            this.labelLocalPath.Name = "labelLocalPath";
+            this.labelLocalPath.Size = new System.Drawing.Size(31, 15);
+            this.labelLocalPath.TabIndex = 5;
+            this.labelLocalPath.Text = "Path";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(28, 100);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(62, 15);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Local Path";
             // 
             // textBoxLocalFolderName
             // 
@@ -135,45 +154,28 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Local Folder Name";
             // 
-            // label3
+            // textBoxRemoteUrl
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(28, 100);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 15);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Local Path";
+            this.textBoxRemoteUrl.Location = new System.Drawing.Point(140, 31);
+            this.textBoxRemoteUrl.Name = "textBoxRemoteUrl";
+            this.textBoxRemoteUrl.Size = new System.Drawing.Size(372, 23);
+            this.textBoxRemoteUrl.TabIndex = 1;
+            this.textBoxRemoteUrl.TextChanged += new System.EventHandler(this.textBoxRemoteUrl_TextChanged);
             // 
-            // labelLocalPath
+            // label1
             // 
-            this.labelLocalPath.AutoSize = true;
-            this.labelLocalPath.Location = new System.Drawing.Point(140, 100);
-            this.labelLocalPath.Name = "labelLocalPath";
-            this.labelLocalPath.Size = new System.Drawing.Size(31, 15);
-            this.labelLocalPath.TabIndex = 5;
-            this.labelLocalPath.Text = "Path";
-            // 
-            // labelStatus
-            // 
-            this.labelStatus.AutoSize = true;
-            this.labelStatus.Location = new System.Drawing.Point(140, 128);
-            this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(39, 15);
-            this.labelStatus.TabIndex = 6;
-            this.labelStatus.Text = "Status";
-            // 
-            // labelRepoType
-            // 
-            this.labelRepoType.AutoSize = true;
-            this.labelRepoType.Location = new System.Drawing.Point(518, 34);
-            this.labelRepoType.Name = "labelRepoType";
-            this.labelRepoType.Size = new System.Drawing.Size(32, 15);
-            this.labelRepoType.TabIndex = 7;
-            this.labelRepoType.Text = "Type";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(28, 34);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(72, 15);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Remote URL";
             // 
             // CloneForm
             // 
             this.AcceptButton = this.buttonOK;
+            this.Appearance.BackColor = System.Drawing.Color.White;
+            this.Appearance.Options.UseBackColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;

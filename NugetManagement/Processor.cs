@@ -16,25 +16,17 @@ namespace NugetManagement
         public List<ModelPackageUpgrade> ModelPackageUpgradeList { get; set; }
         public List<ModelPackageUpgrade> SelectedModelPackageUpgradeList { get; set; }
 
-        public bool IsValidSearchPath()
+        public static bool IsValidSearchPath(string searchPath)
         {
-            if (string.IsNullOrEmpty(SolutionSearchPath))
+            if (string.IsNullOrEmpty(searchPath))
                 return false;
 
-            if (SolutionSearchPath.Contains("|"))
-            {
-                var pathsList = SolutionSearchPath.Split('|');
-                return pathsList.All(Directory.Exists);
-            }
-            else
-            {
-                if (!Directory.Exists(SolutionSearchPath))
-                {
-                    return false;
-                }
+            if (!searchPath.Contains("|")) 
+                return Directory.Exists(searchPath);
 
-            }
-            return true;
+            var pathsList = searchPath.Split('|');
+            return pathsList.All(Directory.Exists);
+
         }
 
         public void BuildSolutionList()
@@ -42,7 +34,7 @@ namespace NugetManagement
 
             ModelSolutionList = new List<ModelSolution>();
 
-            if (!IsValidSearchPath())
+            if (!IsValidSearchPath(SolutionSearchPath))
                 return;
 
             var slnFileList = new List<string>();
