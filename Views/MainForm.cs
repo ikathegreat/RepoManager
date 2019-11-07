@@ -58,6 +58,7 @@ namespace RepoManager
 
 
         private CancellationTokenSource cts;
+        private List<string> focusedRowDependentRepoNamesList = new List<string>();
 
         public FormMain()
         {
@@ -251,8 +252,9 @@ namespace RepoManager
             var selectedRepoModelList = new List<RepoModel>();
             if (useFocusedRow)
             {
-                if (!(gridView1.GetFocusedRow() is RepoModel repoModel)) return;
-                selectedRepoModelList.Add(repoModel);
+                if (!(gridView1.GetFocusedRow() is RepoModel focusedRepoModel)) return;
+                selectedRepoModelList.Add(focusedRepoModel);
+                GetDependentRepoModelsForProcessing(focusedRepoModel, selectedRepoModelList);
             }
             else
             {
@@ -260,10 +262,13 @@ namespace RepoManager
                 for (var i = 0; i < gridView1.SelectedRowsCount; i++)
                 {
                     var row = gridView1.GetSelectedRows()[i];
-                    if (!(gridView1.GetRow(row) is RepoModel repoModel)) continue;
-                    selectedRepoModelList.Add(repoModel);
+                    if (!(gridView1.GetRow(row) is RepoModel checkedRepoModel)) continue;
+                    selectedRepoModelList.Add(checkedRepoModel);
+                    GetDependentRepoModelsForProcessing(checkedRepoModel, selectedRepoModelList);
                 }
             }
+
+            selectedRepoModelList = selectedRepoModelList.Distinct().ToList();
 
             if (selectedRepoModelList.Count == 0)
                 return;
@@ -280,9 +285,9 @@ namespace RepoManager
             var totalBatchFileCount = 0;
             if (repoActionEnum == RepoActionEnum.RunBatch)
             {
-                foreach (var repoModel in selectedRepoModelList)
+                foreach (var selectedRepoModel in selectedRepoModelList)
                 {
-                    totalBatchFileCount += GetBatchFileCount(repoModel);
+                    totalBatchFileCount += GetBatchFileCount(selectedRepoModel);
                 }
 
                 var countAndRepoMsg = selectedRepoModelList.Count == 1 ?
@@ -337,6 +342,45 @@ namespace RepoManager
             }
 
             ProcessRepositories(repoActionEnum, selectedRepoModelList);
+        }
+
+        private void GetDependentRepoModelsForProcessing(RepoModel repoModel, List<RepoModel> selectedRepoModelList)
+        {
+            var iniFile = new IniFile(RepoPropertiesIni);
+            if (iniFile.ReadBool(repoModel.Name, "EnableSmartGit", false))
+            {
+                var listOfLinkedRepos = new List<string>();
+                var linkedReposString = iniFile.ReadString(repoModel.Name, "SmartGitLinkedRepos", "");
+
+                if (string.IsNullOrEmpty(linkedReposString))
+                    listOfLinkedRepos.Add("(Auto Detect)");
+                else
+                    linkedReposString.Split('|').ToList().ForEach(x => listOfLinkedRepos.Add(x));
+
+                if (gridControl1.DataSource is List<RepoModel> repoList)
+                {
+                    foreach (var linkedRepo in listOfLinkedRepos)
+                    {
+                        if (linkedRepo == "(Auto Detect)")
+                        {
+                            foreach (var dependentRepoName in repoModel.GetDependentRepoNamesList())
+                            {
+                                var dependentRepo = repoList.FirstOrDefault(x => string.Equals(x.Name,
+                                    dependentRepoName, StringComparison.CurrentCultureIgnoreCase));
+                                if (dependentRepo != null)
+                                    selectedRepoModelList.Add(dependentRepo);
+                            }
+                        }
+                        else
+                        {
+                            var dependentRepo = repoList.FirstOrDefault(x => string.Equals(x.Name,
+                                linkedRepo, StringComparison.CurrentCultureIgnoreCase));
+                            if (dependentRepo != null)
+                                selectedRepoModelList.Add(dependentRepo);
+                        }
+                    }
+                }
+            }
         }
 
         private void ProcessRepositories(RepoActionEnum repoActionEnum,
@@ -846,6 +890,30 @@ namespace RepoManager
                 return;
             barStaticItemFocusedRepo.Caption = $"{repoModel.Name}";
             barStaticItemFocusedRepoStatus.Caption = $"{repoModel.ChangeString}";
+
+            var repoIniFile = new IniFile(RepoPropertiesIni);
+            var linkedReposString = repoIniFile.ReadString(repoModel.Name, "SmartGitLinkedRepos", "");
+
+            var listOfLinkedRepos = new List<string>();
+            if (string.IsNullOrEmpty(linkedReposString))
+                listOfLinkedRepos.Add("(Auto Detect)");
+            else
+                linkedReposString.Split('|').ToList().ForEach(x => listOfLinkedRepos.Add(x));
+
+            if (listOfLinkedRepos.Contains("(Auto Detect)"))
+            {
+                listOfLinkedRepos.Remove("(Auto Detect)");
+                listOfLinkedRepos.AddRange(repoModel.GetDependentRepoNamesList());
+            }
+
+            focusedRowDependentRepoNamesList.Clear();
+            focusedRowDependentRepoNamesList.AddRange(listOfLinkedRepos);
+
+            //Reliably repaint all row colors
+            for (var i = 0; i < gridView1.RowCount; i++)
+            {
+                gridView1.RefreshRow(i);
+            }
         }
 
         private void gridView1_DoubleClick(object sender, EventArgs e)
@@ -949,10 +1017,26 @@ namespace RepoManager
 
         private void gridView1_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
-            var row = gridView1.GetRow(e.RowHandle);
-            if (!(row is RepoModel repoModel)) return;
+        }
 
-            e.Appearance.ForeColor = repoModel.SkipScan ? Color.Gray : Color.Black;
+        private void gridView1_RowStyle(object sender, RowStyleEventArgs e)
+        {
+            var row = gridView1.GetRow(e.RowHandle);
+
+            if (!(row is RepoModel repoModel))
+                return;
+
+            if (focusedRowDependentRepoNamesList.Contains(repoModel.Name))
+            {
+                e.Appearance.ForeColor = repoModel.SkipScan ? Color.LightSkyBlue : Color.DodgerBlue;
+            }
+            else
+            {
+                e.Appearance.ForeColor = repoModel.SkipScan ? Color.Gray : Color.Black;
+            }
+
+            e.HighPriority = true;
+
         }
 
         private void barButtonItemFeedback_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -1167,5 +1251,6 @@ namespace RepoManager
                     return base.ProcessCmdKey(ref msg, keyData);
             }
         }
+
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RepoPropertiesForm));
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonOK = new System.Windows.Forms.Button();
@@ -53,17 +54,18 @@
             this.colChangeAuthor = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colChangeMessage = new DevExpress.XtraGrid.Columns.GridColumn();
             this.tabPageCommitHistory = new System.Windows.Forms.TabPage();
-            this.tabPageChangeTrends = new System.Windows.Forms.TabPage();
             this.tabPageSmartGit = new System.Windows.Forms.TabPage();
-            this.checkBoxEnableSmartGit = new System.Windows.Forms.CheckBox();
-            this.listBoxSmartGitLinkedRepos = new System.Windows.Forms.ListBox();
-            this.panelSmartGitRepo = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.buttonAddSingleRepo = new System.Windows.Forms.Button();
-            this.buttonAutoDetect = new System.Windows.Forms.Button();
-            this.buttonRemove = new System.Windows.Forms.Button();
-            this.buttonCheckAutoDetect = new System.Windows.Forms.Button();
             this.labelLinkedReposCount = new System.Windows.Forms.Label();
+            this.buttonCheckAutoDetect = new System.Windows.Forms.Button();
+            this.panelSmartGitRepo = new System.Windows.Forms.Panel();
+            this.listBoxSmartGitLinkedRepos = new System.Windows.Forms.ListBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.buttonRemove = new System.Windows.Forms.Button();
+            this.buttonAutoDetect = new System.Windows.Forms.Button();
+            this.buttonAddSingleRepo = new System.Windows.Forms.Button();
+            this.checkBoxEnableSmartGit = new System.Windows.Forms.CheckBox();
+            this.tabPageChangeTrends = new System.Windows.Forms.TabPage();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
@@ -334,16 +336,6 @@
             this.tabPageCommitHistory.Text = "Commit History";
             this.tabPageCommitHistory.UseVisualStyleBackColor = true;
             // 
-            // tabPageChangeTrends
-            // 
-            this.tabPageChangeTrends.Location = new System.Drawing.Point(4, 24);
-            this.tabPageChangeTrends.Name = "tabPageChangeTrends";
-            this.tabPageChangeTrends.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageChangeTrends.Size = new System.Drawing.Size(949, 400);
-            this.tabPageChangeTrends.TabIndex = 2;
-            this.tabPageChangeTrends.Text = "Change Trend";
-            this.tabPageChangeTrends.UseVisualStyleBackColor = true;
-            // 
             // tabPageSmartGit
             // 
             this.tabPageSmartGit.Controls.Add(this.labelLinkedReposCount);
@@ -358,16 +350,33 @@
             this.tabPageSmartGit.Text = "SmartGit™";
             this.tabPageSmartGit.UseVisualStyleBackColor = true;
             // 
-            // checkBoxEnableSmartGit
+            // labelLinkedReposCount
             // 
-            this.checkBoxEnableSmartGit.AutoSize = true;
-            this.checkBoxEnableSmartGit.Location = new System.Drawing.Point(21, 26);
-            this.checkBoxEnableSmartGit.Name = "checkBoxEnableSmartGit";
-            this.checkBoxEnableSmartGit.Size = new System.Drawing.Size(186, 19);
-            this.checkBoxEnableSmartGit.TabIndex = 0;
-            this.checkBoxEnableSmartGit.Text = "Enable SmartGit™ for this repo";
-            this.checkBoxEnableSmartGit.UseVisualStyleBackColor = true;
-            this.checkBoxEnableSmartGit.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.labelLinkedReposCount.AutoSize = true;
+            this.labelLinkedReposCount.Location = new System.Drawing.Point(18, 56);
+            this.labelLinkedReposCount.Name = "labelLinkedReposCount";
+            this.labelLinkedReposCount.Size = new System.Drawing.Size(38, 15);
+            this.labelLinkedReposCount.TabIndex = 4;
+            this.labelLinkedReposCount.Text = "label1";
+            // 
+            // buttonCheckAutoDetect
+            // 
+            this.buttonCheckAutoDetect.Location = new System.Drawing.Point(115, 51);
+            this.buttonCheckAutoDetect.Name = "buttonCheckAutoDetect";
+            this.buttonCheckAutoDetect.Size = new System.Drawing.Size(130, 24);
+            this.buttonCheckAutoDetect.TabIndex = 3;
+            this.buttonCheckAutoDetect.Text = "View Linked Repos";
+            this.buttonCheckAutoDetect.UseVisualStyleBackColor = true;
+            this.buttonCheckAutoDetect.Click += new System.EventHandler(this.buttonCheckAutoDetect_Click);
+            // 
+            // panelSmartGitRepo
+            // 
+            this.panelSmartGitRepo.Controls.Add(this.listBoxSmartGitLinkedRepos);
+            this.panelSmartGitRepo.Controls.Add(this.panel3);
+            this.panelSmartGitRepo.Location = new System.Drawing.Point(21, 81);
+            this.panelSmartGitRepo.Name = "panelSmartGitRepo";
+            this.panelSmartGitRepo.Size = new System.Drawing.Size(423, 192);
+            this.panelSmartGitRepo.TabIndex = 2;
             // 
             // listBoxSmartGitLinkedRepos
             // 
@@ -378,15 +387,6 @@
             this.listBoxSmartGitLinkedRepos.Name = "listBoxSmartGitLinkedRepos";
             this.listBoxSmartGitLinkedRepos.Size = new System.Drawing.Size(423, 162);
             this.listBoxSmartGitLinkedRepos.TabIndex = 1;
-            // 
-            // panelSmartGitRepo
-            // 
-            this.panelSmartGitRepo.Controls.Add(this.listBoxSmartGitLinkedRepos);
-            this.panelSmartGitRepo.Controls.Add(this.panel3);
-            this.panelSmartGitRepo.Location = new System.Drawing.Point(21, 81);
-            this.panelSmartGitRepo.Name = "panelSmartGitRepo";
-            this.panelSmartGitRepo.Size = new System.Drawing.Size(423, 192);
-            this.panelSmartGitRepo.TabIndex = 2;
             // 
             // panel3
             // 
@@ -400,16 +400,16 @@
             this.panel3.Size = new System.Drawing.Size(423, 30);
             this.panel3.TabIndex = 0;
             // 
-            // buttonAddSingleRepo
+            // buttonRemove
             // 
-            this.buttonAddSingleRepo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.buttonAddSingleRepo.Location = new System.Drawing.Point(0, 3);
-            this.buttonAddSingleRepo.Name = "buttonAddSingleRepo";
-            this.buttonAddSingleRepo.Size = new System.Drawing.Size(75, 24);
-            this.buttonAddSingleRepo.TabIndex = 0;
-            this.buttonAddSingleRepo.Text = "Add";
-            this.buttonAddSingleRepo.UseVisualStyleBackColor = true;
-            this.buttonAddSingleRepo.Click += new System.EventHandler(this.buttonAddSingleRepo_Click);
+            this.buttonRemove.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonRemove.Location = new System.Drawing.Point(160, 3);
+            this.buttonRemove.Name = "buttonRemove";
+            this.buttonRemove.Size = new System.Drawing.Size(75, 24);
+            this.buttonRemove.TabIndex = 2;
+            this.buttonRemove.Text = "Remove";
+            this.buttonRemove.UseVisualStyleBackColor = true;
+            this.buttonRemove.Click += new System.EventHandler(this.buttonRemove_Click);
             // 
             // buttonAutoDetect
             // 
@@ -422,35 +422,41 @@
             this.buttonAutoDetect.UseVisualStyleBackColor = true;
             this.buttonAutoDetect.Click += new System.EventHandler(this.buttonAutoDetect_Click);
             // 
-            // buttonRemove
+            // buttonAddSingleRepo
             // 
-            this.buttonRemove.Dock = System.Windows.Forms.DockStyle.Left;
-            this.buttonRemove.Location = new System.Drawing.Point(160, 3);
-            this.buttonRemove.Name = "buttonRemove";
-            this.buttonRemove.Size = new System.Drawing.Size(75, 24);
-            this.buttonRemove.TabIndex = 2;
-            this.buttonRemove.Text = "Remove";
-            this.buttonRemove.UseVisualStyleBackColor = true;
-            this.buttonRemove.Click += new System.EventHandler(this.buttonRemove_Click);
+            this.buttonAddSingleRepo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonAddSingleRepo.Location = new System.Drawing.Point(0, 3);
+            this.buttonAddSingleRepo.Name = "buttonAddSingleRepo";
+            this.buttonAddSingleRepo.Size = new System.Drawing.Size(75, 24);
+            this.buttonAddSingleRepo.TabIndex = 0;
+            this.buttonAddSingleRepo.Text = "Add";
+            this.buttonAddSingleRepo.UseVisualStyleBackColor = true;
+            this.buttonAddSingleRepo.Click += new System.EventHandler(this.buttonAddSingleRepo_Click);
             // 
-            // buttonCheckAutoDetect
+            // checkBoxEnableSmartGit
             // 
-            this.buttonCheckAutoDetect.Location = new System.Drawing.Point(115, 51);
-            this.buttonCheckAutoDetect.Name = "buttonCheckAutoDetect";
-            this.buttonCheckAutoDetect.Size = new System.Drawing.Size(130, 24);
-            this.buttonCheckAutoDetect.TabIndex = 3;
-            this.buttonCheckAutoDetect.Text = "View Linked Repos";
-            this.buttonCheckAutoDetect.UseVisualStyleBackColor = true;
-            this.buttonCheckAutoDetect.Click += new System.EventHandler(this.buttonCheckAutoDetect_Click);
+            this.checkBoxEnableSmartGit.AutoSize = true;
+            this.checkBoxEnableSmartGit.Location = new System.Drawing.Point(21, 26);
+            this.checkBoxEnableSmartGit.Name = "checkBoxEnableSmartGit";
+            this.checkBoxEnableSmartGit.Size = new System.Drawing.Size(186, 19);
+            this.checkBoxEnableSmartGit.TabIndex = 0;
+            this.checkBoxEnableSmartGit.Text = "Enable SmartGit™ for this repo";
+            this.checkBoxEnableSmartGit.UseVisualStyleBackColor = true;
+            this.checkBoxEnableSmartGit.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // labelLinkedReposCount
+            // tabPageChangeTrends
             // 
-            this.labelLinkedReposCount.AutoSize = true;
-            this.labelLinkedReposCount.Location = new System.Drawing.Point(18, 56);
-            this.labelLinkedReposCount.Name = "labelLinkedReposCount";
-            this.labelLinkedReposCount.Size = new System.Drawing.Size(38, 15);
-            this.labelLinkedReposCount.TabIndex = 4;
-            this.labelLinkedReposCount.Text = "label1";
+            this.tabPageChangeTrends.Location = new System.Drawing.Point(4, 24);
+            this.tabPageChangeTrends.Name = "tabPageChangeTrends";
+            this.tabPageChangeTrends.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageChangeTrends.Size = new System.Drawing.Size(949, 400);
+            this.tabPageChangeTrends.TabIndex = 2;
+            this.tabPageChangeTrends.Text = "Change Trend";
+            this.tabPageChangeTrends.UseVisualStyleBackColor = true;
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // RepoPropertiesForm
             // 
@@ -527,5 +533,6 @@
         private System.Windows.Forms.CheckBox checkBoxEnableSmartGit;
         private System.Windows.Forms.Button buttonCheckAutoDetect;
         private System.Windows.Forms.Label labelLinkedReposCount;
+        private System.Windows.Forms.Timer timer1;
     }
 }

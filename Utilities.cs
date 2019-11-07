@@ -49,7 +49,17 @@ namespace RepoManager
                                 dependentRepoNamesList.Add(truncatedPath);
                         }
                     }
-                    repoModel.SetDependentRepoNamesList(dependentRepoNamesList.Distinct().ToList());
+
+                    //Do this weird thing for distinct items for mixed cases
+                    var tempDependentRepoNamesList = new List<string>();
+                    foreach (var repoName in dependentRepoNamesList)
+                    {
+                        if (tempDependentRepoNamesList.Any(x =>
+                             string.Equals(x, repoName, StringComparison.CurrentCultureIgnoreCase)))
+                            continue;
+                        tempDependentRepoNamesList.Add(repoName);
+                    }
+                    repoModel.SetDependentRepoNamesList(tempDependentRepoNamesList);
                 }
                 catch (Exception ex)
                 {

@@ -37,6 +37,11 @@ namespace RepoManager
 
         private void RepoPropertiesForm_Load(object sender, EventArgs e)
         {
+            //Remove
+            tabControl1.TabPages.Remove(tabPageChangeTrends);
+
+            Cursor.Current = Cursors.WaitCursor;
+
             var slnList = repoModel.GetSolutionList();
             slnList.ForEach(x => comboBoxPreferredSolution.Items.Add(x));
 
@@ -44,8 +49,34 @@ namespace RepoManager
             comboBoxPreferredSolution.Text = iniFile.ReadString(repoModel.Name, "PreferredSolution", "");
             checkBoxOpenAsAdmin.Checked = iniFile.ReadBool(repoModel.Name, "OpenPreferredSolutionAsAdmin", false);
 
+            gridControl1.Enabled = false;
+            gridControl2.Enabled = false;
+            timer1.Start();
+
             if (string.IsNullOrEmpty(comboBoxPreferredSolution.Text) && slnList.Count == 1)
                 comboBoxPreferredSolution.SelectedIndex = 0;
+
+
+
+            checkBoxEnableSmartGit.Checked = iniFile.ReadBool(repoModel.Name, "EnableSmartGit", false);
+            panelSmartGitRepo.Enabled = checkBoxEnableSmartGit.Checked;
+
+            var linkedReposString = iniFile.ReadString(repoModel.Name, "SmartGitLinkedRepos", "");
+
+            if (string.IsNullOrEmpty(linkedReposString))
+                listBoxSmartGitLinkedRepos.Items.Add("(Auto Detect)");
+            else
+                linkedReposString.Split('|').ToList().ForEach(x => listBoxSmartGitLinkedRepos.Items.Add(x));
+
+            tabControl1.SelectedIndex = iniFile.ReadInteger(repoModel.Name, "LastTabIndex", 0);
+
+            labelLinkedReposCount.Text = $"{repoModel.GetDependentRepoNamesList().Count} linked repo(s)";
+        }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Stop();
+
+            gridControl1.Enabled = true;
 
             //Todo: Option for number of commits
             var commitHistory = Utilities.DoGitCommitHistoryRetrieve(repoModel, 50);
@@ -64,24 +95,13 @@ namespace RepoManager
             if (File.Exists(FormMain.GridCommitHistoryXml))
                 gridView1.RestoreLayoutFromXml(FormMain.GridCommitHistoryXml);
 
-            checkBoxEnableSmartGit.Checked = iniFile.ReadBool(repoModel.Name, "EnableSmartGit", false);
-            panelSmartGitRepo.Enabled = checkBoxEnableSmartGit.Checked;
-
-            var linkedReposString = iniFile.ReadString(repoModel.Name, "SmartGitLinkedRepos", "");
-
-            if (string.IsNullOrEmpty(linkedReposString))
-                listBoxSmartGitLinkedRepos.Items.Add("(Auto Detect)");
-            else
-                linkedReposString.Split('|').ToList().ForEach(x => listBoxSmartGitLinkedRepos.Items.Add(x));
-
-            tabControl1.SelectedIndex = iniFile.ReadInteger(repoModel.Name, "LastTabIndex", 0);
-
-            labelLinkedReposCount.Text = $"{repoModel.GetDependentRepoNamesList().Count} linked repo(s)";
+            gridControl1.Enabled = true;
+            gridControl2.Enabled = true;
+            Cursor.Current = Cursors.Default;
         }
 
         private void LoadChart(IReadOnlyCollection<SimpleCommit> commitHistory)
         {
-            tabControl1.TabPages.Remove(tabPageChangeTrends);
             return;
 
             var lineChart = new ChartControl();
@@ -132,7 +152,7 @@ namespace RepoManager
             iniFile.WriteBool(repoModel.Name, "OpenPreferredSolutionAsAdmin", checkBoxOpenAsAdmin.Checked);
 
             iniFile.WriteBool(repoModel.Name, "EnableSmartGit", checkBoxEnableSmartGit.Checked);
-            iniFile.WriteString(repoModel.Name, "SmartGitLinkedRepos", 
+            iniFile.WriteString(repoModel.Name, "SmartGitLinkedRepos",
                 string.Join("|", listBoxSmartGitLinkedRepos.Items.OfType<string>().ToArray()));
 
             var linkedReposString = iniFile.ReadString(repoModel.Name, "SmartGitLinkedRepos", "");
@@ -141,7 +161,7 @@ namespace RepoManager
                 listBoxSmartGitLinkedRepos.Items.Add("(Auto Detect)");
             else
                 linkedReposString.Split('|').ToList().ForEach(x => listBoxSmartGitLinkedRepos.Items.Add(x));
-            
+
             iniFile.WriteInteger(repoModel.Name, "LastTabIndex", tabControl1.SelectedIndex);
 
 
@@ -194,6 +214,15 @@ namespace RepoManager
             var reposList = new List<string>();
             Directory.EnumerateDirectories(reposPath).ToList().ForEach(x => reposList.Add(Path.GetFileName(x)));
 
+            for (var i = reposList.Count - 1; i >= 0; i--)
+            {
+                if (!Directory.Exists(reposPath + "\\" + reposList[i] + "\\.git"))
+                {
+                    reposList.RemoveAt(i);
+                }
+
+            }
+
             var addLinkedRepoForm = new AddLinkedRepoForm
             {
                 ReposList = reposList
@@ -226,5 +255,6 @@ namespace RepoManager
             MessageBox.Show($"{repoModel.Name} has {dependentRepoNamesList.Count} linked repo(s):"
                             + Environment.NewLine + Environment.NewLine + reposString);
         }
+
     }
 }
