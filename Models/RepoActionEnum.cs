@@ -18,7 +18,8 @@ namespace RepoManager.Models
         GitFetch,
         [Description("Run batch files for")]
         RunBatch,
-        ManageNuget
+        ManageNuget,
+        Clone
     }
     public class Description : Attribute
     {

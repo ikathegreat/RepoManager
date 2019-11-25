@@ -13,6 +13,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
 using RepoManager.Analytics;
 using RepoManager.Models;
+using RepoManager.Views;
 
 namespace RepoManager
 {
@@ -864,24 +865,12 @@ namespace RepoManager
 
         private void barButtonItemClone_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            Track.DoTrackEvent(TrackCategories.Application, "cloneForm.ShowDialog");
-            var iniFile = new IniFile(OptionsIni);
-            var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
-            var repoPath = iniFile.ReadString(OptionsForm.PreferencesSection, "RepoPath", defaultPath);
 
-            var cloneForm = new CloneForm { RootDirectory = repoPath };
-            if (cloneForm.ShowDialog() != DialogResult.OK)
-                return;
-
-            if (cloneForm.RepoSourceTypeEnum == RepoSourceTypeEnum.Unknown)
-                return;
-
-            CloneGitRepo(cloneForm);
         }
 
-        private static async void CloneGitRepo(CloneForm cloneForm)
+        private static async void CloneGitRepoAsync(string remoteUrl, string localPath, RepoSourceTypeEnum repoSourceTypeEnum)
         {
-            await Utilities.CloneGitRepoAsync(cloneForm.RemoteURL, cloneForm.LocalPath, cloneForm.RepoSourceTypeEnum);
+            await Utilities.CloneGitRepoAsync(remoteUrl, localPath, repoSourceTypeEnum);
         }
 
         private void gridView1_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
@@ -1252,5 +1241,95 @@ namespace RepoManager
             }
         }
 
+        private void barButtonItem2_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Track.DoTrackEvent(TrackCategories.Application, "cloneForm.ShowDialog");
+            var iniFile = new IniFile(OptionsIni);
+            var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
+            var repoPath = iniFile.ReadString(OptionsForm.PreferencesSection, "RepoPath", defaultPath);
+
+            var cloneForm = new CloneForm { RootDirectory = repoPath };
+            if (cloneForm.ShowDialog() != DialogResult.OK)
+                return;
+
+            if (cloneForm.RepoSourceTypeEnum == RepoSourceTypeEnum.Unknown)
+                return;
+
+            CloneGitRepoAsync(cloneForm.RemoteURL, cloneForm.LocalPath, cloneForm.RepoSourceTypeEnum);
+        }
+
+        private void barButtonItemCloneMultipleItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+
+            Track.DoTrackEvent(TrackCategories.Application, "cloneMultipleForm.ShowDialog");
+            var iniFile = new IniFile(OptionsIni);
+            var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
+            var repoPath = iniFile.ReadString(OptionsForm.PreferencesSection, "RepoPath", defaultPath);
+
+            var cloneMultipleForm = new CloneMultipleForm { RootDirectory = repoPath };
+            if (cloneMultipleForm.ShowDialog() != DialogResult.OK)
+                return;
+
+            if (cloneMultipleForm.RepoToCloneList.Count == 0)
+                return;
+
+            if (MessageBox.Show($"Are you sure you want to clone {cloneMultipleForm.RepoToCloneList.Count} repos?" +
+                    Environment.NewLine + Environment.NewLine + "This may take awhile.", "Clone Multiple Repos",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+
+            panelProgressBar.Visible = true;
+            setUIEnable(false);
+
+            var summaryRecordList = new List<SummaryRecord>();
+
+            progressBarControl1.EditValue = 0;
+            progressBarControl1.Properties.Maximum = cloneMultipleForm.RepoToCloneList.Count;
+            Application.DoEvents();
+
+            foreach (var repoToClone in cloneMultipleForm.RepoToCloneList)
+            {
+                var repoToCloneName = Path.GetFileName(repoToClone.LocalPath);
+                barSelectionStatus.Caption = $"Working on {repoToCloneName}";
+
+                Application.DoEvents();
+                var summaryRecord = new SummaryRecord(new RepoModel() { Name = repoToCloneName })
+                {
+                    RepoActionEnum = RepoActionEnum.Clone,
+                    Result = "Success",
+                    Message = ""
+                };
+
+                try
+                {
+                    Utilities.CloneGitRepo(repoToClone.RemoteURL, repoToClone.LocalPath, repoToClone.RepoSourceTypeEnum);
+
+                }
+                catch (Exception ex)
+                {
+                    summaryRecord.Result = "Error";
+                    summaryRecord.Message = $"Failed to clone repo: {ex.Message}";
+                }
+
+                summaryRecordList.Add(summaryRecord);
+
+                progressBarControl1.Increment(1);
+                Application.DoEvents();
+            }
+
+
+            if (summaryRecordList.Count > 0)
+            {
+                var summaryForm = new SummaryForm { SummaryRecordList = summaryRecordList };
+                summaryForm.Show();
+            }
+
+
+            panelProgressBar.Visible = false;
+            setUIEnable(true);
+
+            SearchRepos();
+        }
     }
 }

@@ -532,37 +532,39 @@ namespace RepoManager
 
         public static async Task CloneGitRepoAsync(string url, string localPath, RepoSourceTypeEnum repoSourceType)
         {
-            await Task.Run(() =>
+            await Task.Run(() => { CloneGitRepo(url, localPath, repoSourceType); });
+        }
+
+        public static void CloneGitRepo(string url, string localPath, RepoSourceTypeEnum repoSourceType)
+        {
+
+            if (!IsSiteAccessible(url))
+                return;
+
+            var hasUserNameOrPassword = GetUserNameAndPassword(out var userName,
+                out var password, repoSourceType);
+
+            try
             {
-                if (!IsSiteAccessible(url))
-                    return;
 
-                var hasUserNameOrPassword = GetUserNameAndPassword(out var userName,
-                    out var password, repoSourceType);
-
-                try
+                var co = new CloneOptions
                 {
-
-                    var co = new CloneOptions
+                    CredentialsProvider = (_url, _user, _cred) => new UsernamePasswordCredentials
                     {
-                        CredentialsProvider = (_url, _user, _cred) => new UsernamePasswordCredentials
-                        {
-                            Username = userName,
-                            Password = password
-                        }
-                    };
-                    Repository.Clone(url, localPath, co);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"CloneGitRepoAsync: {ex.Message}");
-                    if (!hasUserNameOrPassword)
-                    {
-                        Debug.WriteLine("CloneGitRepoAsync username or password is blank");
+                        Username = userName,
+                        Password = password
                     }
+                };
+                Repository.Clone(url, localPath, co);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"CloneGitRepoAsync: {ex.Message}");
+                if (!hasUserNameOrPassword)
+                {
+                    Debug.WriteLine("CloneGitRepoAsync username or password is blank");
                 }
-            });
-
+            }
         }
 
         public static void DoGitReset(RepoModel repoModel, ref SummaryRecord summaryRecord)

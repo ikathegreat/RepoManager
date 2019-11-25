@@ -167,6 +167,7 @@
     <Compile Include="Analytics\Track.cs" />
     <Compile Include="Analytics\TrackCategories.cs" />
     <Compile Include="Models\DummyRepoData.cs" />
+    <Compile Include="Models\RepoToClone.cs" />
     <Compile Include="Views\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,6 +186,12 @@
     </Compile>
     <Compile Include="Views\CloneForm.Designer.cs">
       <DependentUpon>CloneForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CloneMultipleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\CloneMultipleForm.Designer.cs">
+      <DependentUpon>CloneMultipleForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ManageNugetForm.cs">
       <SubType>Form</SubType>
@@ -246,6 +253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\CloneForm.resx">
       <DependentUpon>CloneForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CloneMultipleForm.resx">
+      <DependentUpon>CloneMultipleForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ManageNugetForm.resx">
       <DependentUpon>ManageNugetForm.cs</DependentUpon>

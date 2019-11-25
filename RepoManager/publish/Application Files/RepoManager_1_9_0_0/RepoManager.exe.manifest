@@ -1363,14 +1363,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RepoManager.exe" size="648192">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RepoManager.exe" size="700416">
       <assemblyIdentity name="RepoManager" version="1.9.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>2mt1sIuQwOJwKBWnfROcBAsSpN90rfm7YObhn2jIEls=</dsig:DigestValue>
+        <dsig:DigestValue>HgSbgpCELbXkkOPq67Nf0azsEuSM5jpTqq7wj96qMR0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
