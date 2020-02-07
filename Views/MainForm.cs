@@ -1331,5 +1331,11 @@ namespace RepoManager
 
             SearchRepos();
         }
+
+        private void barButtonItemOtherFolders_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            var otherFoldersForm = new OtherFoldersForm();
+            otherFoldersForm.ShowDialog();
+        }
     }
 }

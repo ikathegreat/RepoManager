@@ -55,6 +55,9 @@
             this.barButtonItemFetch = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemAbout = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemClone = new DevExpress.XtraBars.BarButtonItem();
+            this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.barButtonItemCloneItem = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemCloneMultipleItem = new DevExpress.XtraBars.BarButtonItem();
             this.barStaticItemFocusedRepo = new DevExpress.XtraBars.BarStaticItem();
             this.barStaticItemFocusedRepoStatus = new DevExpress.XtraBars.BarStaticItem();
             this.barButtonItemFeedback = new DevExpress.XtraBars.BarButtonItem();
@@ -105,17 +108,15 @@
             this.branchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemProperties = new System.Windows.Forms.ToolStripMenuItem();
-            this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.barButtonItemCloneMultipleItem = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItemCloneItem = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemOtherFolders = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repoModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).BeginInit();
             this.panelProgressBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).BeginInit();
             this.SuspendLayout();
             // 
             // gridControl1
@@ -272,9 +273,10 @@
             this.barButtonItemOpenPreferredSln,
             this.barButtonItemManageNuget,
             this.barButtonItemCloneMultipleItem,
-            this.barButtonItemCloneItem});
+            this.barButtonItemCloneItem,
+            this.barButtonItemOtherFolders});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl1.MaxItemId = 26;
+            this.ribbonControl1.MaxItemId = 27;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1});
@@ -380,6 +382,27 @@
             this.barButtonItemClone.Name = "barButtonItemClone";
             this.barButtonItemClone.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemClone_ItemClick);
             // 
+            // popupMenu1
+            // 
+            this.popupMenu1.ItemLinks.Add(this.barButtonItemCloneItem);
+            this.popupMenu1.ItemLinks.Add(this.barButtonItemCloneMultipleItem);
+            this.popupMenu1.Name = "popupMenu1";
+            this.popupMenu1.Ribbon = this.ribbonControl1;
+            // 
+            // barButtonItemCloneItem
+            // 
+            this.barButtonItemCloneItem.Caption = "Clone";
+            this.barButtonItemCloneItem.Id = 25;
+            this.barButtonItemCloneItem.Name = "barButtonItemCloneItem";
+            this.barButtonItemCloneItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem2_ItemClick);
+            // 
+            // barButtonItemCloneMultipleItem
+            // 
+            this.barButtonItemCloneMultipleItem.Caption = "Clone Multiple...";
+            this.barButtonItemCloneMultipleItem.Id = 24;
+            this.barButtonItemCloneMultipleItem.Name = "barButtonItemCloneMultipleItem";
+            this.barButtonItemCloneMultipleItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemCloneMultipleItem_ItemClick);
+            // 
             // barStaticItemFocusedRepo
             // 
             this.barStaticItemFocusedRepo.Caption = "FocusedRepo";
@@ -481,6 +504,7 @@
             this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemOpenRepo);
             this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemOpenPreferredSln);
             this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemDeleteRepo);
+            this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemOtherFolders);
             this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemProperties);
             this.ribbonPageGroupRepoOrganization.Name = "ribbonPageGroupRepoOrganization";
             this.ribbonPageGroupRepoOrganization.Text = "Repo Organization";
@@ -795,26 +819,12 @@
             this.toolStripMenuItemProperties.Text = "Properties";
             this.toolStripMenuItemProperties.Click += new System.EventHandler(this.toolStripMenuItemProperties_Click);
             // 
-            // popupMenu1
+            // barButtonItemOtherFolders
             // 
-            this.popupMenu1.ItemLinks.Add(this.barButtonItemCloneItem);
-            this.popupMenu1.ItemLinks.Add(this.barButtonItemCloneMultipleItem);
-            this.popupMenu1.Name = "popupMenu1";
-            this.popupMenu1.Ribbon = this.ribbonControl1;
-            // 
-            // barButtonItemCloneMultipleItem
-            // 
-            this.barButtonItemCloneMultipleItem.Caption = "Clone Multiple...";
-            this.barButtonItemCloneMultipleItem.Id = 24;
-            this.barButtonItemCloneMultipleItem.Name = "barButtonItemCloneMultipleItem";
-            this.barButtonItemCloneMultipleItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemCloneMultipleItem_ItemClick);
-            // 
-            // barButtonItemCloneItem
-            // 
-            this.barButtonItemCloneItem.Caption = "Clone";
-            this.barButtonItemCloneItem.Id = 25;
-            this.barButtonItemCloneItem.Name = "barButtonItemCloneItem";
-            this.barButtonItemCloneItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem2_ItemClick);
+            this.barButtonItemOtherFolders.Caption = "Other Folders...";
+            this.barButtonItemOtherFolders.Id = 26;
+            this.barButtonItemOtherFolders.Name = "barButtonItemOtherFolders";
+            this.barButtonItemOtherFolders.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemOtherFolders_ItemClick);
             // 
             // FormMain
             // 
@@ -840,10 +850,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.repoModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).EndInit();
             this.panelProgressBar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -928,6 +938,7 @@
         private DevExpress.XtraBars.PopupMenu popupMenu1;
         private DevExpress.XtraBars.BarButtonItem barButtonItemCloneMultipleItem;
         private DevExpress.XtraBars.BarButtonItem barButtonItemCloneItem;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemOtherFolders;
     }
 }
 

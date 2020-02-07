@@ -361,7 +361,8 @@ namespace RepoManager
             Changes = repoStatus.Count().ToString();
         }
 
-        public static async Task<List<RepoModel>> ScanForRepositoriesAsync(string repoSearchPath)
+        public static async Task<List<RepoModel>> ScanForRepositoriesAsync(string repoSearchPath,
+            bool useGitFolders = true)
         {
             var repoModelList = new List<RepoModel>();
             await Task.Run(() =>
@@ -374,21 +375,58 @@ namespace RepoManager
 
                 foreach (var searchRootDirectory in searchRootDirectories)
                 {
-                    var gitFolderList = Directory
-                        .EnumerateDirectories(searchRootDirectory, ".git", SearchOption.TopDirectoryOnly).ToList();
 
-                    foreach (var gitFolder in gitFolderList)
+                    var gitFolder = Path.Combine(searchRootDirectory, ".git");
+
+
+                    if (Directory.Exists(gitFolder) && useGitFolders)
                     {
-                        var repoPath = Path.GetDirectoryName(gitFolder);
+                        //    var repoPath = Path.GetDirectoryName(gitFolder);
                         var repoModel = new RepoModel
                         {
                             Name = Path.GetFileName(Path.GetDirectoryName(gitFolder)),
-                            Path = repoPath,
-                            SkipScan = repoSectionValuesList.Contains(repoPath)
+                            Path = searchRootDirectory,
+
+                            SkipScan = repoSectionValuesList.Contains(searchRootDirectory)
                         };
 
                         repoModelList.Add(repoModel);
+
                     }
+
+                    if (Directory.Exists(gitFolder) || useGitFolders)
+                        continue;
+
+
+                    //    var repoPath = Path.GetDirectoryName(gitFolder);
+                    var nonGitRepoModel = new RepoModel
+                    {
+                        Name = Path.GetFileName(Path.GetDirectoryName(gitFolder)),
+                        Path = searchRootDirectory,
+
+                        SkipScan = repoSectionValuesList.Contains(searchRootDirectory)
+                    };
+
+                    repoModelList.Add(nonGitRepoModel);
+
+
+                    //var gitFolderList = Directory
+                    //    .EnumerateDirectories(searchRootDirectory, ".git", SearchOption.TopDirectoryOnly).ToList();
+
+                    //foreach (var gitFolder in gitFolderList)
+                    //{
+                    //    var repoPath = Path.GetDirectoryName(gitFolder);
+                    //    var repoModel = new RepoModel
+                    //    {
+                    //        Name = Path.GetFileName(Path.GetDirectoryName(gitFolder)),
+                    //        Path = repoPath,
+
+                    //        SkipScan = repoSectionValuesList.Contains(repoPath)
+                    //    };
+
+                    //    repoModelList.Add(repoModel);
+                    //}
+
                 }
             });
             return repoModelList;
