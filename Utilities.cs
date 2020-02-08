@@ -764,6 +764,40 @@ namespace RepoManager
             return result;
         }
 
+        public static void DoGitBranchCheckout(RepoModel repoModel, string branchName)
+        {
+
+            using (var repo = new Repository(repoModel.Path))
+            {
+                Debug.WriteLine($"{repoModel.Name} active branch: {repo.Head.UpstreamBranchCanonicalName}");
+
+                //var branchNameNoRefHead =
+                //    repo.Head.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
+
+                //repoModel.BranchName = branchNameNoRefHead;
+
+                //var branchesList = new List<string>();
+
+                ////Get local branches
+                //foreach (var b in repo.Branches.Where(b => !b.IsRemote))
+                //{
+                //    var tempBranchNameNoRefHead =
+                //        b.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
+                //    branchesList.Add(tempBranchNameNoRefHead);
+                //}
+
+                var branch = repo.Branches[branchName];
+
+                if (branch == null)
+                {
+                    return ;
+                }
+
+                var currentBranch = Commands.Checkout(repo, branch);
+            }
+        }
+
+
         private static bool IsRemoteServerConnectionOK(RepoModel repoModel, SummaryRecord summaryRecord)
         {
             if (IsSiteAccessible(repoModel.RemoteURL))

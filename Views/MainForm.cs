@@ -14,6 +14,7 @@ using DevExpress.XtraGrid.Views.Grid;
 using RepoManager.Analytics;
 using RepoManager.Models;
 using RepoManager.Views;
+using ToolStripItem = System.Windows.Forms.ToolStripItem;
 
 namespace RepoManager
 {
@@ -722,7 +723,9 @@ namespace RepoManager
                 {
                     var item = branchesToolStripMenuItem.DropDownItems.Add(branch);
                     item.Click += BranchItemClick;
-                    item.Enabled = false;
+                    if (repoModel.BranchName == branch)
+                        ((ToolStripMenuItem)item).Checked = true;
+                    //item.Enabled = false;
                 }
 
                 var branchCount = branchesList.Count == 0 ? "None" : branchesList.Count.ToString();
@@ -754,35 +757,39 @@ namespace RepoManager
             contextMenuStrip.Show(view.GridControl, e.Point);
         }
 
-        private static void BranchItemClick(object sender, EventArgs e)
+        private void BranchItemClick(object sender, EventArgs e)
         {
             //libgit2sharp doesn't support switching local branches yet
 
-            //if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
-            //    return;
+            if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
+                return;
 
+            var branchName = (sender as ToolStripItem)?.Text;
 
-            //using (var repo = new Repository(repoModel.Path))
-            //{
-            //    Debug.WriteLine($"{repoModel.Name} active branch: {repo.Head.UpstreamBranchCanonicalName}");
+            if (string.IsNullOrEmpty(branchName))
+                return;
 
-            //    var branchNameNoRefHead =
-            //        repo.Head.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
+            gridControl1.Enabled = false;
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                Utilities.DoGitBranchCheckout(repoModel, branchName);
+                repoModel.BranchName = branchName;
 
-            //    repoModel.BranchName = branchNameNoRefHead;
-
-            //    var branchesList = new List<string>();
-
-            //    //Get local branches
-            //    foreach (var b in repo.Branches.Where(b => !b.IsRemote))
-            //    {
-            //        var tempBranchNameNoRefHead =
-            //            b.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
-            //        branchesList.Add(tempBranchNameNoRefHead);
-            //    }
-
-            //    // repoModel.BranchesList = branchesList;
-            //}
+                foreach (ToolStripItem toolStripItem in branchesToolStripMenuItem.DropDownItems)
+                {
+                    ((ToolStripMenuItem) toolStripItem).Checked = toolStripItem.Text == branchName;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+                gridControl1.Enabled = true;
+            }
         }
 
         private void SolutionItemClick(object sender, EventArgs e)
