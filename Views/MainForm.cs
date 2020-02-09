@@ -34,6 +34,7 @@ namespace RepoManager
         public static string GridSummaryXml = Path.Combine(RepoManagerAppData, "GridSummary.xml");
         public static string GridNugetPackagesXml = Path.Combine(RepoManagerAppData, "GridNugetPackages.xml");
         public static string GridNugetToUpgradeXml = Path.Combine(RepoManagerAppData, "GridNugetToUpgrade.xml");
+        public static string GridOtherFoldersXml = Path.Combine(RepoManagerAppData, "GridOtherFolders.xml");
 
         /*
          * This project heavily relies on libgit2sharp
@@ -289,7 +290,7 @@ namespace RepoManager
             {
                 foreach (var selectedRepoModel in selectedRepoModelList)
                 {
-                    totalBatchFileCount += GetBatchFileCount(selectedRepoModel);
+                    totalBatchFileCount += Utilities.GetBatchFileCount(selectedRepoModel);
                 }
 
                 var countAndRepoMsg = selectedRepoModelList.Count == 1 ?
@@ -304,7 +305,7 @@ namespace RepoManager
                         return;
                     case 1:
                         {
-                            if (XtraMessageBox.Show($"Run {GetFirstSelectedBatchFileName(selectedRepoModelList.First())} in {countAndRepoMsg}?",
+                            if (XtraMessageBox.Show($"Run {Utilities.GetFirstSelectedBatchFileName(selectedRepoModelList.First())} in {countAndRepoMsg}?",
                                     "Run Batch Files",
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                                 return;
@@ -574,37 +575,6 @@ namespace RepoManager
                 SearchRepos(); //Todo: optimize this 
         }
 
-        private int GetBatchFileCount(RepoModel repoModel)
-        {
-            var batFiles = Directory.EnumerateFiles(repoModel.Path,
-                "*.bat", SearchOption.AllDirectories).ToList();
-
-            var batchToRunCount = 0;
-
-            var iniFile = new IniFile(RunBatchIni);
-            foreach (var batFile in batFiles)
-            {
-                if (iniFile.ReadBool(repoModel.Path, batFile, false))
-                    batchToRunCount++;
-            }
-
-            return batchToRunCount;
-
-        }
-
-        private string GetFirstSelectedBatchFileName(RepoModel repoModel)
-        {
-            var iniFile = new IniFile(RunBatchIni);
-            foreach (var batFile in Directory.EnumerateFiles(repoModel.Path,
-                "*.bat", SearchOption.AllDirectories).ToList())
-            {
-                if (iniFile.ReadBool(repoModel.Path, batFile, false))
-                    return Path.GetFileName(batFile);
-            }
-
-            return string.Empty;
-
-        }
 
         private void barButtonItemDeleteBinObj_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {

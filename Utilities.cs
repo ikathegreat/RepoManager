@@ -920,6 +920,39 @@ namespace RepoManager
             return slnList.Count == 1 ? slnList.First() : string.Empty;
 
         }
+
+
+        public static int GetBatchFileCount(RepoModel repoModel)
+        {
+            var batFiles = Directory.EnumerateFiles(repoModel.Path,
+                "*.bat", SearchOption.AllDirectories).ToList();
+
+            var batchToRunCount = 0;
+
+            var iniFile = new IniFile(FormMain.RunBatchIni);
+            foreach (var batFile in batFiles)
+            {
+                if (iniFile.ReadBool(repoModel.Path, batFile, false))
+                    batchToRunCount++;
+            }
+
+            return batchToRunCount;
+
+        }
+
+        public static string GetFirstSelectedBatchFileName(RepoModel repoModel)
+        {
+            var iniFile = new IniFile(FormMain.RunBatchIni);
+            foreach (var batFile in Directory.EnumerateFiles(repoModel.Path,
+                "*.bat", SearchOption.AllDirectories).ToList())
+            {
+                if (iniFile.ReadBool(repoModel.Path, batFile, false))
+                    return Path.GetFileName(batFile);
+            }
+
+            return string.Empty;
+
+        }
     }
 
 }

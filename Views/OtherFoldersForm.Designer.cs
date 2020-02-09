@@ -57,20 +57,14 @@
             this.ribbonPageGroupRepoUtilities = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroupRepoOrganization = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
-            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridViewOtherFolders = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colName = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colRepoSourceType = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colPath = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colBranchName = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colCommitsAheadBehind = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colChanges = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colLastChange = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colNumberOfFiles = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colSizeString = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colCommitMessage = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewOtherFolders)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbonControl1
@@ -119,7 +113,7 @@
             this.ribbonControl1.ShowPageHeadersMode = DevExpress.XtraBars.Ribbon.ShowPageHeadersMode.Hide;
             this.ribbonControl1.ShowQatLocationSelector = false;
             this.ribbonControl1.ShowToolbarCustomizeItem = false;
-            this.ribbonControl1.Size = new System.Drawing.Size(1131, 62);
+            this.ribbonControl1.Size = new System.Drawing.Size(1098, 62);
             this.ribbonControl1.Toolbar.ShowCustomizeItem = false;
             // 
             // barButtonItemGitGetLatest
@@ -142,6 +136,7 @@
             this.barButtonItemDeleteBinObj.Id = 3;
             this.barButtonItemDeleteBinObj.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemDeleteBinObj.ImageOptions.Image")));
             this.barButtonItemDeleteBinObj.Name = "barButtonItemDeleteBinObj";
+            this.barButtonItemDeleteBinObj.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemDeleteBinObj_ItemClick);
             // 
             // barButtonItemOpenRepo
             // 
@@ -239,6 +234,7 @@
             this.barButtonItemRunBatch.Id = 19;
             this.barButtonItemRunBatch.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemRunBatch.ImageOptions.Image")));
             this.barButtonItemRunBatch.Name = "barButtonItemRunBatch";
+            this.barButtonItemRunBatch.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemRunBatch_ItemClick);
             // 
             // barButtonItemProperties
             // 
@@ -308,32 +304,26 @@
             // 
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl1.Location = new System.Drawing.Point(0, 62);
-            this.gridControl1.MainView = this.gridView1;
+            this.gridControl1.MainView = this.gridViewOtherFolders;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(1131, 457);
+            this.gridControl1.Size = new System.Drawing.Size(1098, 437);
             this.gridControl1.TabIndex = 5;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridView1});
+            this.gridViewOtherFolders});
             // 
-            // gridView1
+            // gridViewOtherFolders
             // 
-            this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.gridViewOtherFolders.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.colName,
-            this.colRepoSourceType,
             this.colPath,
-            this.colBranchName,
-            this.colCommitsAheadBehind,
-            this.colChanges,
-            this.colLastChange,
             this.colNumberOfFiles,
-            this.colSizeString,
-            this.colCommitMessage});
-            this.gridView1.GridControl = this.gridControl1;
-            this.gridView1.Name = "gridView1";
-            this.gridView1.OptionsFind.AlwaysVisible = true;
-            this.gridView1.OptionsSelection.MultiSelect = true;
-            this.gridView1.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CheckBoxRowSelect;
-            this.gridView1.OptionsView.ColumnAutoWidth = false;
+            this.colSizeString});
+            this.gridViewOtherFolders.GridControl = this.gridControl1;
+            this.gridViewOtherFolders.Name = "gridViewOtherFolders";
+            this.gridViewOtherFolders.OptionsFind.AlwaysVisible = true;
+            this.gridViewOtherFolders.OptionsSelection.MultiSelect = true;
+            this.gridViewOtherFolders.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CheckBoxRowSelect;
+            this.gridViewOtherFolders.OptionsView.ColumnAutoWidth = false;
             // 
             // colName
             // 
@@ -341,59 +331,13 @@
             this.colName.Name = "colName";
             this.colName.OptionsColumn.AllowEdit = false;
             this.colName.Visible = true;
-            this.colName.VisibleIndex = 2;
-            // 
-            // colRepoSourceType
-            // 
-            this.colRepoSourceType.Caption = "Type";
-            this.colRepoSourceType.FieldName = "RepoSourceType";
-            this.colRepoSourceType.Name = "colRepoSourceType";
-            this.colRepoSourceType.OptionsColumn.AllowEdit = false;
-            this.colRepoSourceType.Visible = true;
-            this.colRepoSourceType.VisibleIndex = 1;
+            this.colName.VisibleIndex = 1;
             // 
             // colPath
             // 
             this.colPath.FieldName = "Path";
             this.colPath.Name = "colPath";
             this.colPath.OptionsColumn.AllowEdit = false;
-            // 
-            // colBranchName
-            // 
-            this.colBranchName.Caption = "Branch";
-            this.colBranchName.FieldName = "BranchName";
-            this.colBranchName.Name = "colBranchName";
-            this.colBranchName.OptionsColumn.AllowEdit = false;
-            this.colBranchName.Visible = true;
-            this.colBranchName.VisibleIndex = 4;
-            // 
-            // colCommitsAheadBehind
-            // 
-            this.colCommitsAheadBehind.Caption = "Ahead/Behind";
-            this.colCommitsAheadBehind.FieldName = "CommitsAheadBehind";
-            this.colCommitsAheadBehind.Name = "colCommitsAheadBehind";
-            this.colCommitsAheadBehind.OptionsColumn.AllowEdit = false;
-            this.colCommitsAheadBehind.Visible = true;
-            this.colCommitsAheadBehind.VisibleIndex = 3;
-            // 
-            // colChanges
-            // 
-            this.colChanges.Caption = "Changes";
-            this.colChanges.FieldName = "Changes";
-            this.colChanges.Name = "colChanges";
-            this.colChanges.OptionsColumn.AllowEdit = false;
-            this.colChanges.Visible = true;
-            this.colChanges.VisibleIndex = 5;
-            // 
-            // colLastChange
-            // 
-            this.colLastChange.DisplayFormat.FormatString = "MM/dd/yyyy hh:mm:ss tt";
-            this.colLastChange.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
-            this.colLastChange.FieldName = "LastChange";
-            this.colLastChange.Name = "colLastChange";
-            this.colLastChange.OptionsColumn.AllowEdit = false;
-            this.colLastChange.Visible = true;
-            this.colLastChange.VisibleIndex = 6;
             // 
             // colNumberOfFiles
             // 
@@ -402,7 +346,7 @@
             this.colNumberOfFiles.Name = "colNumberOfFiles";
             this.colNumberOfFiles.OptionsColumn.AllowEdit = false;
             this.colNumberOfFiles.Visible = true;
-            this.colNumberOfFiles.VisibleIndex = 9;
+            this.colNumberOfFiles.VisibleIndex = 3;
             // 
             // colSizeString
             // 
@@ -411,31 +355,27 @@
             this.colSizeString.Name = "colSizeString";
             this.colSizeString.OptionsColumn.AllowEdit = false;
             this.colSizeString.Visible = true;
-            this.colSizeString.VisibleIndex = 7;
-            // 
-            // colCommitMessage
-            // 
-            this.colCommitMessage.FieldName = "CommitMessage";
-            this.colCommitMessage.Name = "colCommitMessage";
-            this.colCommitMessage.OptionsColumn.AllowEdit = false;
-            this.colCommitMessage.Visible = true;
-            this.colCommitMessage.VisibleIndex = 8;
+            this.colSizeString.VisibleIndex = 2;
             // 
             // OtherFoldersForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1131, 519);
+            this.ClientSize = new System.Drawing.Size(1098, 499);
             this.Controls.Add(this.gridControl1);
             this.Controls.Add(this.ribbonControl1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "OtherFoldersForm";
             this.Ribbon = this.ribbonControl1;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Other Folders";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OtherFoldersForm_FormClosing);
             this.Load += new System.EventHandler(this.OtherFoldersForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewOtherFolders)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -471,16 +411,10 @@
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroupRepoUtilities;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroupRepoOrganization;
         private DevExpress.XtraGrid.GridControl gridControl1;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridViewOtherFolders;
         private DevExpress.XtraGrid.Columns.GridColumn colName;
-        private DevExpress.XtraGrid.Columns.GridColumn colRepoSourceType;
         private DevExpress.XtraGrid.Columns.GridColumn colPath;
-        private DevExpress.XtraGrid.Columns.GridColumn colBranchName;
-        private DevExpress.XtraGrid.Columns.GridColumn colCommitsAheadBehind;
-        private DevExpress.XtraGrid.Columns.GridColumn colChanges;
-        private DevExpress.XtraGrid.Columns.GridColumn colLastChange;
         private DevExpress.XtraGrid.Columns.GridColumn colNumberOfFiles;
         private DevExpress.XtraGrid.Columns.GridColumn colSizeString;
-        private DevExpress.XtraGrid.Columns.GridColumn colCommitMessage;
     }
 }
