@@ -19,7 +19,10 @@ namespace RepoManager.Models
         [Description("Run batch files for")]
         RunBatch,
         ManageNuget,
-        Clone
+        Clone,
+        CopyPath,
+        OpenInGitKraken,
+        OpenInVSCode
     }
     public class Description : Attribute
     {

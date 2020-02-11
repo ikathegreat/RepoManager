@@ -953,6 +953,60 @@ namespace RepoManager
             return string.Empty;
 
         }
+
+        public static string GetLatestFileVersion(List<string>listOfFiles, bool useProductVersion = false)
+        {
+            var result = string.Empty;
+            var highestFileVersion = "0.0.0.0";
+            foreach (var file in listOfFiles)
+            {
+                try
+                {
+                    var fvi = FileVersionInfo.GetVersionInfo(file);
+                    var versionString = "0.0.0.0";
+                    versionString = useProductVersion ? fvi.ProductVersion : fvi.FileVersion;
+
+                    var version = new System.Version(versionString);
+                    if (version <= new System.Version(highestFileVersion)) 
+                        continue;
+
+                    highestFileVersion = versionString;
+                    result = file;
+                }
+                catch 
+                {
+                    //ignore
+                }
+
+            }
+
+            return result;
+        }
+
+        public static string GetLatestGitKrakenExe()
+        {
+            var result = string.Empty;
+            var gitKrakenRootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "gitkraken");
+
+            if (!Directory.Exists(gitKrakenRootPath))
+                return result;
+
+            var listOfExes = new List<string>();
+
+            var appDirectories = Directory.GetDirectories(gitKrakenRootPath, "app-*", SearchOption.TopDirectoryOnly);
+            foreach (var appDirectory in appDirectories)
+            {
+                var gkExe = Path.Combine(appDirectory, "gitkraken.exe");
+                if (File.Exists(gkExe))
+                {
+                    listOfExes.Add(gkExe);
+                }
+            }
+
+            result = GetLatestFileVersion(listOfExes);
+
+            return result;
+        }
     }
 
 }

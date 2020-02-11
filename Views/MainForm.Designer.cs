@@ -102,6 +102,7 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ignoreRepoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -109,6 +110,10 @@
             this.branchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemProperties = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.openInGitKrakenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInVSCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repoModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
@@ -583,6 +588,8 @@
             this.pullToolStripMenuItem,
             this.resetToolStripMenuItem,
             this.toolStripSeparator3,
+            this.toolsToolStripMenuItem,
+            this.toolStripSeparator8,
             this.deleteBinobjToolStripMenuItem,
             this.deletevsToolStripMenuItem,
             this.runBatchFilesToolStripMenuItem,
@@ -591,6 +598,7 @@
             this.toolStripSeparator4,
             this.openToolStripMenuItem,
             this.deleteToolStripMenuItem,
+            this.copyPathToolStripMenuItem,
             this.toolStripSeparator1,
             this.ignoreRepoToolStripMenuItem,
             this.toolStripSeparator6,
@@ -599,7 +607,7 @@
             this.toolStripSeparator7,
             this.toolStripMenuItemProperties});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 596);
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 646);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // focusedRepoNameToolStripMenuItem
@@ -782,6 +790,13 @@
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
+            // copyPathToolStripMenuItem
+            // 
+            this.copyPathToolStripMenuItem.Name = "copyPathToolStripMenuItem";
+            this.copyPathToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyPathToolStripMenuItem.Text = "Copy Path";
+            this.copyPathToolStripMenuItem.Click += new System.EventHandler(this.copyPathToolStripMenuItem_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -826,6 +841,37 @@
             this.toolStripMenuItemProperties.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemProperties.Text = "Properties";
             this.toolStripMenuItemProperties.Click += new System.EventHandler(this.toolStripMenuItemProperties_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openInGitKrakenToolStripMenuItem,
+            this.openInVSCodeToolStripMenuItem});
+            this.toolsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toolsToolStripMenuItem.Image")));
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(177, 6);
+            // 
+            // openInGitKrakenToolStripMenuItem
+            // 
+            this.openInGitKrakenToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInGitKrakenToolStripMenuItem.Image")));
+            this.openInGitKrakenToolStripMenuItem.Name = "openInGitKrakenToolStripMenuItem";
+            this.openInGitKrakenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openInGitKrakenToolStripMenuItem.Text = "Open in GitKraken";
+            this.openInGitKrakenToolStripMenuItem.Click += new System.EventHandler(this.openInGitKrakenToolStripMenuItem_Click);
+            // 
+            // openInVSCodeToolStripMenuItem
+            // 
+            this.openInVSCodeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInVSCodeToolStripMenuItem.Image")));
+            this.openInVSCodeToolStripMenuItem.Name = "openInVSCodeToolStripMenuItem";
+            this.openInVSCodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openInVSCodeToolStripMenuItem.Text = "Open in VS Code";
+            this.openInVSCodeToolStripMenuItem.Click += new System.EventHandler(this.openInVSCodeToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -940,6 +986,11 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItemCloneMultipleItem;
         private DevExpress.XtraBars.BarButtonItem barButtonItemCloneItem;
         private DevExpress.XtraBars.BarButtonItem barButtonItemOtherFolders;
+        private System.Windows.Forms.ToolStripMenuItem copyPathToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openInGitKrakenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripMenuItem openInVSCodeToolStripMenuItem;
     }
 }
 

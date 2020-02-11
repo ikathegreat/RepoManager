@@ -258,6 +258,37 @@ namespace RepoManager
                 if (!(gridView1.GetFocusedRow() is RepoModel focusedRepoModel)) return;
                 selectedRepoModelList.Add(focusedRepoModel);
                 GetDependentRepoModelsForProcessing(focusedRepoModel, selectedRepoModelList);
+
+                if (repoActionEnum == RepoActionEnum.CopyPath)
+                {
+                    Clipboard.SetText(focusedRepoModel.Path);
+                    return;
+                }
+
+                if (repoActionEnum == RepoActionEnum.OpenInGitKraken)
+                {
+                    var gkExe = Utilities.GetLatestGitKrakenExe();
+                    if (string.IsNullOrEmpty(gkExe)) 
+                        return;
+
+                    var startInfo = new ProcessStartInfo {FileName = gkExe, Arguments = $"--path \"{focusedRepoModel.Path}\"" };
+                    Process.Start(startInfo);
+                    return;
+                }
+
+                if (repoActionEnum == RepoActionEnum.OpenInVSCode)
+                {
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = "code",
+                        Arguments = $"-a \"{focusedRepoModel.Path}\"",
+                        UseShellExecute = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    };
+                    Process.Start(startInfo);
+                    return;
+                }
+
             }
             else
             {
@@ -780,6 +811,22 @@ namespace RepoManager
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DoRepoAction(RepoActionEnum.Delete, true);
+        }
+
+        private void copyPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.CopyPath, true);
+        }
+
+
+        private void openInGitKrakenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.OpenInGitKraken, true);
+        }
+        private void openInVSCodeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            DoRepoAction(RepoActionEnum.OpenInVSCode, true);
         }
 
         private void gridView1_SelectionChanged(object sender, DevExpress.Data.SelectionChangedEventArgs e)
@@ -1314,5 +1361,6 @@ namespace RepoManager
             var otherFoldersForm = new OtherFoldersForm();
             otherFoldersForm.ShowDialog();
         }
+
     }
 }
