@@ -361,7 +361,8 @@ namespace RepoManager
             Changes = repoStatus.Count().ToString();
         }
 
-        public static async Task<List<RepoModel>> ScanForRepositoriesAsync(string repoSearchPath)
+        public static async Task<List<RepoModel>> ScanForRepositoriesAsync(string repoSearchPath,
+            bool useGitFolders = true)
         {
             var repoModelList = new List<RepoModel>();
             await Task.Run(() =>
@@ -374,21 +375,58 @@ namespace RepoManager
 
                 foreach (var searchRootDirectory in searchRootDirectories)
                 {
-                    var gitFolderList = Directory
-                        .EnumerateDirectories(searchRootDirectory, ".git", SearchOption.TopDirectoryOnly).ToList();
 
-                    foreach (var gitFolder in gitFolderList)
+                    var gitFolder = Path.Combine(searchRootDirectory, ".git");
+
+
+                    if (Directory.Exists(gitFolder) && useGitFolders)
                     {
-                        var repoPath = Path.GetDirectoryName(gitFolder);
+                        //    var repoPath = Path.GetDirectoryName(gitFolder);
                         var repoModel = new RepoModel
                         {
                             Name = Path.GetFileName(Path.GetDirectoryName(gitFolder)),
-                            Path = repoPath,
-                            SkipScan = repoSectionValuesList.Contains(repoPath)
+                            Path = searchRootDirectory,
+
+                            SkipScan = repoSectionValuesList.Contains(searchRootDirectory)
                         };
 
                         repoModelList.Add(repoModel);
+
                     }
+
+                    if (Directory.Exists(gitFolder) || useGitFolders)
+                        continue;
+
+
+                    //    var repoPath = Path.GetDirectoryName(gitFolder);
+                    var nonGitRepoModel = new RepoModel
+                    {
+                        Name = Path.GetFileName(Path.GetDirectoryName(gitFolder)),
+                        Path = searchRootDirectory,
+
+                        SkipScan = repoSectionValuesList.Contains(searchRootDirectory)
+                    };
+
+                    repoModelList.Add(nonGitRepoModel);
+
+
+                    //var gitFolderList = Directory
+                    //    .EnumerateDirectories(searchRootDirectory, ".git", SearchOption.TopDirectoryOnly).ToList();
+
+                    //foreach (var gitFolder in gitFolderList)
+                    //{
+                    //    var repoPath = Path.GetDirectoryName(gitFolder);
+                    //    var repoModel = new RepoModel
+                    //    {
+                    //        Name = Path.GetFileName(Path.GetDirectoryName(gitFolder)),
+                    //        Path = repoPath,
+
+                    //        SkipScan = repoSectionValuesList.Contains(repoPath)
+                    //    };
+
+                    //    repoModelList.Add(repoModel);
+                    //}
+
                 }
             });
             return repoModelList;
@@ -764,6 +802,40 @@ namespace RepoManager
             return result;
         }
 
+        public static void DoGitBranchCheckout(RepoModel repoModel, string branchName)
+        {
+
+            using (var repo = new Repository(repoModel.Path))
+            {
+                Debug.WriteLine($"{repoModel.Name} active branch: {repo.Head.UpstreamBranchCanonicalName}");
+
+                //var branchNameNoRefHead =
+                //    repo.Head.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
+
+                //repoModel.BranchName = branchNameNoRefHead;
+
+                //var branchesList = new List<string>();
+
+                ////Get local branches
+                //foreach (var b in repo.Branches.Where(b => !b.IsRemote))
+                //{
+                //    var tempBranchNameNoRefHead =
+                //        b.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
+                //    branchesList.Add(tempBranchNameNoRefHead);
+                //}
+
+                var branch = repo.Branches[branchName];
+
+                if (branch == null)
+                {
+                    return ;
+                }
+
+                var currentBranch = Commands.Checkout(repo, branch);
+            }
+        }
+
+
         private static bool IsRemoteServerConnectionOK(RepoModel repoModel, SummaryRecord summaryRecord)
         {
             if (IsSiteAccessible(repoModel.RemoteURL))
@@ -847,6 +919,93 @@ namespace RepoManager
             var slnList = repoModel.GetSolutionList();
             return slnList.Count == 1 ? slnList.First() : string.Empty;
 
+        }
+
+
+        public static int GetBatchFileCount(RepoModel repoModel)
+        {
+            var batFiles = Directory.EnumerateFiles(repoModel.Path,
+                "*.bat", SearchOption.AllDirectories).ToList();
+
+            var batchToRunCount = 0;
+
+            var iniFile = new IniFile(FormMain.RunBatchIni);
+            foreach (var batFile in batFiles)
+            {
+                if (iniFile.ReadBool(repoModel.Path, batFile, false))
+                    batchToRunCount++;
+            }
+
+            return batchToRunCount;
+
+        }
+
+        public static string GetFirstSelectedBatchFileName(RepoModel repoModel)
+        {
+            var iniFile = new IniFile(FormMain.RunBatchIni);
+            foreach (var batFile in Directory.EnumerateFiles(repoModel.Path,
+                "*.bat", SearchOption.AllDirectories).ToList())
+            {
+                if (iniFile.ReadBool(repoModel.Path, batFile, false))
+                    return Path.GetFileName(batFile);
+            }
+
+            return string.Empty;
+
+        }
+
+        public static string GetLatestFileVersion(List<string>listOfFiles, bool useProductVersion = false)
+        {
+            var result = string.Empty;
+            var highestFileVersion = "0.0.0.0";
+            foreach (var file in listOfFiles)
+            {
+                try
+                {
+                    var fvi = FileVersionInfo.GetVersionInfo(file);
+                    var versionString = "0.0.0.0";
+                    versionString = useProductVersion ? fvi.ProductVersion : fvi.FileVersion;
+
+                    var version = new System.Version(versionString);
+                    if (version <= new System.Version(highestFileVersion)) 
+                        continue;
+
+                    highestFileVersion = versionString;
+                    result = file;
+                }
+                catch 
+                {
+                    //ignore
+                }
+
+            }
+
+            return result;
+        }
+
+        public static string GetLatestGitKrakenExe()
+        {
+            var result = string.Empty;
+            var gitKrakenRootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "gitkraken");
+
+            if (!Directory.Exists(gitKrakenRootPath))
+                return result;
+
+            var listOfExes = new List<string>();
+
+            var appDirectories = Directory.GetDirectories(gitKrakenRootPath, "app-*", SearchOption.TopDirectoryOnly);
+            foreach (var appDirectory in appDirectories)
+            {
+                var gkExe = Path.Combine(appDirectory, "gitkraken.exe");
+                if (File.Exists(gkExe))
+                {
+                    listOfExes.Add(gkExe);
+                }
+            }
+
+            result = GetLatestFileVersion(listOfExes);
+
+            return result;
         }
     }
 

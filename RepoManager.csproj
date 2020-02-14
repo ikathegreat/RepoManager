@@ -30,7 +30,7 @@
     <InstallUrl>https://raw.githubusercontent.com/ikathegreat/RepoManager/master/RepoManager/publish/</InstallUrl>
     <ProductName>Repo Manager</ProductName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.9.1.0</ApplicationVersion>
+    <ApplicationVersion>1.9.2.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -201,6 +201,12 @@
     </Compile>
     <Compile Include="Models\SimpleCommit.cs" />
     <Compile Include="Models\SimpleFileChange.cs" />
+    <Compile Include="Views\OtherFoldersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\OtherFoldersForm.Designer.cs">
+      <DependentUpon>OtherFoldersForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\RepoPropertiesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -259,6 +265,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ManageNugetForm.resx">
       <DependentUpon>ManageNugetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\OtherFoldersForm.resx">
+      <DependentUpon>OtherFoldersForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\RepoPropertiesForm.resx">
       <DependentUpon>RepoPropertiesForm.cs</DependentUpon>

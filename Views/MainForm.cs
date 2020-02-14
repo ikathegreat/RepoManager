@@ -14,6 +14,7 @@ using DevExpress.XtraGrid.Views.Grid;
 using RepoManager.Analytics;
 using RepoManager.Models;
 using RepoManager.Views;
+using ToolStripItem = System.Windows.Forms.ToolStripItem;
 
 namespace RepoManager
 {
@@ -33,6 +34,7 @@ namespace RepoManager
         public static string GridSummaryXml = Path.Combine(RepoManagerAppData, "GridSummary.xml");
         public static string GridNugetPackagesXml = Path.Combine(RepoManagerAppData, "GridNugetPackages.xml");
         public static string GridNugetToUpgradeXml = Path.Combine(RepoManagerAppData, "GridNugetToUpgrade.xml");
+        public static string GridOtherFoldersXml = Path.Combine(RepoManagerAppData, "GridOtherFolders.xml");
 
         /*
          * This project heavily relies on libgit2sharp
@@ -256,6 +258,58 @@ namespace RepoManager
                 if (!(gridView1.GetFocusedRow() is RepoModel focusedRepoModel)) return;
                 selectedRepoModelList.Add(focusedRepoModel);
                 GetDependentRepoModelsForProcessing(focusedRepoModel, selectedRepoModelList);
+
+                if (repoActionEnum == RepoActionEnum.CopyPath)
+                {
+                    Clipboard.SetText(focusedRepoModel.Path);
+                    return;
+                }
+
+                if (repoActionEnum == RepoActionEnum.OpenInGitKraken)
+                {
+                    var gkExe = Utilities.GetLatestGitKrakenExe();
+                    if (string.IsNullOrEmpty(gkExe))
+                        return;
+
+                    var startInfo = new ProcessStartInfo { FileName = gkExe, Arguments = $"--path \"{focusedRepoModel.Path}\"" };
+                    Process.Start(startInfo);
+                    return;
+                }
+
+                if (repoActionEnum == RepoActionEnum.OpenInVSCode)
+                {
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = "code",
+                        Arguments = $"-a \"{focusedRepoModel.Path}\"",
+                        UseShellExecute = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    };
+                    Process.Start(startInfo);
+                    return;
+                }
+                if (repoActionEnum == RepoActionEnum.OpenInGitBash)
+                {
+                    var gitBashExe = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles") ??
+                                                  throw new InvalidOperationException(), "Git", "git-bash.exe");
+
+                    if (!File.Exists(gitBashExe))
+                    {
+                        MessageBox.Show("File not found:" + Environment.NewLine + Environment.NewLine + gitBashExe);
+                        return;
+                    }
+
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = gitBashExe,
+                        Arguments = $"--cd=\"{focusedRepoModel.Path}\"",
+                        UseShellExecute = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    };
+                    Process.Start(startInfo);
+                    return;
+                }
+
             }
             else
             {
@@ -288,7 +342,7 @@ namespace RepoManager
             {
                 foreach (var selectedRepoModel in selectedRepoModelList)
                 {
-                    totalBatchFileCount += GetBatchFileCount(selectedRepoModel);
+                    totalBatchFileCount += Utilities.GetBatchFileCount(selectedRepoModel);
                 }
 
                 var countAndRepoMsg = selectedRepoModelList.Count == 1 ?
@@ -303,7 +357,7 @@ namespace RepoManager
                         return;
                     case 1:
                         {
-                            if (XtraMessageBox.Show($"Run {GetFirstSelectedBatchFileName(selectedRepoModelList.First())} in {countAndRepoMsg}?",
+                            if (XtraMessageBox.Show($"Run {Utilities.GetFirstSelectedBatchFileName(selectedRepoModelList.First())} in {countAndRepoMsg}?",
                                     "Run Batch Files",
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                                 return;
@@ -573,37 +627,6 @@ namespace RepoManager
                 SearchRepos(); //Todo: optimize this 
         }
 
-        private int GetBatchFileCount(RepoModel repoModel)
-        {
-            var batFiles = Directory.EnumerateFiles(repoModel.Path,
-                "*.bat", SearchOption.AllDirectories).ToList();
-
-            var batchToRunCount = 0;
-
-            var iniFile = new IniFile(RunBatchIni);
-            foreach (var batFile in batFiles)
-            {
-                if (iniFile.ReadBool(repoModel.Path, batFile, false))
-                    batchToRunCount++;
-            }
-
-            return batchToRunCount;
-
-        }
-
-        private string GetFirstSelectedBatchFileName(RepoModel repoModel)
-        {
-            var iniFile = new IniFile(RunBatchIni);
-            foreach (var batFile in Directory.EnumerateFiles(repoModel.Path,
-                "*.bat", SearchOption.AllDirectories).ToList())
-            {
-                if (iniFile.ReadBool(repoModel.Path, batFile, false))
-                    return Path.GetFileName(batFile);
-            }
-
-            return string.Empty;
-
-        }
 
         private void barButtonItemDeleteBinObj_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -722,7 +745,9 @@ namespace RepoManager
                 {
                     var item = branchesToolStripMenuItem.DropDownItems.Add(branch);
                     item.Click += BranchItemClick;
-                    item.Enabled = false;
+                    if (repoModel.BranchName == branch)
+                        ((ToolStripMenuItem)item).Checked = true;
+                    //item.Enabled = false;
                 }
 
                 var branchCount = branchesList.Count == 0 ? "None" : branchesList.Count.ToString();
@@ -754,35 +779,39 @@ namespace RepoManager
             contextMenuStrip.Show(view.GridControl, e.Point);
         }
 
-        private static void BranchItemClick(object sender, EventArgs e)
+        private void BranchItemClick(object sender, EventArgs e)
         {
             //libgit2sharp doesn't support switching local branches yet
 
-            //if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
-            //    return;
+            if (!(gridView1.GetFocusedRow() is RepoModel repoModel))
+                return;
 
+            var branchName = (sender as ToolStripItem)?.Text;
 
-            //using (var repo = new Repository(repoModel.Path))
-            //{
-            //    Debug.WriteLine($"{repoModel.Name} active branch: {repo.Head.UpstreamBranchCanonicalName}");
+            if (string.IsNullOrEmpty(branchName))
+                return;
 
-            //    var branchNameNoRefHead =
-            //        repo.Head.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
+            gridControl1.Enabled = false;
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                Utilities.DoGitBranchCheckout(repoModel, branchName);
+                repoModel.BranchName = branchName;
 
-            //    repoModel.BranchName = branchNameNoRefHead;
-
-            //    var branchesList = new List<string>();
-
-            //    //Get local branches
-            //    foreach (var b in repo.Branches.Where(b => !b.IsRemote))
-            //    {
-            //        var tempBranchNameNoRefHead =
-            //            b.UpstreamBranchCanonicalName.Replace("refs/heads/", "");
-            //        branchesList.Add(tempBranchNameNoRefHead);
-            //    }
-
-            //    // repoModel.BranchesList = branchesList;
-            //}
+                foreach (ToolStripItem toolStripItem in branchesToolStripMenuItem.DropDownItems)
+                {
+                    ((ToolStripMenuItem)toolStripItem).Checked = toolStripItem.Text == branchName;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+                gridControl1.Enabled = true;
+            }
         }
 
         private void SolutionItemClick(object sender, EventArgs e)
@@ -803,6 +832,25 @@ namespace RepoManager
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DoRepoAction(RepoActionEnum.Delete, true);
+        }
+
+        private void copyPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.CopyPath, true);
+        }
+
+
+        private void openInGitKrakenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.OpenInGitKraken, true);
+        }
+        private void openInVSCodeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.OpenInVSCode, true);
+        }
+        private void openInGitBashToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.OpenInGitBash, true);
         }
 
         private void gridView1_SelectionChanged(object sender, DevExpress.Data.SelectionChangedEventArgs e)
@@ -1331,5 +1379,12 @@ namespace RepoManager
 
             SearchRepos();
         }
+
+        private void barButtonItemOtherFolders_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            var otherFoldersForm = new OtherFoldersForm();
+            otherFoldersForm.ShowDialog();
+        }
+
     }
 }

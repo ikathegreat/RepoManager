@@ -55,6 +55,9 @@
             this.barButtonItemFetch = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemAbout = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemClone = new DevExpress.XtraBars.BarButtonItem();
+            this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.barButtonItemCloneItem = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemCloneMultipleItem = new DevExpress.XtraBars.BarButtonItem();
             this.barStaticItemFocusedRepo = new DevExpress.XtraBars.BarStaticItem();
             this.barStaticItemFocusedRepoStatus = new DevExpress.XtraBars.BarStaticItem();
             this.barButtonItemFeedback = new DevExpress.XtraBars.BarButtonItem();
@@ -64,6 +67,7 @@
             this.barButtonItemProperties = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemOpenPreferredSln = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemManageNuget = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemOtherFolders = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroupGit = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroupRepoUtilities = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -90,6 +94,10 @@
             this.pullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInGitKrakenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInVSCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteBinobjToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deletevsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runBatchFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,6 +106,7 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ignoreRepoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -105,17 +114,15 @@
             this.branchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemProperties = new System.Windows.Forms.ToolStripMenuItem();
-            this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.barButtonItemCloneMultipleItem = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItemCloneItem = new DevExpress.XtraBars.BarButtonItem();
+            this.openInGitBashToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repoModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).BeginInit();
             this.panelProgressBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).BeginInit();
             this.SuspendLayout();
             // 
             // gridControl1
@@ -125,7 +132,7 @@
             this.gridControl1.Location = new System.Drawing.Point(0, 62);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(1383, 389);
+            this.gridControl1.Size = new System.Drawing.Size(1489, 389);
             this.gridControl1.TabIndex = 4;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -272,9 +279,10 @@
             this.barButtonItemOpenPreferredSln,
             this.barButtonItemManageNuget,
             this.barButtonItemCloneMultipleItem,
-            this.barButtonItemCloneItem});
+            this.barButtonItemCloneItem,
+            this.barButtonItemOtherFolders});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl1.MaxItemId = 26;
+            this.ribbonControl1.MaxItemId = 27;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1});
@@ -287,7 +295,7 @@
             this.ribbonControl1.ShowPageHeadersMode = DevExpress.XtraBars.Ribbon.ShowPageHeadersMode.Hide;
             this.ribbonControl1.ShowQatLocationSelector = false;
             this.ribbonControl1.ShowToolbarCustomizeItem = false;
-            this.ribbonControl1.Size = new System.Drawing.Size(1383, 62);
+            this.ribbonControl1.Size = new System.Drawing.Size(1489, 62);
             this.ribbonControl1.StatusBar = this.ribbonStatusBar1;
             this.ribbonControl1.Toolbar.ShowCustomizeItem = false;
             // 
@@ -380,6 +388,27 @@
             this.barButtonItemClone.Name = "barButtonItemClone";
             this.barButtonItemClone.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemClone_ItemClick);
             // 
+            // popupMenu1
+            // 
+            this.popupMenu1.ItemLinks.Add(this.barButtonItemCloneItem);
+            this.popupMenu1.ItemLinks.Add(this.barButtonItemCloneMultipleItem);
+            this.popupMenu1.Name = "popupMenu1";
+            this.popupMenu1.Ribbon = this.ribbonControl1;
+            // 
+            // barButtonItemCloneItem
+            // 
+            this.barButtonItemCloneItem.Caption = "Clone";
+            this.barButtonItemCloneItem.Id = 25;
+            this.barButtonItemCloneItem.Name = "barButtonItemCloneItem";
+            this.barButtonItemCloneItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem2_ItemClick);
+            // 
+            // barButtonItemCloneMultipleItem
+            // 
+            this.barButtonItemCloneMultipleItem.Caption = "Clone Multiple...";
+            this.barButtonItemCloneMultipleItem.Id = 24;
+            this.barButtonItemCloneMultipleItem.Name = "barButtonItemCloneMultipleItem";
+            this.barButtonItemCloneMultipleItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemCloneMultipleItem_ItemClick);
+            // 
             // barStaticItemFocusedRepo
             // 
             this.barStaticItemFocusedRepo.Caption = "FocusedRepo";
@@ -447,6 +476,15 @@
             this.barButtonItemManageNuget.Name = "barButtonItemManageNuget";
             this.barButtonItemManageNuget.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemManageNuget_ItemClick);
             // 
+            // barButtonItemOtherFolders
+            // 
+            this.barButtonItemOtherFolders.Caption = "Other Folders...";
+            this.barButtonItemOtherFolders.Id = 26;
+            this.barButtonItemOtherFolders.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemOtherFolders.ImageOptions.Image")));
+            this.barButtonItemOtherFolders.Name = "barButtonItemOtherFolders";
+            this.barButtonItemOtherFolders.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            this.barButtonItemOtherFolders.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemOtherFolders_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -481,6 +519,7 @@
             this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemOpenRepo);
             this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemOpenPreferredSln);
             this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemDeleteRepo);
+            this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemOtherFolders);
             this.ribbonPageGroupRepoOrganization.ItemLinks.Add(this.barButtonItemProperties);
             this.ribbonPageGroupRepoOrganization.Name = "ribbonPageGroupRepoOrganization";
             this.ribbonPageGroupRepoOrganization.Text = "Repo Organization";
@@ -508,7 +547,7 @@
             this.ribbonStatusBar1.Location = new System.Drawing.Point(0, 498);
             this.ribbonStatusBar1.Name = "ribbonStatusBar1";
             this.ribbonStatusBar1.Ribbon = this.ribbonControl1;
-            this.ribbonStatusBar1.Size = new System.Drawing.Size(1383, 21);
+            this.ribbonStatusBar1.Size = new System.Drawing.Size(1489, 21);
             // 
             // panelProgressBar
             // 
@@ -516,7 +555,7 @@
             this.panelProgressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelProgressBar.Location = new System.Drawing.Point(0, 451);
             this.panelProgressBar.Name = "panelProgressBar";
-            this.panelProgressBar.Size = new System.Drawing.Size(1383, 47);
+            this.panelProgressBar.Size = new System.Drawing.Size(1489, 47);
             this.panelProgressBar.TabIndex = 7;
             // 
             // progressBarControl1
@@ -528,7 +567,7 @@
             this.progressBarControl1.Name = "progressBarControl1";
             this.progressBarControl1.Properties.ShowTitle = true;
             this.progressBarControl1.ShowProgressInTaskBar = true;
-            this.progressBarControl1.Size = new System.Drawing.Size(1359, 18);
+            this.progressBarControl1.Size = new System.Drawing.Size(1465, 18);
             this.progressBarControl1.TabIndex = 0;
             // 
             // contextMenuStrip
@@ -551,6 +590,8 @@
             this.pullToolStripMenuItem,
             this.resetToolStripMenuItem,
             this.toolStripSeparator3,
+            this.toolsToolStripMenuItem,
+            this.toolStripSeparator8,
             this.deleteBinobjToolStripMenuItem,
             this.deletevsToolStripMenuItem,
             this.runBatchFilesToolStripMenuItem,
@@ -559,6 +600,7 @@
             this.toolStripSeparator4,
             this.openToolStripMenuItem,
             this.deleteToolStripMenuItem,
+            this.copyPathToolStripMenuItem,
             this.toolStripSeparator1,
             this.ignoreRepoToolStripMenuItem,
             this.toolStripSeparator6,
@@ -567,7 +609,7 @@
             this.toolStripSeparator7,
             this.toolStripMenuItemProperties});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(178, 574);
+            this.contextMenuStrip.Size = new System.Drawing.Size(178, 624);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // focusedRepoNameToolStripMenuItem
@@ -575,27 +617,27 @@
             this.focusedRepoNameToolStripMenuItem.Enabled = false;
             this.focusedRepoNameToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("focusedRepoNameToolStripMenuItem.Image")));
             this.focusedRepoNameToolStripMenuItem.Name = "focusedRepoNameToolStripMenuItem";
-            this.focusedRepoNameToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.focusedRepoNameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.focusedRepoNameToolStripMenuItem.Text = "FocusedRepoName";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // toolStripMenuItemAzureDevOps
             // 
             this.toolStripMenuItemAzureDevOps.Enabled = false;
             this.toolStripMenuItemAzureDevOps.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAzureDevOps.Image")));
             this.toolStripMenuItemAzureDevOps.Name = "toolStripMenuItemAzureDevOps";
-            this.toolStripMenuItemAzureDevOps.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAzureDevOps.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAzureDevOps.Text = "Azure DevOps";
             // 
             // remoteURLToolStripMenuItem
             // 
             this.remoteURLToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("remoteURLToolStripMenuItem.Image")));
             this.remoteURLToolStripMenuItem.Name = "remoteURLToolStripMenuItem";
-            this.remoteURLToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.remoteURLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.remoteURLToolStripMenuItem.Text = "Code";
             this.remoteURLToolStripMenuItem.Click += new System.EventHandler(this.remoteURLToolStripMenuItem_Click);
             // 
@@ -603,7 +645,7 @@
             // 
             this.toolStripMenuItemAdoCommits.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAdoCommits.Image")));
             this.toolStripMenuItemAdoCommits.Name = "toolStripMenuItemAdoCommits";
-            this.toolStripMenuItemAdoCommits.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAdoCommits.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAdoCommits.Text = "Commits";
             this.toolStripMenuItemAdoCommits.Click += new System.EventHandler(this.toolStripMenuItemAdoCommits_Click);
             // 
@@ -611,7 +653,7 @@
             // 
             this.toolStripMenuItemAdoPushes.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAdoPushes.Image")));
             this.toolStripMenuItemAdoPushes.Name = "toolStripMenuItemAdoPushes";
-            this.toolStripMenuItemAdoPushes.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAdoPushes.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAdoPushes.Text = "Pushes";
             this.toolStripMenuItemAdoPushes.Click += new System.EventHandler(this.toolStripMenuItemAdoPushes_Click);
             // 
@@ -619,7 +661,7 @@
             // 
             this.toolStripMenuItemAdoBranches.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAdoBranches.Image")));
             this.toolStripMenuItemAdoBranches.Name = "toolStripMenuItemAdoBranches";
-            this.toolStripMenuItemAdoBranches.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAdoBranches.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAdoBranches.Text = "Branches";
             this.toolStripMenuItemAdoBranches.Click += new System.EventHandler(this.toolStripMenuItemAdoBranches_Click);
             // 
@@ -627,7 +669,7 @@
             // 
             this.toolStripMenuItemAdoPulLRequests.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemAdoPulLRequests.Image")));
             this.toolStripMenuItemAdoPulLRequests.Name = "toolStripMenuItemAdoPulLRequests";
-            this.toolStripMenuItemAdoPulLRequests.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemAdoPulLRequests.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemAdoPulLRequests.Text = "Pull Requests";
             this.toolStripMenuItemAdoPulLRequests.Click += new System.EventHandler(this.toolStripMenuItemAdoPulLRequests_Click);
             // 
@@ -636,14 +678,14 @@
             this.gitHubToolStripMenuItem.Enabled = false;
             this.gitHubToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("gitHubToolStripMenuItem.Image")));
             this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
-            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gitHubToolStripMenuItem.Text = "GitHub";
             // 
             // gitHubCodeToolStripMenuItem
             // 
             this.gitHubCodeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("gitHubCodeToolStripMenuItem.Image")));
             this.gitHubCodeToolStripMenuItem.Name = "gitHubCodeToolStripMenuItem";
-            this.gitHubCodeToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.gitHubCodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gitHubCodeToolStripMenuItem.Text = "Code";
             this.gitHubCodeToolStripMenuItem.Click += new System.EventHandler(this.CodeToolStripMenuItem_Click);
             // 
@@ -651,20 +693,20 @@
             // 
             this.gitHubIssuesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("gitHubIssuesToolStripMenuItem.Image")));
             this.gitHubIssuesToolStripMenuItem.Name = "gitHubIssuesToolStripMenuItem";
-            this.gitHubIssuesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.gitHubIssuesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gitHubIssuesToolStripMenuItem.Text = "Issues";
             this.gitHubIssuesToolStripMenuItem.Click += new System.EventHandler(this.GitHubIssuesToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
             // 
             // fetchToolStripMenuItem
             // 
             this.fetchToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fetchToolStripMenuItem.Image")));
             this.fetchToolStripMenuItem.Name = "fetchToolStripMenuItem";
-            this.fetchToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.fetchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.fetchToolStripMenuItem.Text = "Fetch";
             this.fetchToolStripMenuItem.Click += new System.EventHandler(this.fetchToolStripMenuItem_Click);
             // 
@@ -672,7 +714,7 @@
             // 
             this.pullToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pullToolStripMenuItem.Image")));
             this.pullToolStripMenuItem.Name = "pullToolStripMenuItem";
-            this.pullToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.pullToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pullToolStripMenuItem.Text = "Pull";
             this.pullToolStripMenuItem.Click += new System.EventHandler(this.pullToolStripMenuItem_Click);
             // 
@@ -680,20 +722,52 @@
             // 
             this.resetToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("resetToolStripMenuItem.Image")));
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openInGitKrakenToolStripMenuItem,
+            this.openInVSCodeToolStripMenuItem,
+            this.openInGitBashToolStripMenuItem});
+            this.toolsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toolsToolStripMenuItem.Image")));
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // openInGitKrakenToolStripMenuItem
+            // 
+            this.openInGitKrakenToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInGitKrakenToolStripMenuItem.Image")));
+            this.openInGitKrakenToolStripMenuItem.Name = "openInGitKrakenToolStripMenuItem";
+            this.openInGitKrakenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openInGitKrakenToolStripMenuItem.Text = "Open in GitKraken";
+            this.openInGitKrakenToolStripMenuItem.Click += new System.EventHandler(this.openInGitKrakenToolStripMenuItem_Click);
+            // 
+            // openInVSCodeToolStripMenuItem
+            // 
+            this.openInVSCodeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInVSCodeToolStripMenuItem.Image")));
+            this.openInVSCodeToolStripMenuItem.Name = "openInVSCodeToolStripMenuItem";
+            this.openInVSCodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openInVSCodeToolStripMenuItem.Text = "Open in VS Code";
+            this.openInVSCodeToolStripMenuItem.Click += new System.EventHandler(this.openInVSCodeToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(177, 6);
             // 
             // deleteBinobjToolStripMenuItem
             // 
             this.deleteBinobjToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteBinobjToolStripMenuItem.Image")));
             this.deleteBinobjToolStripMenuItem.Name = "deleteBinobjToolStripMenuItem";
-            this.deleteBinobjToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.deleteBinobjToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deleteBinobjToolStripMenuItem.Text = "Delete bin/obj";
             this.deleteBinobjToolStripMenuItem.Click += new System.EventHandler(this.deleteBinobjToolStripMenuItem_Click);
             // 
@@ -701,7 +775,7 @@
             // 
             this.deletevsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deletevsToolStripMenuItem.Image")));
             this.deletevsToolStripMenuItem.Name = "deletevsToolStripMenuItem";
-            this.deletevsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.deletevsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deletevsToolStripMenuItem.Text = "Delete .vs";
             this.deletevsToolStripMenuItem.Click += new System.EventHandler(this.deletevsToolStripMenuItem_Click);
             // 
@@ -709,7 +783,7 @@
             // 
             this.runBatchFilesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runBatchFilesToolStripMenuItem.Image")));
             this.runBatchFilesToolStripMenuItem.Name = "runBatchFilesToolStripMenuItem";
-            this.runBatchFilesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.runBatchFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.runBatchFilesToolStripMenuItem.Text = "Run Batch Files";
             this.runBatchFilesToolStripMenuItem.Click += new System.EventHandler(this.RunBatchFilesToolStripMenuItem_Click);
             // 
@@ -717,7 +791,7 @@
             // 
             this.editRunBatchFilesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("editRunBatchFilesToolStripMenuItem.Image")));
             this.editRunBatchFilesToolStripMenuItem.Name = "editRunBatchFilesToolStripMenuItem";
-            this.editRunBatchFilesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.editRunBatchFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.editRunBatchFilesToolStripMenuItem.Text = "Batch Files...";
             this.editRunBatchFilesToolStripMenuItem.Click += new System.EventHandler(this.EditRunBatchFilesToolStripMenuItem_Click);
             // 
@@ -725,20 +799,20 @@
             // 
             this.nugetPackagesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("nugetPackagesToolStripMenuItem.Image")));
             this.nugetPackagesToolStripMenuItem.Name = "nugetPackagesToolStripMenuItem";
-            this.nugetPackagesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.nugetPackagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.nugetPackagesToolStripMenuItem.Text = "Nuget Packages...";
             this.nugetPackagesToolStripMenuItem.Click += new System.EventHandler(this.nugetPackagesToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -746,82 +820,76 @@
             // 
             this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // copyPathToolStripMenuItem
+            // 
+            this.copyPathToolStripMenuItem.Name = "copyPathToolStripMenuItem";
+            this.copyPathToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyPathToolStripMenuItem.Text = "Copy Path";
+            this.copyPathToolStripMenuItem.Click += new System.EventHandler(this.copyPathToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // ignoreRepoToolStripMenuItem
             // 
             this.ignoreRepoToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("ignoreRepoToolStripMenuItem.Image")));
             this.ignoreRepoToolStripMenuItem.Name = "ignoreRepoToolStripMenuItem";
-            this.ignoreRepoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.ignoreRepoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ignoreRepoToolStripMenuItem.Text = "Ignore Repo";
             this.ignoreRepoToolStripMenuItem.Click += new System.EventHandler(this.ignoreRepoToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
             // 
             // solutionsToolStripMenuItem
             // 
             this.solutionsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("solutionsToolStripMenuItem.Image")));
             this.solutionsToolStripMenuItem.Name = "solutionsToolStripMenuItem";
-            this.solutionsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.solutionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.solutionsToolStripMenuItem.Text = "Solutions";
             // 
             // branchesToolStripMenuItem
             // 
             this.branchesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("branchesToolStripMenuItem.Image")));
             this.branchesToolStripMenuItem.Name = "branchesToolStripMenuItem";
-            this.branchesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.branchesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.branchesToolStripMenuItem.Text = "Branches";
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(177, 6);
             // 
             // toolStripMenuItemProperties
             // 
             this.toolStripMenuItemProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemProperties.Image")));
             this.toolStripMenuItemProperties.Name = "toolStripMenuItemProperties";
-            this.toolStripMenuItemProperties.Size = new System.Drawing.Size(177, 22);
+            this.toolStripMenuItemProperties.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemProperties.Text = "Properties";
             this.toolStripMenuItemProperties.Click += new System.EventHandler(this.toolStripMenuItemProperties_Click);
             // 
-            // popupMenu1
+            // openInGitBashToolStripMenuItem
             // 
-            this.popupMenu1.ItemLinks.Add(this.barButtonItemCloneItem);
-            this.popupMenu1.ItemLinks.Add(this.barButtonItemCloneMultipleItem);
-            this.popupMenu1.Name = "popupMenu1";
-            this.popupMenu1.Ribbon = this.ribbonControl1;
-            // 
-            // barButtonItemCloneMultipleItem
-            // 
-            this.barButtonItemCloneMultipleItem.Caption = "Clone Multiple...";
-            this.barButtonItemCloneMultipleItem.Id = 24;
-            this.barButtonItemCloneMultipleItem.Name = "barButtonItemCloneMultipleItem";
-            this.barButtonItemCloneMultipleItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemCloneMultipleItem_ItemClick);
-            // 
-            // barButtonItemCloneItem
-            // 
-            this.barButtonItemCloneItem.Caption = "Clone";
-            this.barButtonItemCloneItem.Id = 25;
-            this.barButtonItemCloneItem.Name = "barButtonItemCloneItem";
-            this.barButtonItemCloneItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem2_ItemClick);
+            this.openInGitBashToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInGitBashToolStripMenuItem.Image")));
+            this.openInGitBashToolStripMenuItem.Name = "openInGitBashToolStripMenuItem";
+            this.openInGitBashToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openInGitBashToolStripMenuItem.Text = "Open in Git Bash";
+            this.openInGitBashToolStripMenuItem.Click += new System.EventHandler(this.openInGitBashToolStripMenuItem_Click);
             // 
             // FormMain
             // 
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1383, 519);
+            this.ClientSize = new System.Drawing.Size(1489, 519);
             this.Controls.Add(this.gridControl1);
             this.Controls.Add(this.panelProgressBar);
             this.Controls.Add(this.ribbonStatusBar1);
@@ -840,10 +908,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.repoModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).EndInit();
             this.panelProgressBar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -928,6 +996,13 @@
         private DevExpress.XtraBars.PopupMenu popupMenu1;
         private DevExpress.XtraBars.BarButtonItem barButtonItemCloneMultipleItem;
         private DevExpress.XtraBars.BarButtonItem barButtonItemCloneItem;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemOtherFolders;
+        private System.Windows.Forms.ToolStripMenuItem copyPathToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openInGitKrakenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripMenuItem openInVSCodeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openInGitBashToolStripMenuItem;
     }
 }
 
