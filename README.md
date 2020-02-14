@@ -1,6 +1,6 @@
 # RepoManager
 
-Desktop Git repository manager for .NET projects (designed for Visual Studio) with quick actions and shortcuts for repo (repository) folder, its contents, and web links.
+Desktop Git repository manager (designed for for .NET projects/Visual Studio) with quick actions and shortcuts for repo (repository) folder, its contents, and web links.
 
 ![RepoManagerImage](https://imgur.com/VgnRSqP.png "Repo Manager")
 
@@ -19,7 +19,10 @@ Performs a git pull for all selected (checked) repos with a prompt. May fail if 
 Performs a git (hard) reset for all selected (checked) repos with a prompt. 
 
 ### Clone
-Opens a dialog to provide a remote repository URL and the desired local folder name. Root path is set in the Options.
+Opens a dialog to provide a remote repository URL and the desired local folder name. Will indicate if directory already exists. Root path is set in the Options.
+
+### Clone Multiple...
+Opens a dialog to provide multiple remote repository URLs and the desired local folder name. Will indicate if directory already exists. Root path is set in the Options.
 
 ## Local Actions
 
@@ -53,9 +56,54 @@ Deletes the selected repos' folder. Cannot undo this action. May fail if Visual 
 
 Opens the focused repo's Properties dialog. View recently changed files and commits. Select preferred solution and option to open it as Administrator. 
 
+## Context Menu
+
+![RepoManagerImage](https://i.imgur.com/togYxcb.png "Repo Manager - Context Menu")
+
+### Repository Name
+No action. 
+
+### Web Links
+Direct shortcuts to web interface for git host. Actions vary based on type of git host.
+
+### Git Actions
+Same actions available in the toolbar. Will only be performed on the focused grid row repository (what was right-clicked on).
+
+### Tools
+- Open in Gitkraken - Opens the focused repo's path in [Gitkraken](https://www.gitkraken.com/)
+- Open in VS Code - Opens the focused repo's path in [VS Code](https://code.visualstudio.com/)
+- Open in Git Bash - Opens the focused repo's path in [Git Bash](https://gitforwindows.org/). The installation directory must beC:\Program Files\Git.
+
+### Local Actions
+#### Batch Files
+Opens a dialog listing all Windows Batch .bat files in the focused repository. Run Batch wil execute the selected batch files from this window.
+
+All others as the same actions available in the toolbar. 
+
+### Copy Path
+Copies the focused repo folder path to the clipboard as text.
+
+### Ignore Repo
+Adds the focused repo to the ignored list. Folder status refresj and Git actions performed on ignored are skipped.
+
+### Include Repo in Scan
+Removes the focsed repo from the ignored list.
+
+### Solutions
+Expands a submenu listing all .sln files in the focused repo directory. 
+
+### Branches
+Expands a submenu listing local branches for the focused repo.
+
+### Properties
+Opens the Repo Properties dialog to set the Preferred Solution, viewing recently changed files, the commit history, and configuring SmartGit.
+
 ## Other
 
 ### Options
+
+![RepoManagerImage](https://i.imgur.com/a2FeWNW.png "Repo Manager - Options dialog")
+
 Opens Options dialog. 
 
 ### About
