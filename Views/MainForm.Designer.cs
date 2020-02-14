@@ -94,6 +94,10 @@
             this.pullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInGitKrakenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInVSCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteBinobjToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deletevsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runBatchFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,10 +114,7 @@
             this.branchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemProperties = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.openInGitKrakenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openInVSCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInGitBashToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repoModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
@@ -481,6 +482,7 @@
             this.barButtonItemOtherFolders.Id = 26;
             this.barButtonItemOtherFolders.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemOtherFolders.ImageOptions.Image")));
             this.barButtonItemOtherFolders.Name = "barButtonItemOtherFolders";
+            this.barButtonItemOtherFolders.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             this.barButtonItemOtherFolders.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemOtherFolders_ItemClick);
             // 
             // ribbonPage1
@@ -607,7 +609,7 @@
             this.toolStripSeparator7,
             this.toolStripMenuItemProperties});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 646);
+            this.contextMenuStrip.Size = new System.Drawing.Size(178, 624);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // focusedRepoNameToolStripMenuItem
@@ -729,6 +731,38 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openInGitKrakenToolStripMenuItem,
+            this.openInVSCodeToolStripMenuItem,
+            this.openInGitBashToolStripMenuItem});
+            this.toolsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toolsToolStripMenuItem.Image")));
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // openInGitKrakenToolStripMenuItem
+            // 
+            this.openInGitKrakenToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInGitKrakenToolStripMenuItem.Image")));
+            this.openInGitKrakenToolStripMenuItem.Name = "openInGitKrakenToolStripMenuItem";
+            this.openInGitKrakenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openInGitKrakenToolStripMenuItem.Text = "Open in GitKraken";
+            this.openInGitKrakenToolStripMenuItem.Click += new System.EventHandler(this.openInGitKrakenToolStripMenuItem_Click);
+            // 
+            // openInVSCodeToolStripMenuItem
+            // 
+            this.openInVSCodeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInVSCodeToolStripMenuItem.Image")));
+            this.openInVSCodeToolStripMenuItem.Name = "openInVSCodeToolStripMenuItem";
+            this.openInVSCodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openInVSCodeToolStripMenuItem.Text = "Open in VS Code";
+            this.openInVSCodeToolStripMenuItem.Click += new System.EventHandler(this.openInVSCodeToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(177, 6);
+            // 
             // deleteBinobjToolStripMenuItem
             // 
             this.deleteBinobjToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteBinobjToolStripMenuItem.Image")));
@@ -842,36 +876,13 @@
             this.toolStripMenuItemProperties.Text = "Properties";
             this.toolStripMenuItemProperties.Click += new System.EventHandler(this.toolStripMenuItemProperties_Click);
             // 
-            // toolsToolStripMenuItem
+            // openInGitBashToolStripMenuItem
             // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openInGitKrakenToolStripMenuItem,
-            this.openInVSCodeToolStripMenuItem});
-            this.toolsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toolsToolStripMenuItem.Image")));
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(177, 6);
-            // 
-            // openInGitKrakenToolStripMenuItem
-            // 
-            this.openInGitKrakenToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInGitKrakenToolStripMenuItem.Image")));
-            this.openInGitKrakenToolStripMenuItem.Name = "openInGitKrakenToolStripMenuItem";
-            this.openInGitKrakenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openInGitKrakenToolStripMenuItem.Text = "Open in GitKraken";
-            this.openInGitKrakenToolStripMenuItem.Click += new System.EventHandler(this.openInGitKrakenToolStripMenuItem_Click);
-            // 
-            // openInVSCodeToolStripMenuItem
-            // 
-            this.openInVSCodeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInVSCodeToolStripMenuItem.Image")));
-            this.openInVSCodeToolStripMenuItem.Name = "openInVSCodeToolStripMenuItem";
-            this.openInVSCodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openInVSCodeToolStripMenuItem.Text = "Open in VS Code";
-            this.openInVSCodeToolStripMenuItem.Click += new System.EventHandler(this.openInVSCodeToolStripMenuItem_Click);
+            this.openInGitBashToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openInGitBashToolStripMenuItem.Image")));
+            this.openInGitBashToolStripMenuItem.Name = "openInGitBashToolStripMenuItem";
+            this.openInGitBashToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openInGitBashToolStripMenuItem.Text = "Open in Git Bash";
+            this.openInGitBashToolStripMenuItem.Click += new System.EventHandler(this.openInGitBashToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -991,6 +1002,7 @@
         private System.Windows.Forms.ToolStripMenuItem openInGitKrakenToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolStripMenuItem openInVSCodeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openInGitBashToolStripMenuItem;
     }
 }
 

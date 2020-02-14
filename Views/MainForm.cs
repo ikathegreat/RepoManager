@@ -268,10 +268,10 @@ namespace RepoManager
                 if (repoActionEnum == RepoActionEnum.OpenInGitKraken)
                 {
                     var gkExe = Utilities.GetLatestGitKrakenExe();
-                    if (string.IsNullOrEmpty(gkExe)) 
+                    if (string.IsNullOrEmpty(gkExe))
                         return;
 
-                    var startInfo = new ProcessStartInfo {FileName = gkExe, Arguments = $"--path \"{focusedRepoModel.Path}\"" };
+                    var startInfo = new ProcessStartInfo { FileName = gkExe, Arguments = $"--path \"{focusedRepoModel.Path}\"" };
                     Process.Start(startInfo);
                     return;
                 }
@@ -282,6 +282,27 @@ namespace RepoManager
                     {
                         FileName = "code",
                         Arguments = $"-a \"{focusedRepoModel.Path}\"",
+                        UseShellExecute = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    };
+                    Process.Start(startInfo);
+                    return;
+                }
+                if (repoActionEnum == RepoActionEnum.OpenInGitBash)
+                {
+                    var gitBashExe = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles") ??
+                                                  throw new InvalidOperationException(), "Git", "git-bash.exe");
+
+                    if (!File.Exists(gitBashExe))
+                    {
+                        MessageBox.Show("File not found:" + Environment.NewLine + Environment.NewLine + gitBashExe);
+                        return;
+                    }
+
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = gitBashExe,
+                        Arguments = $"--cd=\"{focusedRepoModel.Path}\"",
                         UseShellExecute = true,
                         WindowStyle = ProcessWindowStyle.Hidden
                     };
@@ -779,7 +800,7 @@ namespace RepoManager
 
                 foreach (ToolStripItem toolStripItem in branchesToolStripMenuItem.DropDownItems)
                 {
-                    ((ToolStripMenuItem) toolStripItem).Checked = toolStripItem.Text == branchName;
+                    ((ToolStripMenuItem)toolStripItem).Checked = toolStripItem.Text == branchName;
                 }
             }
             catch (Exception ex)
@@ -825,8 +846,11 @@ namespace RepoManager
         }
         private void openInVSCodeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             DoRepoAction(RepoActionEnum.OpenInVSCode, true);
+        }
+        private void openInGitBashToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.OpenInGitBash, true);
         }
 
         private void gridView1_SelectionChanged(object sender, DevExpress.Data.SelectionChangedEventArgs e)
