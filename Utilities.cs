@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -573,11 +574,11 @@ namespace RepoManager
             await Task.Run(() => { CloneGitRepo(url, localPath, repoSourceType); });
         }
 
-        public static void CloneGitRepo(string url, string localPath, RepoSourceTypeEnum repoSourceType)
+        public static bool CloneGitRepo(string url, string localPath, RepoSourceTypeEnum repoSourceType)
         {
 
             if (!IsSiteAccessible(url))
-                return;
+                return false;
 
             var hasUserNameOrPassword = GetUserNameAndPassword(out var userName,
                 out var password, repoSourceType);
@@ -594,6 +595,7 @@ namespace RepoManager
                     }
                 };
                 Repository.Clone(url, localPath, co);
+                return true;
             }
             catch (Exception ex)
             {
@@ -602,6 +604,15 @@ namespace RepoManager
                 {
                     Debug.WriteLine("CloneGitRepoAsync username or password is blank");
                 }
+            }
+            return false;
+        }
+
+        public static string GetRepoModelRemoteUrl(RepoModel repoModel)
+        {
+            using (var repo = new Repository(repoModel.Path))
+            {
+                return repo.Network.Remotes.First().Url;
             }
         }
 
@@ -859,6 +870,41 @@ namespace RepoManager
                 success = result.Status == IPStatus.Success;
 
             return success;
+        }
+
+        public static bool IsSiteRespondingToWebRequest(string url)
+        {
+            try
+            {
+                if (!url.StartsWith("http://"))
+                {
+                    if (!url.StartsWith("https://"))
+                    {
+                        url = $"http://{url}";
+                    }
+                }
+
+                var request = WebRequest.Create(url);
+                request.Credentials = CredentialCache.DefaultCredentials;
+                request.Timeout = 3000; //3 sec
+
+                var response = request.GetResponse();
+                return ((HttpWebResponse)response).StatusCode == HttpStatusCode.OK;
+            }
+            catch (WebException wEx)
+            {
+                if (wEx.Response is HttpWebResponse httpResponse)
+                {
+                    //site is up, but non-domain PC will not be authorized to access
+                    return httpResponse.StatusCode == HttpStatusCode.Unauthorized;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         /// <summary>
