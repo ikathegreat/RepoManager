@@ -215,7 +215,7 @@ namespace RepoManager
 
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
 
-            barStaticItemVersion.Caption = $"{fileVersionInfo.FileMajorPart}.{fileVersionInfo.FileMinorPart}";
+            barStaticItemVersion.Caption = $"{fileVersionInfo.FileMajorPart}.{fileVersionInfo.FileMinorPart}.{fileVersionInfo.FileBuildPart}";
         }
 
         private static void InitializeAnalytics()
@@ -255,7 +255,11 @@ namespace RepoManager
             var selectedRepoModelList = new List<RepoModel>();
             if (useFocusedRow)
             {
-                if (!(gridView1.GetFocusedRow() is RepoModel focusedRepoModel)) return;
+                //Actions only possible from context menu
+
+                if (!(gridView1.GetFocusedRow() is RepoModel focusedRepoModel))
+                    return;
+
                 selectedRepoModelList.Add(focusedRepoModel);
                 GetDependentRepoModelsForProcessing(focusedRepoModel, selectedRepoModelList);
 
@@ -288,6 +292,7 @@ namespace RepoManager
                     Process.Start(startInfo);
                     return;
                 }
+
                 if (repoActionEnum == RepoActionEnum.OpenInGitBash)
                 {
                     var gitBashExe = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles") ??
@@ -308,6 +313,46 @@ namespace RepoManager
                     };
                     Process.Start(startInfo);
                     return;
+                }
+
+                if (repoActionEnum == RepoActionEnum.GitReclone)
+                {
+                    if (XtraMessageBox.Show($"Delete and clone {focusedRepoModel.Name}?" + Environment.NewLine + Environment.NewLine
+                                            + "This operation cannot be reversed.",
+                            "Reclone",
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                        return;
+
+                    Cursor.Current = Cursors.WaitCursor;
+                    try
+                    {
+                        if (Utilities.TryDeleteDirectory(focusedRepoModel.Path))
+                        {
+                            if (Utilities.CloneGitRepo(focusedRepoModel.RemoteURL, focusedRepoModel.Path,
+                                focusedRepoModel.RepoSourceType))
+                            {
+                                XtraMessageBox.Show($"Reclone for {focusedRepoModel.Name} was successful",
+                                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                SearchRepos(); 
+                                return;
+                            }
+                            else
+                            {
+                                XtraMessageBox.Show("Reclone failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            XtraMessageBox.Show("Failed to delete directory." + Environment.NewLine + Environment.NewLine
+                                                + focusedRepoModel.Path, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+                    finally
+                    {
+                        Cursor.Current = Cursors.Default;
+                    }
                 }
 
             }
@@ -561,46 +606,55 @@ namespace RepoManager
                     }
                 }
 
-                if (repoActionEnum == RepoActionEnum.GitReset)
+                //var remoteUrl = Utilities.GetRepoModelRemoteUrl(repoModel).Replace(".git", "");
+                if (!Utilities.IsSiteRespondingToWebRequest(repoModel.RemoteURL) && repoModel.RepoSourceType == RepoSourceTypeEnum.AzureDevOps)
                 {
-                    try
-                    {
-                        Track.DoTrackEvent(TrackCategories.GitAction, "gitReset");
-                        Utilities.DoGitReset(repoModel, ref summaryRecord);
-                    }
-                    catch (Exception ex)
-                    {
-                        summaryRecord.Result = "Error";
-                        summaryRecord.Message = ex.Message;
-                    }
+                    summaryRecord.Result = "Error";
+                    summaryRecord.Message = $"Remote site is not accessible: {repoModel.RemoteURL}";
                 }
-
-                if (repoActionEnum == RepoActionEnum.GitPull)
+                else
                 {
-                    try
+                    switch (repoActionEnum)
                     {
-                        Track.DoTrackEvent(TrackCategories.GitAction, "gitPull");
-                        Utilities.DoGitPull(repoModel, ref summaryRecord);
-                    }
-                    catch (Exception ex)
-                    {
-                        summaryRecord.Result = "Error";
-                        summaryRecord.Message = ex.Message;
-                    }
+                        case RepoActionEnum.GitReset:
+                            try
+                            {
+                                Track.DoTrackEvent(TrackCategories.GitAction, "gitReset");
+                                Utilities.DoGitReset(repoModel, ref summaryRecord);
+                            }
+                            catch (Exception ex)
+                            {
+                                summaryRecord.Result = "Error";
+                                summaryRecord.Message = ex.Message;
+                            }
 
-                }
+                            break;
+                        case RepoActionEnum.GitPull:
+                            try
+                            {
+                                Track.DoTrackEvent(TrackCategories.GitAction, "gitPull");
+                                Utilities.DoGitPull(repoModel, ref summaryRecord);
+                            }
+                            catch (Exception ex)
+                            {
+                                summaryRecord.Result = "Error";
+                                summaryRecord.Message = ex.Message;
+                            }
 
-                if (repoActionEnum == RepoActionEnum.GitFetch)
-                {
-                    try
-                    {
-                        Track.DoTrackEvent(TrackCategories.GitAction, "gitFetch");
-                        Utilities.DoGitFetch(repoModel, ref summaryRecord);
-                    }
-                    catch (Exception ex)
-                    {
-                        summaryRecord.Result = "Error";
-                        summaryRecord.Message = ex.Message;
+                            break;
+                        case RepoActionEnum.GitFetch:
+                            try
+                            {
+                                Track.DoTrackEvent(TrackCategories.GitAction, "gitFetch");
+                                Utilities.DoGitFetch(repoModel, ref summaryRecord);
+                            }
+                            catch (Exception ex)
+                            {
+                                summaryRecord.Result = "Error";
+                                summaryRecord.Message = ex.Message;
+                            }
+
+                            break;
                     }
                 }
 
@@ -883,6 +937,12 @@ namespace RepoManager
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DoRepoAction(RepoActionEnum.GitReset, true);
+        }
+
+
+        private void recloneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoRepoAction(RepoActionEnum.GitReclone, true);
         }
 
         private void deleteBinobjToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1303,7 +1363,8 @@ namespace RepoManager
             if (cloneForm.RepoSourceTypeEnum == RepoSourceTypeEnum.Unknown)
                 return;
 
-            CloneGitRepoAsync(cloneForm.RemoteURL, cloneForm.LocalPath, cloneForm.RepoSourceTypeEnum);
+            Utilities.CloneGitRepo(cloneForm.RemoteURL, cloneForm.LocalPath, cloneForm.RepoSourceTypeEnum);
+            SearchRepos();
         }
 
         private void barButtonItemCloneMultipleItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

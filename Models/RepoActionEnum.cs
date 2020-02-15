@@ -23,7 +23,8 @@ namespace RepoManager.Models
         CopyPath,
         OpenInGitKraken,
         OpenInVSCode,
-        OpenInGitBash
+        OpenInGitBash,
+        GitReclone
     }
     public class Description : Attribute
     {
